@@ -51,12 +51,13 @@ test('shows no count where the viewer cannot run', async ({ page }) => {
     await shoot(popup, 'unavailable');
 });
 
-test('links to the author, the project and its issues, without a coffee button while no link is set', async ({ page }) => {
+test('links to the author, the project, its issues and the coffee page', async ({ page }) => {
     await page.goto('/article.html');
     const popup = await openPopup(page);
 
     await expect(popup.locator('[data-link="author"]')).toHaveAttribute('href', 'https://github.com/jonaaix');
     await expect(popup.locator('[data-link="issues"]')).toHaveAttribute('href', 'https://github.com/jonaaix/magic-image-viewer/issues');
     await expect(popup.locator('[data-trust="private"]')).toHaveAttribute('href', /PRIVACY\.md$/);
-    await expect(popup.locator('[data-link="coffee"]')).toHaveCount(0);
+    await expect(popup.locator('[data-link="coffee"]')).toHaveAttribute('href', 'https://buymeacoffee.com/jonaaix');
+    await shoot(popup, 'coffee');
 });

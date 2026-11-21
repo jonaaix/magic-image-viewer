@@ -70,6 +70,11 @@ Built with [WXT](https://wxt.dev), Vue 3 and Tailwind CSS 4. The viewer is the `
 popup's controls come from [laravel-islands](https://github.com/jonaaix/laravel-islands). The viewer
 runs inside a Shadow DOM, so pages and viewer do not affect each other's styles.
 
+## Support
+
+Magic Image Viewer is free and stays free. If it saves you time, you can
+[buy me a coffee](https://buymeacoffee.com/jonaaix).
+
 ## Licence
 
 [MIT](LICENSE)
