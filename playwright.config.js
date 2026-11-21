@@ -4,6 +4,7 @@ const port = 5190;
 
 export default defineConfig({
     testDir: './tests',
+    testMatch: '**/*.spec.js',
     forbidOnly: !!process.env.CI,
     reporter: process.env.CI ? 'github' : 'list',
     workers: 1,

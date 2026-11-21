@@ -14,7 +14,8 @@
         "build:test:firefox": "wxt build -b firefox --mv3 --mode test",
         "zip": "wxt zip",
         "zip:firefox": "wxt zip -b firefox --mv3",
-        "test": "npm run build:test && playwright test",
+        "test": "npm run test:unit && npm run build:test && playwright test",
+        "test:unit": "node --test tests/unit/*.test.js",
         "postinstall": "wxt prepare"
     },
     "dependencies": {

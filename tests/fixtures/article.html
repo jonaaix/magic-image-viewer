@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Article</title>
+        <script src="fixture.js"></script>
+        <style>
+            body { font-family: system-ui, sans-serif; margin: 0; color: #1f2937; }
+            header { display: flex; align-items: center; gap: 16px; padding: 12px 24px; border-bottom: 1px solid #e5e7eb; }
+            header nav { display: flex; gap: 12px; margin-left: auto; }
+            main { max-width: 760px; margin: 0 auto; padding: 24px; }
+            .byline { display: flex; align-items: center; gap: 12px; }
+            .byline img { width: 48px; height: 48px; border-radius: 50%; }
+            .content { width: 100%; display: block; margin: 16px 0; }
+            .rounded { border-radius: 16px; }
+            figure { margin: 16px 0; }
+            figure img { width: 100%; display: block; }
+            .teaser { display: flex; gap: 16px; align-items: center; margin-top: 32px; text-decoration: none; color: inherit; border: 1px solid #e5e7eb; border-radius: 12px; padding: 12px; }
+            .teaser img { width: 240px; }
+            .sprite { width: 32px; height: 32px; object-fit: none; object-position: 0 0; }
+            .hidden { display: none; }
+            button.share { border: 0; background: #f3f4f6; padding: 8px; border-radius: 12px; }
+            button.share img { width: 120px; height: 120px; display: block; }
+        </style>
+    </head>
+    <body>
+        <header>
+            <img src="images/logo.svg" alt="Site logo" width="180" height="48" />
+            <nav>
+                <img src="images/icon.svg" alt="" width="24" height="24" />
+                <img src="images/icon.svg?search" alt="" width="24" height="24" />
+                <img class="sprite" src="images/ui-sprite.svg" alt="" />
+            </nav>
+        </header>
+        <main>
+            <h1>A walk along the coast</h1>
+            <div class="byline">
+                <img src="images/avatar.svg" alt="Author" />
+                <span>By the author</span>
+            </div>
+
+            <img class="content" src="images/photo-1.svg" alt="Cliffs at dawn" />
+            <p>First paragraph of the article.</p>
+
+            <figure>
+                <img src="images/photo-2.svg" alt="Harbour" />
+                <figcaption>The harbour at low tide</figcaption>
+            </figure>
+
+            <img class="content rounded" src="images/photo-3.svg" alt="Beach" />
+            <img class="content hidden" src="images/photo-4.svg" alt="Hidden slide" />
+
+            <form>
+                <label>Upload <img src="images/button-art.svg" alt="" width="160" height="160" /></label>
+            </form>
+            <button class="share" type="button"><img src="images/button-art.svg?share" alt="Share" /></button>
+
+            <a class="teaser" href="other-article.html">
+                <img src="images/teaser.svg" alt="Next article" />
+                <span>Read the next article</span>
+            </a>
+
+            <img src="images/pixel.svg" alt="" width="1" height="1" />
+        </main>
+    </body>
+</html>

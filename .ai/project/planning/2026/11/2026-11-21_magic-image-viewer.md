@@ -36,10 +36,11 @@ both store packages build from CI.
   `Lightbox` provides its own root when `teleport` is not `body`. Both libraries committed
   locally, no tag, no push. The extension links both from the working copies, the test
   `puts nothing into the page body` passes without the expected-to-fail mark.
-- [ ] **M2 — Image detection and click to open.** Collector module finds the content images of a
+- [x] **M2 — Image detection and click to open.** Collector module finds the content images of a
   page in document order, resolves the largest version of each, reads the list fresh at the
   moment of opening (lazy images that have not loaded yet included), and a click opens the viewer at that image with the grow-from-thumbnail
-  animation (`origin`). Pure detection functions with unit tests.
+  animation (`origin`). Pure detection functions with unit tests. Behaviour in the Feature Book
+  chapter `viewer-click-to-open`.
 - [ ] **M3 — Taking over site galleries.** Capture-phase interception from `document_start` so
   the site's lightbox never sees the click; linked images handled per the click rule in
   Decisions, including Alt-click; fixture pages for common lightbox patterns and a real-site checklist.
@@ -63,7 +64,8 @@ Extension (own git repo): WXT 0.21 + Vue + Tailwind 4, content script at `docume
 mounting the viewer lazily on first open in a shadow host appended to `<html>`. Opening is only
 reachable through a test hook (`--mode test`, event `magic-image-viewer:test-open`) until M2.
 `npm test` builds the test package and runs Playwright in Chromium with the extension loaded
-against `tests/fixtures/` (plain, aggressive). Firefox MV3 build loads and opens headless via
+against `tests/fixtures/` (plain, aggressive, article, sources). A plain click on an unlinked
+content image opens the viewer on the page gallery; `npm run test:unit` covers the rules. Firefox MV3 build loads and opens headless via
 WebDriver BiDi; not yet part of `npm test`.
 
 ## Decisions
@@ -125,7 +127,13 @@ WebDriver BiDi; not yet part of `npm test`.
   image file. Excluded: SVG icons, sprites, tracking pixels, images inside buttons and form
   controls. Largest version from: link to an image file, `srcset`/`<picture>`, common data
   attributes (`data-src`, `data-full`, `data-zoom-image`, `data-large`), else `currentSrc`.
-  Thresholds are tuned against the fixtures in M2.
+  Thresholds: `MIN_SHORT_SIDE` 100 px, `MIN_LINKED_THUMBNAIL_SIDE` 40 px. Data attributes are
+  tried full-size first (`data-zoom-image`, `data-full`, `data-large`, then `data-src`), and the
+  srcset step also reads `data-srcset`. SVG files are not excluded by type: small icons fall out
+  by size, large SVG content counts. A 1 px placeholder does not count as the loaded source.
+- **The collector reads the DOM into plain descriptors** (`collector/describe.js`) and decides on
+  them with pure functions (`collector/rules.js`), so the rules run under `node --test` without a
+  browser.
 - **Gallery scope: all content images of the page**, in document order.
 - **Active on every site by default**, with a global and a per-site switch in the popup.
 - **Images only in the first version.** The library plays videos, but page videos are left alone.

@@ -22,6 +22,7 @@ function pin(host) {
 
 export function createViewer(ctx, { onOpened }) {
     const images = shallowRef([]);
+    const options = shallowRef({});
     const index = ref(null);
     let ui = null;
 
@@ -39,6 +40,7 @@ export function createViewer(ctx, { onOpened }) {
                 pin(host);
                 const app = createApp({
                     render: () => h(Lightbox, {
+                        ...options.value,
                         images: images.value,
                         index: index.value,
                         teleport: false,
@@ -57,8 +59,9 @@ export function createViewer(ctx, { onOpened }) {
     return {
         isOpen: () => index.value !== null,
         owns: (event) => !!ui && event.composedPath().includes(ui.shadowHost),
-        async open(list, start = 0) {
+        async open(list, start = 0, { origin = null, originRadius = 0 } = {}) {
             await ensureMounted();
+            options.value = { origin, originRadius };
             images.value = list;
             index.value = start;
             await nextTick();
