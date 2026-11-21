@@ -1,34 +1,11 @@
-import { collectImages, isContentElement } from './collector/index.js';
-import { cornerRadius } from './collector/rules.js';
-import { linkKind, shouldOpen } from './clickRules.js';
+import { isContentElement } from './collector/index.js';
+import { openInGallery } from './galleryOpener.js';
+import { CAROUSEL_MARKUP, isSwipeStyle, linkKind, movedTooFar, shouldOpen } from './clickRules.js';
 
-const GESTURE_EVENTS = ['pointerdown', 'mousedown', 'touchstart', 'pointerup', 'mouseup', 'touchend', 'click'];
+const PRESS_EVENTS = ['pointerdown', 'mousedown', 'touchstart'];
+const RELEASE_EVENTS = ['pointerup', 'mouseup', 'touchend'];
 const CONTROLS = 'button, [role="button"], input, select, textarea, option, summary, [contenteditable]:not([contenteditable="false"])';
 const ANCESTOR_SEARCH_DEPTH = 3;
-
-function onScreen(rect) {
-    return rect.width > 0 && rect.bottom > 0 && rect.right > 0 && rect.top < window.innerHeight && rect.left < window.innerWidth;
-}
-
-function originOf(elements) {
-    return (index) => {
-        const element = elements[index];
-
-        if (!element?.isConnected) {
-            return null;
-        }
-
-        const rect = element.getBoundingClientRect();
-
-        return onScreen(rect) ? rect : null;
-    };
-}
-
-function radiusOf(element) {
-    const rect = element.getBoundingClientRect();
-
-    return cornerRadius(getComputedStyle(element).borderTopLeftRadius, rect.width, rect.height);
-}
 
 function pointOf(event) {
     const touch = event.changedTouches?.[0];
@@ -94,8 +71,8 @@ function isPrimary(event) {
     return event.button === 0 && !event.ctrlKey && !event.metaKey && !event.shiftKey;
 }
 
-function claimedImage(event, viewer) {
-    if (!isPrimary(event) || viewer.isOpen() || viewer.owns(event) || document.designMode === 'on') {
+function claimedImage(event, viewer, activation) {
+    if (!activation.isSiteEnabled() || !isPrimary(event) || viewer.isOpen() || viewer.owns(event) || document.designMode === 'on') {
         return null;
     }
 
@@ -111,33 +88,63 @@ function claimedImage(event, viewer) {
     return shouldOpen({ link, altKey: event.altKey }) ? image : null;
 }
 
-function open(viewer, image) {
-    const { entries, indexOf } = collectImages();
-    const start = indexOf(image);
-
-    if (start === -1) {
-        return;
-    }
-
-    const elements = entries.map((entry) => entry.element);
-    viewer.open(entries.map((entry) => entry.item), start, { origin: originOf(elements), originRadius: radiusOf(image) });
+function scrollsSideways(element, style) {
+    return element.scrollWidth > element.clientWidth && ['auto', 'scroll'].includes(style.overflowX);
 }
 
-export function openOnClick(viewer) {
-    for (const type of GESTURE_EVENTS) {
-        window.addEventListener(type, (event) => {
-            const image = claimedImage(event, viewer);
+function inSwipeRegion(image) {
+    if (image.closest(CAROUSEL_MARKUP)) {
+        return true;
+    }
 
-            if (!image) {
-                return;
+    for (let element = image; element && element !== document.body && element !== document.documentElement; element = element.parentElement) {
+        const style = getComputedStyle(element);
+        const swipes = isSwipeStyle({
+            overflowX: style.overflowX,
+            scrollsSideways: scrollsSideways(element, style),
+            scrollSnapType: style.scrollSnapType,
+            touchAction: style.touchAction,
+        });
+
+        if (swipes) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+export function openOnClick(viewer, activation) {
+    let press = null;
+
+    for (const type of [...PRESS_EVENTS, ...RELEASE_EVENTS]) {
+        window.addEventListener(type, (event) => {
+            if (PRESS_EVENTS.includes(type)) {
+                press = pointOf(event);
             }
 
-            event.stopPropagation();
+            const image = claimedImage(event, viewer, activation);
 
-            if (type === 'click') {
-                event.preventDefault();
-                open(viewer, image);
+            if (image && !inSwipeRegion(image)) {
+                event.stopPropagation();
             }
         }, true);
     }
+
+    window.addEventListener('click', (event) => {
+        const moved = event.detail > 0 && movedTooFar(press, pointOf(event));
+        press = null;
+        const image = claimedImage(event, viewer, activation);
+
+        if (!image || (moved && inSwipeRegion(image))) {
+            return;
+        }
+
+        event.stopPropagation();
+        event.preventDefault();
+
+        if (!moved) {
+            openInGallery(viewer, image);
+        }
+    }, true);
 }

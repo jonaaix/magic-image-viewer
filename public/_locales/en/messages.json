@@ -1,0 +1,111 @@
+{
+    "extDescription": {
+        "message": "Opens any image on any web page in a full-screen viewer with zoom, pan and a gallery of every picture on the page.",
+        "description": "Store description, at most 132 characters."
+    },
+    "showInViewer": {
+        "message": "Show in Magic Image Viewer",
+        "description": "Context menu entry on images. Magic Image Viewer is the product name and stays untranslated."
+    },
+    "badgeOff": {
+        "message": "off",
+        "description": "Badge on the toolbar icon while the extension is off. At most 4 characters."
+    },
+    "popup_allSites": {
+        "message": "All sites"
+    },
+    "popup_thisSite": {
+        "message": "This site"
+    },
+    "popup_localFiles": {
+        "message": "Local files"
+    },
+    "popup_unavailable": {
+        "message": "Not available on this page"
+    },
+    "popup_accessTitle": {
+        "message": "Access to websites needed"
+    },
+    "popup_accessText": {
+        "message": "Without it, images do not open on web pages."
+    },
+    "popup_allowAccess": {
+        "message": "Allow access"
+    },
+    "popup_sourceCode": {
+        "message": "Source code"
+    },
+    "popup_version": {
+        "message": "Version $VERSION$",
+        "placeholders": {
+            "version": {
+                "content": "$1",
+                "example": "1.0.0"
+            }
+        },
+        "description": "Version number in the popup footer."
+    },
+    "lightbox_dialog": {
+        "message": "Image viewer"
+    },
+    "lightbox_counter": {
+        "message": ":current / :total"
+    },
+    "lightbox_image": {
+        "message": "Image :number"
+    },
+    "lightbox_video": {
+        "message": "Video :number"
+    },
+    "lightbox_open": {
+        "message": "Open image"
+    },
+    "lightbox_previous": {
+        "message": "Previous image"
+    },
+    "lightbox_next": {
+        "message": "Next image"
+    },
+    "lightbox_close": {
+        "message": "Close"
+    },
+    "lightbox_zoomIn": {
+        "message": "Zoom in"
+    },
+    "lightbox_zoomOut": {
+        "message": "Zoom out"
+    },
+    "lightbox_play": {
+        "message": "Start slideshow"
+    },
+    "lightbox_pause": {
+        "message": "Pause slideshow"
+    },
+    "lightbox_fullscreen": {
+        "message": "Full screen"
+    },
+    "lightbox_exitFullscreen": {
+        "message": "Exit full screen"
+    },
+    "lightbox_download": {
+        "message": "Download"
+    },
+    "lightbox_playVideo": {
+        "message": "Play"
+    },
+    "lightbox_pauseVideo": {
+        "message": "Pause"
+    },
+    "lightbox_seek": {
+        "message": "Seek"
+    },
+    "lightbox_mute": {
+        "message": "Mute"
+    },
+    "lightbox_unmute": {
+        "message": "Unmute"
+    },
+    "lightbox_volume": {
+        "message": "Volume"
+    }
+}

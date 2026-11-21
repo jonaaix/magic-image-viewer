@@ -2,6 +2,9 @@ import './style.css';
 import { createViewer } from './viewer.js';
 import { guardKeys } from './keyGuard.js';
 import { openOnClick } from './clickToOpen.js';
+import { openFromContextMenu } from './contextMenu.js';
+import { isImageDocument, showImageDocument } from './imageDocument.js';
+import { createActivation } from './activation.js';
 
 export default defineContentScript({
     matches: ['<all_urls>'],
@@ -11,7 +14,15 @@ export default defineContentScript({
         let keys = null;
         const viewer = createViewer(ctx, { onOpened: () => keys.forwardAfterViewer() });
         keys = guardKeys(viewer);
-        openOnClick(viewer);
+        const activation = createActivation();
+        activation.onChange(({ enabled }) => !enabled && viewer.close());
+        openFromContextMenu(viewer, activation);
+
+        if (isImageDocument()) {
+            showImageDocument(viewer, activation);
+        } else {
+            openOnClick(viewer, activation);
+        }
 
         if (import.meta.env.MODE === 'test') {
             document.addEventListener('magic-image-viewer:test-open', (event) => {

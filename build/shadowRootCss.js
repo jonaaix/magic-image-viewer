@@ -23,7 +23,8 @@ function propertyDefaults(root, postcss) {
     });
 
     if (defaults.length) {
-        root.prepend(postcss.rule({ selector: ':host, *, ::before, ::after, ::backdrop', nodes: defaults }));
+        const rule = postcss.rule({ selector: ':host, *, ::before, ::after, ::backdrop', nodes: defaults });
+        root.prepend(postcss.atRule({ name: 'layer', params: 'properties', nodes: [rule] }));
     }
 }
 

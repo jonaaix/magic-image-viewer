@@ -53,6 +53,12 @@ For an image the viewer opens, the page sees neither the click nor the pointer, 
 presses leading to it, so the site's own lightbox stays closed. Dragging the image and its context
 menu keep working.
 
+Swiping stays with the page. When the image sits in a swipe region — a part of the page that
+scrolls sideways, snaps while scrolling, handles touch gestures itself, or is built with a known
+carousel library — the page receives every press and release, and only the finished click opens
+the viewer. A press that moves more than about 10 px before it is released never opens the viewer;
+outside a swipe region such a drag opens nothing at all.
+
 The picture grows out of its place on the page and, on closing, shrinks back into the picture the
 viewer currently shows, with matching rounded corners; when that picture is off screen, the viewer
 fades instead.
@@ -73,3 +79,5 @@ fades instead.
 - A Wikipedia article: a click on a photo opens our viewer instead of Wikipedia's media viewer; the
   link to the file page does not load as an image, so the largest picture from the article is shown.
 - A photo inside a rich-text editor stays clickable for the editor and never opens the viewer.
+- A product page with a swipeable photo carousel: swiping moves to the next photo, a tap on a photo
+  opens our viewer.

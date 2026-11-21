@@ -1,5 +1,6 @@
 import { createApp, h, nextTick, ref, shallowRef, watch } from 'vue';
 import { Lightbox } from '@aaix/laravel-islands-gallery/vue';
+import { lightboxLabels } from './lightboxLabels.js';
 
 const HOST_NAME = 'magic-image-viewer';
 
@@ -24,6 +25,7 @@ export function createViewer(ctx, { onOpened }) {
     const images = shallowRef([]);
     const options = shallowRef({});
     const index = ref(null);
+    const labels = lightboxLabels();
     let ui = null;
 
     function fallBack(position, failed) {
@@ -72,6 +74,7 @@ export function createViewer(ctx, { onOpened }) {
                     render: () => h(Lightbox, {
                         ...options.value,
                         images: images.value,
+                        labels,
                         index: index.value,
                         teleport: false,
                         'onUpdate:index': (value) => (index.value = value),
@@ -96,6 +99,9 @@ export function createViewer(ctx, { onOpened }) {
             index.value = start;
             await nextTick();
             onOpened();
+        },
+        close() {
+            index.value = null;
         },
     };
 }

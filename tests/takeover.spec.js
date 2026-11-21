@@ -1,4 +1,4 @@
-import { expect, test, viewer } from './support/extension.js';
+import { expect, label, test, viewer } from './support/extension.js';
 
 const counter = (page) => viewer(page).locator('span.tabular-nums');
 const siteLog = (page) => page.evaluate(() => window.siteLog);
@@ -99,9 +99,9 @@ test.describe('special cases', () => {
         await expect(counter(page)).toHaveText('1 / 8');
         await page.waitForTimeout(450);
 
-        await viewer(page).getByRole('button', { name: 'Next image' }).click();
+        await viewer(page).getByRole('button', { name: await label(page, 'next') }).click();
         await expect(counter(page)).toHaveText('2 / 8');
-        await viewer(page).getByRole('button', { name: 'Close' }).click();
+        await viewer(page).getByRole('button', { name: await label(page, 'close') }).click();
         await expect(viewer(page)).toBeHidden();
         expect(await siteLog(page)).toEqual([]);
     });

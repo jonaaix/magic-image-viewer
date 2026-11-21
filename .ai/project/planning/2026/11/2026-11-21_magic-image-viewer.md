@@ -22,14 +22,14 @@ both store packages build from CI.
   of `laravel-islands-gallery` (its own git repo):
   the five shadow-root changes under Decisions and the thumbnail-ring bug, demo tests green,
   changelog and version bumped. Released as `v1.0.9`.
-- [ ] **M1 — Skeleton and viewer in the page.** WXT + Vue 3 + Tailwind 4, MV3 builds for Chrome
+- [x] **M1 — Skeleton and viewer in the page.** WXT + Vue 3 + Tailwind 4, MV3 builds for Chrome
   and Firefox. Content script mounts the library's `Lightbox` inside a Shadow DOM host and opens
   it with a fixed image list on a fixture page. Proves isolation in both directions: page CSS
   does not reach the viewer, viewer CSS does not reach the page. Checks: Tailwind 4 inside a
   shadow root (`@property` rules and `:root` theme variables), `rem` on pages with a changed root
   font size, keyboard events not reaching the page, focus trap, fullscreen, page scroll lock,
   whether `IconButton` from `@aaix/laravel-islands` teleports anything to `body`.
-  Built and proven (`cb1abd1`) except the last check, which is M1b.
+  The last check became M1b.
 - [x] **M1b — Tooltips inside the viewer.** `Tooltip` in `@aaix/laravel-islands` takes its
   teleport target from an injected value, `body` when nothing is provided; the gallery's
   `Lightbox` provides its own root when `teleport` is not `body`. Released as islands `v1.0.176`
@@ -49,15 +49,35 @@ both store packages build from CI.
   whose source is already in the list opens at that entry. Images inside editable content are
   left alone. Fixture pages for the common lightbox patterns, a real-site checklist, and the
   first build Jonas loads in his own browser.
-- [ ] **M4 — Direct image tabs and context menu.** An image document (`document.contentType`
-  starts with `image/`) is shown in the viewer; context-menu entry "Show in Magic Image Viewer"
-  on images opens the viewer on that image, within the page gallery when the image is part of it.
-- [ ] **M5 — Popup, settings, languages.** Popup with global on/off and "off on this site";
-  all strings through the browser's i18n in en, de, fr, es, it, pt, nl, pl, including the
-  library's `labels` and the store description.
-- [ ] **M6 — Release readiness.** Icon set, README, MIT licence, privacy statement (no data
-  leaves the browser), Playwright end-to-end tests with the extension loaded, CI building both
-  store packages, source package for Firefox review.
+- [x] **M3b — Swiping stays with the page.** In a swipe region — an ancestor of the image scrolls
+  sideways, uses scroll snap, restricts `touch-action`, or carries the markup of a known carousel
+  library — presses and releases reach the page unchanged and only `click` is taken. More than
+  `MAX_TAP_DISTANCE` (10 px) between press and click never opens the viewer. Outside swipe
+  regions everything stays as in M3. Proven by `carousel.html`: a pointer carousel swipes with
+  mouse and touch, a markup-known carousel with the mouse, a tap opens our viewer, a drag across
+  a free image opens nothing.
+- [x] **M4 — Direct image tabs and context menu.** An image document whose `document.contentType`
+  is an image type other than SVG opens the viewer at once with that one image; closing shows the
+  browser's view, a click on the image opens the viewer again. Context-menu entry "Show in Magic
+  Image Viewer" on images, its text through the browser's i18n from the start (English only until
+  M5). When the image is part of the page gallery the viewer opens there at its place, otherwise
+  it shows the image alone — decorative images and images in iframes included. Only the
+  permissions this needs. `file://` behaviour in Chrome and Firefox settled and recorded here.
+  Behaviour in the Feature Book chapter `viewer-open-from-tab-and-menu`.
+- [x] **M5 — Popup, settings, languages.** Popup with a global switch and a switch for the
+  current host, both live without reload and kept across restarts; a hint instead of the site
+  switch on pages extensions cannot reach; version and repository link; light and dark. Firefox:
+  a button requests website access when it is missing. Badge on the toolbar icon while off.
+  Every string through the browser's i18n in en, de, fr, es, it, pt_BR, pt_PT, nl, pl, including
+  the store description, the menu entry, the popup and the library's `labels`. Behaviour in the
+  Feature Book chapter `settings-switches`.
+- [ ] **M6 — Release readiness.** Three icon designs, one built in as the provisional default,
+  all sizes plus a grey variant for "off". README with screenshots, MIT `LICENSE`, `PRIVACY.md`
+  with a reason per permission, `CHANGELOG.md`. GitHub CI runs unit tests, browser tests and both
+  builds on every push; a version tag attaches the Chrome package, the Firefox package and the
+  Firefox source package to a GitHub release. Store material in `store/` (listings in every
+  language, screenshots, permission justifications) and a release checklist for Jonas. Version
+  1.0.0 prepared, not tagged; `main` follows `dev`. Own security check of the whole extension.
 
 ## State
 
@@ -72,9 +92,24 @@ reachable through a test hook (`--mode test`, event `magic-image-viewer:test-ope
 against `tests/fixtures/` (plain, aggressive, article, sources). A plain click on an unlinked
 content image opens the viewer on the page gallery; `npm run test:unit` covers the rules.
 M3: gestures on images we open are taken at `window` capture (`clickToOpen.js`), click rules
-in `clickRules.js`, fixture `lightboxes.html` covers the common lightbox patterns. Real-site
-checklist run headless; rows blocked for automation stay open for Jonas. Firefox MV3 build loads and opens headless via
-WebDriver BiDi; not yet part of `npm test`.
+in `clickRules.js`, fixture `lightboxes.html` covers the common lightbox patterns. M3b: swipe
+regions and the tap distance in the same files, fixture `carousel.html`. Real-site
+checklist run headless; rows blocked for automation stay open for Jonas. M4: `imageDocument.js` takes over raster image tabs,
+`contextMenu.js` answers the background's menu message (`entrypoints/background.js`), both open
+through `galleryOpener.js`. Permission: `contextMenus` only. Locale file `public/_locales/en`.
+M5: settings in `utils/settings.js` (`storage.local`), the content script follows them through
+`activation.js`, the background toggles the menu and the badge, popup in `entrypoints/popup/`.
+Locales in `public/_locales/`, completeness checked by `tests/unit/locales.test.js`. The popup
+takes the page address from `?url=` in test builds, since tests open it as a tab. Browser tests
+read expected texts from the browser's own language files, so they pass in any system language.
+M6: icon variants in `assets/icon/`, rendered by `npm run icons` into `public/icons/` (grey
+copies in `off/`); variant A is the provisional default until Jonas picks one (previews in
+`.ai/project/artifacts/2026-11-21_icon-*.html`). CI in `.github/workflows/ci.yml`; store material
+and the release checklist in `store/`, regenerated by `scripts/store-assets.mjs`. Version 1.0.0
+is prepared and not tagged.
+Specs `imageTab.spec.js` and `menu.spec.js`; the menu click is driven through a test-mode hook in
+the service worker, since Playwright cannot click native menus. Firefox MV3 build loads and opens
+headless via WebDriver BiDi (image tab and SVG checked there); not yet part of `npm test`.
 
 ## Decisions
 
@@ -127,6 +162,11 @@ WebDriver BiDi; not yet part of `npm test`.
   was rejected: other listeners on the same node still fire.
 - **The host is pinned with inline `!important` styles** (fixed, 0×0, z-index max), which beat
   any page rule including `* { all: unset }`.
+- **Swiping wins over taking a site lightbox's press.** In swipe regions only the finished click
+  is taken, and a movement beyond `MAX_TAP_DISTANCE` never opens the viewer anywhere. Price: a
+  site lightbox inside a carousel that opens on press may open in addition to ours — rarer and
+  less harmful than a carousel that no longer swipes. Outside swipe regions a dragged click is
+  swallowed, so neither viewer opens.
 - **Gesture takeover is decided per event, not per gesture.** Each of `pointerdown`, `mousedown`,
   `touchstart`, `pointerup`, `mouseup`, `touchend`, `click` re-resolves the image under the point;
   same point, same answer, no state to get stuck. Only `click` is prevented.
@@ -134,6 +174,17 @@ WebDriver BiDi; not yet part of `npm test`.
   so a page of 200 thumbnails linking to file pages does not trigger 200 downloads.
 - **Unsized lazy images count**: docs sites lazy-load screenshots without width or height, 0×0
   until loaded (VS Code docs: 1 instead of 26 pictures before this rule).
+- **We deliver the store packages, texts and screenshots; Jonas uploads.** Both stores need his
+  developer accounts. The version tag is set only after his OK; CI then builds the packages.
+- **Firefox manifest declares `data_collection_permissions: { required: ["none"] }`** with
+  `strict_min_version` 140.0: required for new AMO submissions since November 2025, understood from
+  Firefox 140.
+- **CI fetches the git dependencies over HTTPS.** npm records `github:` dependencies as
+  `git+ssh` in the lockfile; the workflow rewrites `ssh://git@github.com/` to HTTPS so no key is
+  needed.
+- **The context menu's new-tab fallback only opens http, https and file images.**
+- **Tailwind scans only declared sources** (`source(none)` plus `@source`). Automatic detection read
+  every file of the checkout, so the Firefox reviewer's rebuild from the source package differed.
 - **WXT as the extension framework.** One codebase for Chrome and Firefox MV3, Vite-based like
   the library, with Vue module, shadow-root UI helper and i18n. Rejected: hand-written manifests
   and two build configs.
@@ -157,17 +208,40 @@ WebDriver BiDi; not yet part of `npm test`.
 - **Tooltips are fixed in the islands library, not switched off in the viewer.** Same line as
   the gallery changes: one generic injected teleport target, default unchanged. Rejected: a
   `tooltips` switch on `Lightbox` — icon-only buttons would lose their hints.
-- **Top frame only in the first version.** Images inside iframes are not collected.
+- **Top frame only in the first version.** Images inside iframes are not collected. The context
+  menu still reaches them: the background always messages the top frame, which shows the frame's
+  image alone.
+- **Context menu falls back to a new tab.** When the tab has no content script (open before the
+  install, or a page scripts cannot reach), the image opens in a new tab beside it, where the image
+  tab shows the viewer. Needs no permission beyond `contextMenus`.
+- **The menu target is the last right-clicked image** in the top frame when its source matches the
+  menu's `srcUrl`, else the first image showing that source.
+- **`file://`:** Chrome runs the content script on local files only with "Allow access to file URLs"
+  (store installs off by default, unpacked installs on); verified with Chromium unpacked. Firefox
+  160 (headless, temporary install) does not run it on `file://`, not even with an explicit
+  `file:///*` match. Accepted for the first version.
 - **No telemetry, no remote code, no network requests of our own.** Keeps the store review of
   the all-sites permission simple and the privacy statement one sentence.
-- **Languages: en, de, fr, es, it, pt, nl, pl.** English is the fallback.
+- **Languages: en, de, fr, es, it, pt_BR, pt_PT, nl, pl.** English is the fallback. Chrome knows
+  no plain `pt`, so Portuguese ships in both variants. The language follows the browser; there is
+  no language setting of its own. The name stays untranslated.
+- **Switch semantics:** "All sites" off stops everything, the context-menu entry included (the
+  background removes it). "This site" off stops only the automatic behaviour (clicks, image tabs);
+  the context-menu entry still opens the viewer, as it is an explicit request.
+- **Settings in `storage.local`**, not `sync`: a per-device choice, and no data leaves the browser.
+- **Permissions: `storage`, `activeTab`** added. `activeTab` gives the popup the current page's
+  address without `tabs`, also in Firefox when website access is withheld.
+- **Badge is set per tab by the content script's report** (no `tabs` permission needed) and
+  globally by the background while all sites are off.
+- **Firefox add-on ID `magic-image-viewer@jonaaix.github.io`**, needed for a stable extension URL
+  and for the store.
+- **Rewritten `@property` defaults live in `@layer properties`.** Unlayered they beat every
+  Tailwind utility and reset `translate`, `scale` and friends (the switch knob sat off-centre).
 
 ## Open
 
-- Firefox: content-script host permission under MV3 for a normal (non-temporary) install, and
-  whether the backdrop blur renders (missing in headless Firefox).
-- Swipe carousels whose slides are content images: the press on the image is kept from the page,
-  so a swipe that starts on the image may not move the carousel. To check on real sites.
+- Icon: Jonas picks one of the three variants; the choice replaces variant A via `npm run icons`.
+- Tag `v1.0.0` after Jonas's OK and the release checklist in `store/`.
 
-- To verify in M4: content scripts on `file://` images (Chrome needs the user's "Allow access to
-  file URLs"; Firefox behaviour to be checked).
+- Firefox: whether the backdrop blur renders (missing in headless Firefox). Website access: granted
+  at a temporary install, can be withdrawn; the popup then offers the button (checked headless).

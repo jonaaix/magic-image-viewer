@@ -1,5 +1,6 @@
-@import 'tailwindcss';
+@import 'tailwindcss' source(none);
 @import '@aaix/laravel-islands/css/theme.css';
+@source '.';
 
 @source '../../node_modules/@aaix/laravel-islands-gallery/resources/js';
 @source '../../node_modules/@aaix/laravel-islands/resources/js/vue/helpers';

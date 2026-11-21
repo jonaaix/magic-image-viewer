@@ -1,0 +1,107 @@
+{
+    "extDescription": {
+        "message": "Öffnet jedes Bild auf jeder Webseite in einer Vollbildansicht mit Zoom, Verschieben und einer Galerie aller Bilder der Seite."
+    },
+    "showInViewer": {
+        "message": "In Magic Image Viewer anzeigen"
+    },
+    "badgeOff": {
+        "message": "aus"
+    },
+    "popup_allSites": {
+        "message": "Alle Websites"
+    },
+    "popup_thisSite": {
+        "message": "Diese Website"
+    },
+    "popup_localFiles": {
+        "message": "Lokale Dateien"
+    },
+    "popup_unavailable": {
+        "message": "Auf dieser Seite nicht verfügbar"
+    },
+    "popup_accessTitle": {
+        "message": "Zugriff auf Websites erforderlich"
+    },
+    "popup_accessText": {
+        "message": "Ohne ihn öffnen sich Bilder auf Webseiten nicht."
+    },
+    "popup_allowAccess": {
+        "message": "Zugriff erlauben"
+    },
+    "popup_sourceCode": {
+        "message": "Quellcode"
+    },
+    "popup_version": {
+        "message": "Version $VERSION$",
+        "placeholders": {
+            "version": {
+                "content": "$1",
+                "example": "1.0.0"
+            }
+        }
+    },
+    "lightbox_dialog": {
+        "message": "Bildbetrachter"
+    },
+    "lightbox_counter": {
+        "message": ":current / :total"
+    },
+    "lightbox_image": {
+        "message": "Bild :number"
+    },
+    "lightbox_video": {
+        "message": "Video :number"
+    },
+    "lightbox_open": {
+        "message": "Bild öffnen"
+    },
+    "lightbox_previous": {
+        "message": "Vorheriges Bild"
+    },
+    "lightbox_next": {
+        "message": "Nächstes Bild"
+    },
+    "lightbox_close": {
+        "message": "Schließen"
+    },
+    "lightbox_zoomIn": {
+        "message": "Vergrößern"
+    },
+    "lightbox_zoomOut": {
+        "message": "Verkleinern"
+    },
+    "lightbox_play": {
+        "message": "Diashow starten"
+    },
+    "lightbox_pause": {
+        "message": "Diashow anhalten"
+    },
+    "lightbox_fullscreen": {
+        "message": "Vollbild"
+    },
+    "lightbox_exitFullscreen": {
+        "message": "Vollbild beenden"
+    },
+    "lightbox_download": {
+        "message": "Herunterladen"
+    },
+    "lightbox_playVideo": {
+        "message": "Abspielen"
+    },
+    "lightbox_pauseVideo": {
+        "message": "Pause"
+    },
+    "lightbox_seek": {
+        "message": "Wiedergabeposition"
+    },
+    "lightbox_mute": {
+        "message": "Ton aus"
+    },
+    "lightbox_unmute": {
+        "message": "Ton an"
+    },
+    "lightbox_volume": {
+        "message": "Lautstärke"
+    }
+}

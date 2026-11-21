@@ -1,13 +1,13 @@
 import { chromium } from '@playwright/test';
-import { expect, openViewer, test, viewer } from './support/extension.js';
+import { expect, label, openViewer, test, viewer } from './support/extension.js';
 
 const shots = process.env.SHOTS_DIR;
 
 async function measure(page) {
-    return page.evaluate(() => {
+    return page.evaluate((closeLabel) => {
         const root = document.querySelector('magic-image-viewer').shadowRoot;
         const style = (selector) => getComputedStyle(root.querySelector(selector));
-        const close = root.querySelector('[aria-label="Close"]').getBoundingClientRect();
+        const close = root.querySelector(`[aria-label="${closeLabel}"]`).getBoundingClientRect();
 
         return {
             closeButton: { width: close.width, height: close.height },
@@ -19,7 +19,7 @@ async function measure(page) {
             imageShadow: style('img.ilg-image').boxShadow,
             imageRadius: style('img.ilg-image').borderRadius,
         };
-    });
+    }, await label(page, 'close'));
 }
 
 function sameImage(a, b) {
@@ -145,18 +145,18 @@ test.describe('viewer', () => {
         await page.goto('/plain.html');
         await openViewer(page);
 
-        await viewer(page).getByRole('button', { name: 'Full screen' }).click();
-        await expect(viewer(page).getByRole('button', { name: 'Exit full screen' })).toBeVisible();
-        await viewer(page).getByRole('button', { name: 'Exit full screen' }).click();
-        await expect(viewer(page).getByRole('button', { name: 'Full screen' })).toBeVisible();
+        await viewer(page).getByRole('button', { name: await label(page, 'fullscreen') }).click();
+        await expect(viewer(page).getByRole('button', { name: await label(page, 'exitFullscreen') })).toBeVisible();
+        await viewer(page).getByRole('button', { name: await label(page, 'exitFullscreen') }).click();
+        await expect(viewer(page).getByRole('button', { name: await label(page, 'fullscreen') })).toBeVisible();
     });
 
     test('puts nothing into the page body', async ({ page }) => {
         await page.goto('/plain.html');
         const before = await page.evaluate(() => document.body.children.length);
         await openViewer(page);
-        await viewer(page).getByRole('button', { name: 'Close' }).hover();
-        await expect(viewer(page).getByRole('tooltip')).toHaveText('Close');
+        await viewer(page).getByRole('button', { name: await label(page, 'close') }).hover();
+        await expect(viewer(page).getByRole('tooltip')).toHaveText(await label(page, 'close'));
 
         expect(await page.evaluate(() => document.body.children.length)).toBe(before);
     });
@@ -164,10 +164,10 @@ test.describe('viewer', () => {
     test('shows a styled tooltip at the button', async ({ page }) => {
         await page.goto('/aggressive.html');
         await openViewer(page);
-        const button = viewer(page).getByRole('button', { name: 'Full screen' });
+        const button = viewer(page).getByRole('button', { name: await label(page, 'fullscreen') });
         await button.hover();
         const tooltip = viewer(page).getByRole('tooltip');
-        await expect(tooltip).toHaveText('Full screen');
+        await expect(tooltip).toHaveText(await label(page, 'fullscreen'));
         await page.waitForTimeout(300);
         shots && (await page.screenshot({ path: `${shots}/viewer-tooltip.png`, clip: { x: 900, y: 0, width: 380, height: 120 } }));
 

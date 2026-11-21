@@ -1,0 +1,107 @@
+{
+    "extDescription": {
+        "message": "Abre cualquier imagen de una página web en un visor a pantalla completa con zoom, desplazamiento y galería de todas sus imágenes."
+    },
+    "showInViewer": {
+        "message": "Mostrar en Magic Image Viewer"
+    },
+    "badgeOff": {
+        "message": "off"
+    },
+    "popup_allSites": {
+        "message": "Todos los sitios"
+    },
+    "popup_thisSite": {
+        "message": "Este sitio"
+    },
+    "popup_localFiles": {
+        "message": "Archivos locales"
+    },
+    "popup_unavailable": {
+        "message": "No disponible en esta página"
+    },
+    "popup_accessTitle": {
+        "message": "Se necesita acceso a los sitios web"
+    },
+    "popup_accessText": {
+        "message": "Sin él, las imágenes no se abren en las páginas web."
+    },
+    "popup_allowAccess": {
+        "message": "Permitir acceso"
+    },
+    "popup_sourceCode": {
+        "message": "Código fuente"
+    },
+    "popup_version": {
+        "message": "Versión $VERSION$",
+        "placeholders": {
+            "version": {
+                "content": "$1",
+                "example": "1.0.0"
+            }
+        }
+    },
+    "lightbox_dialog": {
+        "message": "Visor de imágenes"
+    },
+    "lightbox_counter": {
+        "message": ":current / :total"
+    },
+    "lightbox_image": {
+        "message": "Imagen :number"
+    },
+    "lightbox_video": {
+        "message": "Vídeo :number"
+    },
+    "lightbox_open": {
+        "message": "Abrir imagen"
+    },
+    "lightbox_previous": {
+        "message": "Imagen anterior"
+    },
+    "lightbox_next": {
+        "message": "Imagen siguiente"
+    },
+    "lightbox_close": {
+        "message": "Cerrar"
+    },
+    "lightbox_zoomIn": {
+        "message": "Ampliar"
+    },
+    "lightbox_zoomOut": {
+        "message": "Reducir"
+    },
+    "lightbox_play": {
+        "message": "Iniciar presentación"
+    },
+    "lightbox_pause": {
+        "message": "Pausar presentación"
+    },
+    "lightbox_fullscreen": {
+        "message": "Pantalla completa"
+    },
+    "lightbox_exitFullscreen": {
+        "message": "Salir de pantalla completa"
+    },
+    "lightbox_download": {
+        "message": "Descargar"
+    },
+    "lightbox_playVideo": {
+        "message": "Reproducir"
+    },
+    "lightbox_pauseVideo": {
+        "message": "Pausa"
+    },
+    "lightbox_seek": {
+        "message": "Posición de reproducción"
+    },
+    "lightbox_mute": {
+        "message": "Silenciar"
+    },
+    "lightbox_unmute": {
+        "message": "Activar sonido"
+    },
+    "lightbox_volume": {
+        "message": "Volumen"
+    }
+}
