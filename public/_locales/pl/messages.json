@@ -106,5 +106,56 @@
     },
     "lightbox_volume": {
         "message": "Głośność"
+    },
+    "popup_statusActive": {
+        "message": "Aktywne na tej stronie"
+    },
+    "popup_statusSiteOff": {
+        "message": "Wyłączone na tej stronie"
+    },
+    "popup_statusAllOff": {
+        "message": "Wyłączone wszędzie"
+    },
+    "popup_imagesOne": {
+        "message": "1 obraz na tej stronie"
+    },
+    "popup_imagesOther": {
+        "message": "Obrazy na tej stronie: $COUNT$",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "12"
+            }
+        }
+    },
+    "popup_private": {
+        "message": "100% prywatnie"
+    },
+    "popup_privateText": {
+        "message": "Żadne dane nie opuszczają przeglądarki"
+    },
+    "popup_free": {
+        "message": "Zawsze za darmo"
+    },
+    "popup_freeText": {
+        "message": "Otwarte źródło"
+    },
+    "popup_by": {
+        "message": "autor: $NAME$",
+        "placeholders": {
+            "name": {
+                "content": "$1",
+                "example": "jonaaix"
+            }
+        }
+    },
+    "popup_star": {
+        "message": "Gwiazdka na GitHubie"
+    },
+    "popup_reportBug": {
+        "message": "Zgłoś błąd"
+    },
+    "popup_coffee": {
+        "message": "Postaw mi kawę"
     }
 }

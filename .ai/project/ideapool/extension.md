@@ -1,4 +1,3 @@
-- 2026-11-21 [user]: "Buy Me a Coffee" button, e.g. in the popup and the README.
 - 2026-11-21 [agent]: Play page videos in the viewer too; the library already supports videos.
 - 2026-11-21 [agent]: Per-site adapters for sites whose full-size image cannot be found generically.
 - 2026-11-21 [agent]: CSS background images as content images.

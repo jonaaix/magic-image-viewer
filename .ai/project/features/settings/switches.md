@@ -15,7 +15,23 @@ prefer the site's own behaviour. The extension speaks the visitor's language.
 
 ### The popup
 
-The toolbar button opens a small panel with two switches:
+The toolbar button opens a small panel, readable at a glance, from top to bottom:
+
+- **Header:** the app icon, the name and the version.
+- **Status:** one sentence on the current state — active on this site, off on this site, off
+  everywhere, or not available here. Active is tinted green, everything else stays grey. While
+  active on a web page, a second line counts the images on the page ("12 images on this page"),
+  counted exactly as the viewer collects its gallery.
+- **Switches**, described below.
+- **Trust:** "100% private — no data leaves your browser", linking to the privacy policy, and
+  "Free forever — open source", linking to the repository.
+- **Footer:** "by jonaaix" linking to the author's GitHub profile, then icon buttons with
+  tooltips to star the project on GitHub, report a bug (the repository's issues), the source code,
+  and Buy Me a Coffee. The coffee button appears only once its link is configured.
+
+Links only open new tabs; the popup needs no extra permission and makes no network requests.
+
+The two switches:
 
 - **All sites** turns the whole extension on or off. Off means no click handling, no key
   protection, no viewer on image tabs and no context-menu entry.
@@ -26,12 +42,11 @@ The toolbar button opens a small panel with two switches:
 
 Both switches take effect at once in every open tab, without reloading, and are kept across
 browser restarts. On pages where extensions cannot run — browser pages, extension stores — the
-panel shows "Not available on this page" instead of the site switch.
+status reads "Not available on this page" and the site switch is gone. In a file tab the site
+switch is gone too, because it does not apply there.
 
 When the browser has not granted access to websites (Firefox lets the visitor withhold or
 withdraw it), the panel shows a warning with a button that asks for it.
-
-The footer shows the version and links to the source code.
 
 ### State at the toolbar icon
 

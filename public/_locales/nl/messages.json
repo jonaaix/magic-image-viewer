@@ -106,5 +106,56 @@
     },
     "lightbox_volume": {
         "message": "Volume"
+    },
+    "popup_statusActive": {
+        "message": "Actief op deze site"
+    },
+    "popup_statusSiteOff": {
+        "message": "Uit op deze site"
+    },
+    "popup_statusAllOff": {
+        "message": "Overal uit"
+    },
+    "popup_imagesOne": {
+        "message": "1 afbeelding op deze pagina"
+    },
+    "popup_imagesOther": {
+        "message": "$COUNT$ afbeeldingen op deze pagina",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "12"
+            }
+        }
+    },
+    "popup_private": {
+        "message": "100% privé"
+    },
+    "popup_privateText": {
+        "message": "Er verlaten geen gegevens de browser"
+    },
+    "popup_free": {
+        "message": "Voor altijd gratis"
+    },
+    "popup_freeText": {
+        "message": "Open source"
+    },
+    "popup_by": {
+        "message": "door $NAME$",
+        "placeholders": {
+            "name": {
+                "content": "$1",
+                "example": "jonaaix"
+            }
+        }
+    },
+    "popup_star": {
+        "message": "Ster op GitHub"
+    },
+    "popup_reportBug": {
+        "message": "Fout melden"
+    },
+    "popup_coffee": {
+        "message": "Trakteer op koffie"
     }
 }

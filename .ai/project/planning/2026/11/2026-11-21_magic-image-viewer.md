@@ -113,6 +113,9 @@ headless via WebDriver BiDi (image tab and SVG checked there); not yet part of `
 
 ## Decisions
 
+- **The popup carries status, image count, trust and author links** (Jonas' choice of ten
+  elements); quick guide and shortcuts stay out. The coffee link lives only in `utils/links.js`;
+  empty hides the button. No new permissions, no network access.
 - **A file opened directly in a tab exists only in the viewer.** Image or video, local or from
   the web: the viewer shows it at once and cannot be closed — no close button, Esc only resets
   the zoom, no drag-down, and no "off on this site". The browser's own view never appears; a

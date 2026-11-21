@@ -106,5 +106,56 @@
     },
     "lightbox_volume": {
         "message": "Volume"
+    },
+    "popup_statusActive": {
+        "message": "Ativo neste site"
+    },
+    "popup_statusSiteOff": {
+        "message": "Desativado neste site"
+    },
+    "popup_statusAllOff": {
+        "message": "Desativado em todos os sites"
+    },
+    "popup_imagesOne": {
+        "message": "1 imagem nesta página"
+    },
+    "popup_imagesOther": {
+        "message": "$COUNT$ imagens nesta página",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "12"
+            }
+        }
+    },
+    "popup_private": {
+        "message": "100% privado"
+    },
+    "popup_privateText": {
+        "message": "Nenhum dado sai do navegador"
+    },
+    "popup_free": {
+        "message": "Grátis para sempre"
+    },
+    "popup_freeText": {
+        "message": "Código aberto"
+    },
+    "popup_by": {
+        "message": "por $NAME$",
+        "placeholders": {
+            "name": {
+                "content": "$1",
+                "example": "jonaaix"
+            }
+        }
+    },
+    "popup_star": {
+        "message": "Estrela no GitHub"
+    },
+    "popup_reportBug": {
+        "message": "Comunicar um erro"
+    },
+    "popup_coffee": {
+        "message": "Ofereça-me um café"
     }
 }
