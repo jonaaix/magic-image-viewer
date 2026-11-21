@@ -2,7 +2,7 @@
 
 ## 1. Real sites, by hand
 
-Load `.output/chrome-mv3` in Chrome, then repeat the marked rows in Firefox.
+Load `dist/chrome-mv3` in Chrome, then repeat the marked rows in Firefox.
 
 - [ ] Forum thread with attached photos: a click opens the viewer, the forum's own lightbox stays closed.
 - [ ] Shop product page: product photos open, the photo carousel still swipes (mouse and touch), a tap opens the viewer.
