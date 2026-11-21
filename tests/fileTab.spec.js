@@ -124,3 +124,18 @@ test('a single file shows no counter and keeps its toolbar icons steady', async 
     await page.waitForTimeout(60);
     expect(await zoom.locator('svg').evaluate((icon) => icon.getBoundingClientRect().width)).toBe(20);
 });
+
+test('a toolbar tooltip stays while the pointer moves over its button', async ({ page }) => {
+    await page.goto('/images/landscape.jpg');
+    await expect(shownImage(page)).toHaveAttribute('style', /scale\(1\)/);
+    await page.waitForTimeout(450);
+    const zoom = viewer(page).locator('.ilg-tool').first();
+    const box = await zoom.boundingBox();
+
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await expect(viewer(page).getByRole('tooltip')).toHaveText(await label(page, 'zoomIn'));
+    await page.mouse.move(box.x + box.width / 2 + 3, box.y + box.height / 2 + 2);
+    await page.waitForTimeout(300);
+
+    await expect(viewer(page).getByRole('tooltip')).toHaveText(await label(page, 'zoomIn'));
+});
