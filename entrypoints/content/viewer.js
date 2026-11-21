@@ -11,9 +11,19 @@ const HOST_STYLE = {
     width: '0',
     height: '0',
     overflow: 'visible',
+    right: 'auto',
+    bottom: 'auto',
+    margin: '0',
+    padding: '0',
+    border: '0',
+    background: 'transparent',
+    'max-width': 'none',
+    'max-height': 'none',
     display: 'block',
     'z-index': '2147483647',
 };
+
+const CLOSE_ANIMATION_MS = 400;
 
 function pin(host) {
     for (const [property, value] of Object.entries(HOST_STYLE)) {
@@ -57,6 +67,46 @@ export function createViewer(ctx, { onOpened }) {
             [position - 1, position, position + 1].forEach(probe);
         }
     });
+
+    function raise() {
+        const host = ui?.shadowHost;
+
+        if (!host?.isConnected) {
+            return;
+        }
+
+        host.setAttribute('popover', 'manual');
+
+        if (host.matches(':popover-open')) {
+            host.hidePopover();
+        }
+
+        host.showPopover();
+    }
+
+    function lower() {
+        setTimeout(() => {
+            const host = ui?.shadowHost;
+
+            if (index.value === null && host?.matches(':popover-open')) {
+                host.hidePopover();
+            }
+        }, CLOSE_ANIMATION_MS);
+    }
+
+    watch(index, (position, previous) => {
+        if (position === null) {
+            lower();
+        } else if (previous === null) {
+            nextTick(raise);
+        }
+    });
+
+    document.addEventListener('toggle', (event) => {
+        if (index.value !== null && event.newState === 'open' && event.target !== ui?.shadowHost) {
+            raise();
+        }
+    }, true);
 
     async function ensureMounted() {
         if (ui?.shadowHost.isConnected) {

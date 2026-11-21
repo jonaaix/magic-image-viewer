@@ -113,6 +113,11 @@ headless via WebDriver BiDi (image tab and SVG checked there); not yet part of `
 
 ## Decisions
 
+- **The viewer sits in the browser's top layer while open** (popover on the shadow host), not
+  only at the highest z-index. An ad or widget with the same maximum z-index that comes later in
+  the page would otherwise stay above it; the top layer is above every z-index. If the page puts
+  something of its own into the top layer afterwards, the viewer moves back to the front. A modal
+  dialog the page opens meanwhile still makes the viewer inert; the browser allows no way around it.
 - **Viewer lives in the page inside a Shadow DOM, not in an extension iframe.** Images then load
   with the page's cookies and referrer, so hotlink-protected and logged-in images work, and
   `origin` rectangles match the viewport. Rejected: extension-page iframe — clean isolation, but
