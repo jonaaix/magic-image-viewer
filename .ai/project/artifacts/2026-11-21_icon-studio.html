@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Icon Studio</title>
+<style>
+    body { margin: 0; padding: 20px; font: 13px/1.4 system-ui, sans-serif; background: #18181b; color: #e4e4e7; }
+    main { display: grid; grid-template-columns: 300px 1fr; gap: 24px; }
+    .panel { display: grid; gap: 10px; align-content: start; padding: 16px; border-radius: 12px; background: #27272a; box-shadow: inset 0 0 0 1px #3f3f46; }
+    h2 { margin: 6px 0 0; font-size: 12px; font-weight: 600; color: #a1a1aa; }
+    label { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    input[type=color] { width: 56px; height: 32px; padding: 0; border: 0; border-radius: 8px; background: none; cursor: pointer; }
+    input[type=range] { width: 140px; }
+    .presets { display: flex; flex-wrap: wrap; gap: 6px; }
+    .presets button { height: 28px; padding: 0 10px; border: 0; border-radius: 6px; background: #3f3f46; color: #e4e4e7; cursor: pointer; }
+    .presets button:hover { background: #52525b; }
+    .row { display: flex; align-items: flex-end; gap: 18px; }
+    .icon svg { display: block; width: 100%; height: 100%; }
+    .off svg { filter: grayscale(1) opacity(.55); }
+    .toolbar { display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 10px; border-radius: 10px; background: #fff; margin-top: 10px; max-width: 520px; }
+    .toolbar.dark { background: #202124; box-shadow: inset 0 0 0 1px #3c4043; }
+    .url { flex: 1; height: 24px; line-height: 24px; padding: 0 10px; border-radius: 12px; background: #f1f3f4; color: #5f6368; }
+    .dark .url { background: #35363a; color: #bdc1c6; }
+    .slot { display: flex; width: 28px; height: 28px; align-items: center; justify-content: center; }
+    .stage { display: grid; gap: 16px; align-content: start; }
+    .bgs { display: flex; gap: 12px; }
+    .bgs div { padding: 14px; border-radius: 12px; }
+    code { display: block; padding: 10px; border-radius: 8px; background: #09090b; color: #a7f3d0; white-space: pre-wrap; font-size: 12px; }
+    .copy { height: 32px; border: 0; border-radius: 8px; background: #6366f1; color: #fff; font-weight: 600; cursor: pointer; }
+</style>
+</head>
+<body>
+<main>
+    <div class="panel">
+        <h2>Presets</h2>
+        <div class="presets" id="presets"></div>
+
+        <h2>Background</h2>
+        <label>Top <input type="color" id="bg1"></label>
+        <label>Bottom <input type="color" id="bg2"></label>
+        <label>Angle <input type="range" id="angle" min="0" max="180" step="15"></label>
+        <label>Gloss <input type="range" id="gloss" min="0" max="60"></label>
+
+        <h2>Photos</h2>
+        <label>Colour 1 <input type="color" id="c1"></label>
+        <label>Colour 2 <input type="color" id="c2"></label>
+        <label>Front card <input type="color" id="card"></label>
+
+        <h2>Sparkle</h2>
+        <label>Colour <input type="color" id="spark"></label>
+
+        <h2>Values</h2>
+        <code id="values"></code>
+        <button class="copy" id="copy">Copy values</button>
+    </div>
+
+    <div class="stage">
+        <div class="row" id="sizes"></div>
+        <div>
+            <div class="toolbar"><span class="url">example.com/photos</span><span class="slot icon" id="tb1" style="width:16px;height:16px"></span><span class="slot icon off" id="tb2" style="width:16px;height:16px"></span></div>
+            <div class="toolbar dark"><span class="url">example.com/photos</span><span class="slot icon" id="tb3" style="width:16px;height:16px"></span><span class="slot icon off" id="tb4" style="width:16px;height:16px"></span></div>
+        </div>
+        <div class="bgs" id="bgs"></div>
+    </div>
+</main>
+
+<script>
+const PRESETS = {
+    Graphite: { bg1: '#55555c', bg2: '#18181b', angle: 0, gloss: 32, c1: '#f472b6', c2: '#8b5cf6', card: '#ffffff', spark: '#fde68a' },
+    Original: { bg1: '#111827', bg2: '#111827', angle: 0, gloss: 0, c1: '#f472b6', c2: '#8b5cf6', card: '#ffffff', spark: '#fde68a' },
+    Sunset: { bg1: '#ff9a3c', bg2: '#ff2e7e', angle: 45, gloss: 30, c1: '#ffe066', c2: '#ff7a00', card: '#ffffff', spark: '#fff7d6' },
+    Ocean: { bg1: '#3ea6ff', bg2: '#1d4ed8', angle: 0, gloss: 32, c1: '#f472b6', c2: '#8b5cf6', card: '#ffffff', spark: '#fde68a' },
+    Neon: { bg1: '#26262b', bg2: '#09090b', angle: 45, gloss: 30, c1: '#22d3ee', c2: '#e879f9', card: '#ffffff', spark: '#fde047' },
+};
+const FIELDS = ['bg1', 'bg2', 'angle', 'gloss', 'c1', 'c2', 'card', 'spark'];
+const $ = (id) => document.getElementById(id);
+let counter = 0;
+
+function svg(v) {
+    const n = ++counter;
+    const rad = (v.angle * Math.PI) / 180;
+    const x2 = (0.5 + Math.sin(rad) / 2).toFixed(3), y2 = (0.5 + Math.cos(rad) / 2).toFixed(3);
+    const x1 = (1 - x2).toFixed(3), y1 = (1 - y2).toFixed(3);
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+    <defs>
+        <linearGradient id="card${n}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${v.c1}"/><stop offset="1" stop-color="${v.c2}"/></linearGradient>
+        <linearGradient id="bg${n}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"><stop offset="0" stop-color="${v.bg1}"/><stop offset="1" stop-color="${v.bg2}"/></linearGradient>
+        <linearGradient id="gloss${n}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="${v.gloss / 100}"/><stop offset="0.5" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    </defs>
+    <rect width="128" height="128" rx="28" fill="url(#bg${n})"/>
+    <rect width="128" height="128" rx="28" fill="url(#gloss${n})"/>
+    ${v.gloss > 0 ? '<rect x="1" y="1" width="126" height="126" rx="27" fill="none" stroke="#fff" stroke-opacity="0.22" stroke-width="2"/>' : ''}
+    <rect x="22" y="30" width="70" height="58" rx="10" fill="url(#card${n})" transform="rotate(-12 57 59)"/>
+    <rect x="36" y="44" width="72" height="60" rx="10" fill="${v.card}"/>
+    <path d="M46 94 L66 70 L79 84 L88 75 L100 94 Z" fill="url(#card${n})"/>
+    <circle cx="90" cy="60" r="7" fill="url(#card${n})"/>
+    <path d="M30 98 C31.2 106 33 107.8 41 109 C33 110.2 31.2 112 30 120 C28.8 112 27 110.2 19 109 C27 107.8 28.8 106 30 98 Z" fill="${v.spark}"/>
+</svg>`;
+}
+
+function values() {
+    return Object.fromEntries(FIELDS.map((f) => [f, $(f).type === 'range' ? Number($(f).value) : $(f).value]));
+}
+
+function render() {
+    const v = values();
+    $('sizes').innerHTML = [128, 64, 48, 32, 16].map((s) => `<span class="icon" style="width:${s}px;height:${s}px">${svg(v)}</span>`).join('');
+    ['tb1', 'tb2', 'tb3', 'tb4'].forEach((id) => ($(id).innerHTML = svg(v)));
+    $('bgs').innerHTML = ['#ffffff', '#f3f4f6', '#202124', '#000000'].map((bg) => `<div style="background:${bg}"><span class="icon" style="display:block;width:48px;height:48px">${svg(v)}</span></div>`).join('');
+    $('values').textContent = `Background ${v.bg1} → ${v.bg2}, ${v.angle}°, gloss ${v.gloss}%\nPhotos ${v.c1} → ${v.c2}, front card ${v.card}\nSparkle ${v.spark}`;
+}
+
+function apply(preset) {
+    FIELDS.forEach((f) => ($(f).value = preset[f]));
+    render();
+}
+
+Object.entries(PRESETS).forEach(([name, preset]) => {
+    const button = document.createElement('button');
+    button.textContent = name;
+    button.onclick = () => apply(preset);
+    $('presets').append(button);
+});
+FIELDS.forEach((f) => $(f).addEventListener('input', render));
+$('copy').onclick = () => navigator.clipboard.writeText($('values').textContent).then(() => ($('copy').textContent = 'Copied'), () => ($('copy').textContent = 'Select the text above'));
+apply(PRESETS.Graphite);
+</script>
+</body>
+</html>

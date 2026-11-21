@@ -2,7 +2,7 @@ import { chromium } from '@playwright/test';
 import { mkdirSync, readFileSync } from 'node:fs';
 
 const SIZES = [16, 24, 32, 48, 64, 96, 128];
-const VARIANT = process.argv[2] ?? 'variant-c2';
+const VARIANT = process.argv[2] ?? 'variant-e';
 const source = readFileSync(new URL(`../assets/icon/${VARIANT}.svg`, import.meta.url), 'utf8');
 const output = (folder) => new URL(`../public/icons/${folder}`, import.meta.url);
 

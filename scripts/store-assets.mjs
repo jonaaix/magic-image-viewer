@@ -72,13 +72,13 @@ await popup.setContent(`<style>body{margin:0;width:1280px;height:800px;backgroun
 await popup.screenshot({ path: join(output, '03-popup.png') });
 
 // ----- Store icon (96 px artwork, 16 px transparent padding) and small promo tile -----
-const icon = readFileSync(join(root, 'assets/icon/variant-c2.svg'), 'utf8');
+const icon = readFileSync(join(root, 'assets/icon/variant-e.svg'), 'utf8');
 await popup.setViewportSize({ width: 128, height: 128 });
 await popup.setContent(`<style>html,body{margin:0;background:transparent}main{width:128px;height:128px;padding:16px;box-sizing:border-box}svg{display:block;width:96px;height:96px}</style><main>${icon}</main>`);
 await popup.locator('main').screenshot({ path: join(output, '../icon-128.png'), omitBackground: true });
 
 await popup.setViewportSize({ width: 440, height: 280 });
-await popup.setContent(`<style>body{margin:0}main{width:440px;height:280px;display:flex;align-items:center;gap:20px;padding:0 32px;box-sizing:border-box;background:linear-gradient(135deg,#1e1b4b,#4c1d95);font-family:system-ui,sans-serif;color:#fff}svg{width:96px;height:96px;flex:none}b{display:block;font-size:26px;letter-spacing:-.01em}span{display:block;margin-top:6px;font-size:15px;color:#ddd6fe}</style><main>${icon}<div><b>Magic Image Viewer</b><span>Any image on any page, full screen.</span></div></main>`);
+await popup.setContent(`<style>body{margin:0}main{width:440px;height:280px;display:flex;align-items:center;gap:20px;padding:0 32px;box-sizing:border-box;background:linear-gradient(135deg,#11053b,#002e7a);font-family:system-ui,sans-serif;color:#fff}svg{width:96px;height:96px;flex:none}b{display:block;font-size:26px;letter-spacing:-.01em}span{display:block;margin-top:6px;font-size:15px;color:#bfdbfe}</style><main>${icon}<div><b>Magic Image Viewer</b><span>Any image on any page, full screen.</span></div></main>`);
 await popup.locator('main').screenshot({ path: join(output, '../promo-440x280.png') });
 
 await testContext.close();
