@@ -79,7 +79,7 @@ test.describe('isolation', () => {
         expect(styles.counterFont).toContain('sans-serif');
         expect(styles.islandBackdrop).toContain('blur(16px)');
         expect(styles.backdropBlur).toContain('blur(40px)');
-        expect(styles.activeThumbnail).toContain('rgb(255, 255, 255) 0px 0px 0px 2px');
+        expect(styles.activeThumbnail).toMatch(/ \/ 0\.8\) 0px 0px 0px 2px/);
         expect(styles.imageShadow).not.toContain('lime');
         expect(styles.imageRadius).toBe('8px');
     });

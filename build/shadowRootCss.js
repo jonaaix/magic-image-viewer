@@ -10,10 +10,18 @@ function propertyDefaults(root, postcss) {
 
     root.walkAtRules('property', (rule) => {
         let initial = null;
+        let syntax = '';
 
         rule.walkDecls('initial-value', (decl) => {
             initial = decl.value;
         });
+        rule.walkDecls('syntax', (decl) => {
+            syntax = decl.value;
+        });
+
+        if (initial === '0' && syntax.includes('<length')) {
+            initial = '0px';
+        }
 
         if (initial !== null) {
             defaults.push(postcss.decl({ prop: rule.params.trim(), value: initial }));
