@@ -9,7 +9,6 @@ import BugAntIcon from './icons/BugAntIcon.vue';
 import CodeBracketIcon from './icons/CodeBracketIcon.vue';
 import ExclamationTriangleIcon from './icons/ExclamationTriangleIcon.vue';
 import GiftIcon from './icons/GiftIcon.vue';
-import HeartIcon from './icons/HeartIcon.vue';
 import PhotoIcon from './icons/PhotoIcon.vue';
 import ShieldCheckIcon from './icons/ShieldCheckIcon.vue';
 import StarIcon from './icons/StarIcon.vue';
@@ -181,6 +180,18 @@ onMounted(async () => {
                         <span class="block text-xs text-gray-500 dark:text-gray-400">{{ t('popup_freeText') }}</span>
                     </a>
                 </section>
+
+                <a
+                    v-if="COFFEE_URL"
+                    :href="COFFEE_URL"
+                    target="_blank"
+                    rel="noopener"
+                    class="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#FFDD00] text-sm font-bold text-gray-900 transition-colors hover:bg-[#FFE53D] dark:bg-[#FFDD00] dark:text-gray-900 dark:hover:bg-[#FFE53D]"
+                    data-link="coffee"
+                >
+                    <span aria-hidden="true" class="text-base">☕</span>
+                    {{ t('popup_coffee') }}
+                </a>
             </template>
         </div>
 
@@ -192,7 +203,6 @@ onMounted(async () => {
                 <IconButton :href="REPOSITORY_URL" :label="t('popup_star')" size="sm" data-link="star"><StarIcon /></IconButton>
                 <IconButton :href="ISSUES_URL" :label="t('popup_reportBug')" size="sm" data-link="issues"><BugAntIcon /></IconButton>
                 <IconButton :href="REPOSITORY_URL" :label="t('popup_sourceCode')" size="sm" data-link="source"><CodeBracketIcon /></IconButton>
-                <IconButton v-if="COFFEE_URL" :href="COFFEE_URL" :label="t('popup_coffee')" size="sm" data-link="coffee"><HeartIcon /></IconButton>
             </nav>
         </footer>
     </main>

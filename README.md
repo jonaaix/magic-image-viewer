@@ -90,8 +90,9 @@ runs inside a Shadow DOM, so pages and viewer do not affect each other's styles.
 
 ## Support
 
-Magic Image Viewer is free and stays free. If it saves you time, you can
-[buy me a coffee](https://buymeacoffee.com/jonaaix).
+Magic Image Viewer is free and stays free. If it saves you time, you can buy me a coffee:
+
+<a href="https://buymeacoffee.com/jonaaix"><img src="https://img.shields.io/badge/Buy%20me%20a%20coffee-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=black" alt="Buy me a coffee" height="40"></a>
 
 ## Licence
 

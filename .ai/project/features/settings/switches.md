@@ -25,9 +25,11 @@ The toolbar button opens a small panel, readable at a glance, from top to bottom
 - **Switches**, described below.
 - **Trust:** "100% private — no data leaves your browser", linking to the privacy policy, and
   "Free forever — open source", linking to the repository.
+- **Buy me a coffee:** a full-width button in the brand's yellow, labelled in English in every
+  language, as it is the brand name. It appears only once its link is configured.
 - **Footer:** "by jonaaix" linking to the author's GitHub profile, then icon buttons with
-  tooltips to star the project on GitHub, report a bug (the repository's issues), the source code,
-  and Buy Me a Coffee. The coffee button appears only once its link is configured.
+  tooltips to star the project on GitHub, report a bug (the repository's issues) and the source
+  code.
 
 Links only open new tabs; the popup needs no extra permission and makes no network requests.
 
