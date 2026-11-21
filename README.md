@@ -9,6 +9,10 @@ A browser extension for Chrome and Firefox that opens any image on any web page 
 viewer — with zoom, pan and a gallery of every picture on the page.
 </p>
 
+<p align="center">
+  <b>Chrome Web Store</b> · <b>Firefox Add-ons</b> · <b>Microsoft Edge Add-ons</b> — coming soon
+</p>
+
 ![The viewer over a page of photos](store/screenshots/01-viewer.png)
 
 ## Features
@@ -44,7 +48,15 @@ viewer — with zoom, pan and a gallery of every picture on the page.
 | Any image | Right-click → Show in Magic Image Viewer |
 | Switch off | Toolbar button → All sites / This site |
 
-## Install from source
+## Install
+
+| Store | Link |
+| --- | --- |
+| Chrome Web Store | Coming soon |
+| Firefox Add-ons | Coming soon |
+| Microsoft Edge Add-ons | Coming soon |
+
+### From source
 
 Requirements: Node.js 24 and npm.
 
