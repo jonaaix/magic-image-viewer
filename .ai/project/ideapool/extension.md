@@ -3,3 +3,4 @@
 - 2026-11-21 [agent]: Per-site adapters for sites whose full-size image cannot be found generically.
 - 2026-11-21 [agent]: CSS background images as content images.
 - 2026-11-21 [agent]: For a directly opened image, step through the other images of the same folder.
+- 2026-11-21 [agent]: Collect images inside iframes too (content script in all frames).

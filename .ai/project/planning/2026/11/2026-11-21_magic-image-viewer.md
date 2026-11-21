@@ -30,11 +30,15 @@ both store packages build from CI.
   shadow root (`@property` rules and `:root` theme variables), `rem` on pages with a changed root
   font size, keyboard events not reaching the page, focus trap, fullscreen, page scroll lock,
   whether `IconButton` from `@aaix/laravel-islands` teleports anything to `body`.
-  Built and proven except the last check: `IconButton`'s `Tooltip` teleports to `body`
-  (see Open).
+  Built and proven (`cb1abd1`) except the last check, which is M1b.
+- [x] **M1b — Tooltips inside the viewer.** `Tooltip` in `@aaix/laravel-islands` takes its
+  teleport target from an injected value, `body` when nothing is provided; the gallery's
+  `Lightbox` provides its own root when `teleport` is not `body`. Both libraries committed
+  locally, no tag, no push. The extension links both from the working copies, the test
+  `puts nothing into the page body` passes without the expected-to-fail mark.
 - [ ] **M2 — Image detection and click to open.** Collector module finds the content images of a
-  page in document order, resolves the largest version of each, keeps the list current as the
-  page changes, and a click opens the viewer at that image with the grow-from-thumbnail
+  page in document order, resolves the largest version of each, reads the list fresh at the
+  moment of opening (lazy images that have not loaded yet included), and a click opens the viewer at that image with the grow-from-thumbnail
   animation (`origin`). Pure detection functions with unit tests.
 - [ ] **M3 — Taking over site galleries.** Capture-phase interception from `document_start` so
   the site's lightbox never sees the click; linked images handled per the click rule in
@@ -125,16 +129,16 @@ WebDriver BiDi; not yet part of `npm test`.
 - **Gallery scope: all content images of the page**, in document order.
 - **Active on every site by default**, with a global and a per-site switch in the popup.
 - **Images only in the first version.** The library plays videos, but page videos are left alone.
+- **Tooltips are fixed in the islands library, not switched off in the viewer.** Same line as
+  the gallery changes: one generic injected teleport target, default unchanged. Rejected: a
+  `tooltips` switch on `Lightbox` — icon-only buttons would lose their hints.
+- **Top frame only in the first version.** Images inside iframes are not collected.
 - **No telemetry, no remote code, no network requests of our own.** Keeps the store review of
   the all-sites permission simple and the privacy statement one sentence.
 - **Languages: en, de, fr, es, it, pt, nl, pl.** English is the fallback.
 
 ## Open
 
-- `Tooltip` in `@aaix/laravel-islands` (used by every `IconButton`) teleports to `body`: on hover
-  an unstyled tip lands in the page. Needs a teleport target in that library (e.g. injected by
-  the gallery's `Lightbox` when `teleport` is not `body`). Test `puts nothing into the page body`
-  is marked expected-to-fail until then.
 - Firefox: content-script host permission under MV3 for a normal (non-temporary) install, and
   whether the backdrop blur renders (missing in headless Firefox).
 

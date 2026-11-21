@@ -18,7 +18,7 @@
         "postinstall": "wxt prepare"
     },
     "dependencies": {
-        "@aaix/laravel-islands": "github:jonaaix/laravel-islands#v1.0.134",
+        "@aaix/laravel-islands": "file:../laravel-islands",
         "@aaix/laravel-islands-gallery": "file:../laravel-islands-gallery",
         "vue": "^3.5.42"
     },

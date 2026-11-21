@@ -152,14 +152,32 @@ test.describe('viewer', () => {
     });
 
     test('puts nothing into the page body', async ({ page }) => {
-        test.fail(true, 'Tooltip of @aaix/laravel-islands teleports to body; needs a target in that library');
-
         await page.goto('/plain.html');
         const before = await page.evaluate(() => document.body.children.length);
         await openViewer(page);
         await viewer(page).getByRole('button', { name: 'Close' }).hover();
-        await page.waitForTimeout(400);
+        await expect(viewer(page).getByRole('tooltip')).toHaveText('Close');
 
         expect(await page.evaluate(() => document.body.children.length)).toBe(before);
+    });
+
+    test('shows a styled tooltip at the button', async ({ page }) => {
+        await page.goto('/aggressive.html');
+        await openViewer(page);
+        const button = viewer(page).getByRole('button', { name: 'Full screen' });
+        await button.hover();
+        const tooltip = viewer(page).getByRole('tooltip');
+        await expect(tooltip).toHaveText('Full screen');
+        await page.waitForTimeout(300);
+        shots && (await page.screenshot({ path: `${shots}/viewer-tooltip.png`, clip: { x: 900, y: 0, width: 380, height: 120 } }));
+
+        const buttonBox = await button.boundingBox();
+        const tooltipBox = await tooltip.boundingBox();
+        const style = await tooltip.evaluate((element) => ({ position: getComputedStyle(element).position, fontSize: getComputedStyle(element).fontSize, background: getComputedStyle(element).backgroundColor }));
+
+        expect(style).toMatchObject({ position: 'fixed', fontSize: '12px' });
+        expect(style.background).not.toBe('rgba(0, 0, 0, 0)');
+        expect(tooltipBox.y + tooltipBox.height).toBeLessThanOrEqual(buttonBox.y + buttonBox.height + 50);
+        expect(Math.abs(tooltipBox.x + tooltipBox.width / 2 - (buttonBox.x + buttonBox.width / 2))).toBeLessThan(2);
     });
 });
