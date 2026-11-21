@@ -142,9 +142,9 @@ export function createViewer(ctx, { onOpened }) {
     return {
         isOpen: () => index.value !== null,
         owns: (event) => !!ui && event.composedPath().includes(ui.shadowHost),
-        async open(list, start = 0, { origin = null, originRadius = 0 } = {}) {
+        async open(list, start = 0, { origin = null, originRadius = 0, closable = true } = {}) {
             await ensureMounted();
-            options.value = { origin, originRadius };
+            options.value = { origin, originRadius, closable };
             images.value = list;
             index.value = start;
             await nextTick();

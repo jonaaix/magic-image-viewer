@@ -3,7 +3,7 @@ import { createViewer } from './viewer.js';
 import { guardKeys } from './keyGuard.js';
 import { openOnClick } from './clickToOpen.js';
 import { openFromContextMenu } from './contextMenu.js';
-import { isImageDocument, showImageDocument } from './imageDocument.js';
+import { isFileDocument, showFileDocument } from './fileDocument.js';
 import { createActivation } from './activation.js';
 
 export default defineContentScript({
@@ -18,8 +18,8 @@ export default defineContentScript({
         activation.onChange(({ enabled }) => !enabled && viewer.close());
         openFromContextMenu(viewer, activation);
 
-        if (isImageDocument()) {
-            showImageDocument(viewer, activation);
+        if (isFileDocument()) {
+            showFileDocument(viewer, activation);
         } else {
             openOnClick(viewer, activation);
         }

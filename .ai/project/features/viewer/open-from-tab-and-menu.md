@@ -16,11 +16,13 @@ opened in the viewer from its context menu.
 
 ### An image in its own tab
 
-When a tab shows a single image file — a PNG, JPEG, WebP, GIF or other raster image — the viewer
-opens at once with that one picture, and again every time the tab is shown again — on switching
-back to it, reloading it, or returning to it with Back or Forward. Closing it shows the browser's
-own view of the image; a click on the picture opens the viewer again. SVG files are left to the
-browser.
+When a tab shows a single image or video file — a PNG, JPEG, WebP, GIF or other raster image, or
+a video the browser plays — the file exists only in the viewer. It opens at once, with the video in
+the viewer's own player, and it cannot be closed: there is no close button, and neither Escape, a
+downward drag nor a click beside the picture closes it; Escape only resets the zoom. The browser's
+own video underneath stays paused and silent. The per-site switch does not apply to such tabs and
+the popup does not offer it there; only the switch for all sites turns this off. SVG files are left
+to the browser.
 
 ### The context menu
 
@@ -44,8 +46,9 @@ installs have that access already. Firefox does not run the extension on local f
 
 ## Examples
 
-- A link to `holiday.jpg` opened in a new tab: the viewer shows the photo; Esc shows the browser's
-  view, a click on the photo opens the viewer again.
+- A link to `holiday.jpg` opened in a new tab: the viewer shows the photo and stays; Esc only
+  resets the zoom.
+- A local `clip.mp4` opened in Chrome: it plays in the viewer, once, with one sound track.
 - A link to `diagram.svg` opened in a new tab: the browser shows the drawing as usual.
 - Right-clicking the second of four photos in an article and choosing the entry opens "2 / 4".
 - Right-clicking the site logo and choosing the entry shows the logo alone, "1 / 1".

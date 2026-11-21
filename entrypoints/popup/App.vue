@@ -3,6 +3,7 @@ import { computed, onMounted, ref } from 'vue';
 import { Alert, Button, Switch } from '@aaix/laravel-islands/vue/helpers';
 import { enabledSetting, readSettings, setSiteEnabled, siteOf } from '../../utils/settings.js';
 import { isReachable } from '../../utils/reachablePages.js';
+import { FILE_TAB } from '../../utils/messages.js';
 import ArrowTopRightOnSquareIcon from './icons/ArrowTopRightOnSquareIcon.vue';
 import ExclamationTriangleIcon from './icons/ExclamationTriangleIcon.vue';
 import InformationCircleIcon from './icons/InformationCircleIcon.vue';
@@ -17,6 +18,7 @@ const enabled = ref(true);
 const site = ref(null);
 const siteEnabled = ref(true);
 const hasAccess = ref(true);
+const fileTab = ref(false);
 const version = browser.runtime.getManifest().version;
 
 const siteLabel = computed(() => (site.value === 'file://' ? t('popup_localFiles') : site.value));
@@ -31,6 +33,10 @@ async function currentTab() {
     const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
 
     return tab;
+}
+
+function isFileTab(tab) {
+    return tab?.id === undefined ? Promise.resolve(false) : browser.tabs.sendMessage(tab.id, { type: FILE_TAB }).then((answer) => answer === true, () => false);
 }
 
 async function toggleEnabled(value) {
@@ -49,6 +55,7 @@ async function requestAccess() {
 
 onMounted(async () => {
     const [tab, settings, access] = await Promise.all([currentTab(), readSettings(), browser.permissions.contains(ALL_SITES)]);
+    fileTab.value = await isFileTab(tab);
 
     site.value = isReachable(tab?.url) ? siteOf(tab.url) : null;
     enabled.value = settings.enabled;
@@ -71,8 +78,10 @@ onMounted(async () => {
                     <Switch :model-value="enabled" data-setting="enabled" @update:model-value="toggleEnabled" />
                 </label>
 
+                <template v-if="fileTab" />
+
                 <label
-                    v-if="site"
+                    v-else-if="site"
                     class="flex items-center justify-between gap-3 rounded-lg px-2 py-2"
                     :class="enabled ? 'cursor-pointer hover:bg-gray-50 dark:hover:bg-white/5' : 'cursor-not-allowed'"
                 >

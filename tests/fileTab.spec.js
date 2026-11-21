@@ -2,7 +2,7 @@ import { expect, label, test, viewer } from './support/extension.js';
 
 const shownImage = (page) => viewer(page).locator('img.ilg-image');
 
-test.describe('an image opened in its own tab', () => {
+test.describe('an image file in its own tab', () => {
     test.beforeEach(async ({ page }) => {
         await page.goto('/images/photo.png');
     });
@@ -12,41 +12,29 @@ test.describe('an image opened in its own tab', () => {
         await expect(shownImage(page)).toHaveAttribute('src', /photo\.png$/);
     });
 
-    test('closes to the browser view and opens again on a click', async ({ page }) => {
+    test('stays open: no close button, Escape and a click beside the image do nothing', async ({ page }) => {
         await expect(shownImage(page)).toHaveAttribute('style', /scale\(1\)/);
         await page.waitForTimeout(450);
-        await page.keyboard.press('Escape');
-        await expect(viewer(page)).toHaveCount(0);
 
-        await page.locator('body > img').click();
+        await expect(viewer(page).getByRole('button', { name: await label(page, 'close') })).toHaveCount(0);
+        await page.keyboard.press('Escape');
+        await page.mouse.click(8, 400);
+        await page.waitForTimeout(600);
 
         await expect(viewer(page)).toBeVisible();
     });
 
-    test('opens again when the tab is shown again', async ({ page, context }) => {
+    test('stays open after a downward drag', async ({ page }) => {
         await expect(shownImage(page)).toHaveAttribute('style', /scale\(1\)/);
         await page.waitForTimeout(450);
-        await page.keyboard.press('Escape');
-        await expect(viewer(page)).toHaveCount(0);
-
-        const other = await context.newPage();
-        await other.goto('/carousel.html');
-        await page.bringToFront();
-        await page.evaluate(() => document.dispatchEvent(new Event('visibilitychange')));
+        const box = await shownImage(page).boundingBox();
+        await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+        await page.mouse.down();
+        await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2 + 300, { steps: 10 });
+        await page.mouse.up();
+        await page.waitForTimeout(600);
 
         await expect(viewer(page)).toBeVisible();
-        await other.close();
-    });
-
-    test('opens again on back and forward', async ({ page }) => {
-        await expect(viewer(page)).toBeVisible();
-        await page.goto('/carousel.html');
-        await page.goBack();
-        await expect(shownImage(page)).toHaveAttribute('src', /photo\.png$/);
-        await page.goForward();
-        await page.goBack();
-
-        await expect(shownImage(page)).toHaveAttribute('src', /photo\.png$/);
     });
 
     test('zooms and downloads', async ({ page }) => {
@@ -70,4 +58,20 @@ test('an SVG file in its own tab is left alone', async ({ page }) => {
     await page.waitForTimeout(500);
 
     await expect(page.locator('magic-image-viewer')).toHaveCount(0);
+});
+
+test('a video file in its own tab plays only in the viewer', async ({ page }) => {
+    await page.goto('/videos/clip.webm');
+
+    await expect(viewer(page).locator('video')).toHaveCount(1);
+    await page.waitForTimeout(800);
+    expect(await page.evaluate(() => {
+        const native = document.querySelector('body video');
+
+        return { paused: native.paused, muted: native.muted };
+    })).toEqual({ paused: true, muted: true });
+
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(400);
+    await expect(viewer(page)).toBeVisible();
 });
