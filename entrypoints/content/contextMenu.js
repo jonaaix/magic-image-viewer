@@ -13,7 +13,7 @@ function imageFor(src, lastTarget) {
     return [...document.images].find((image) => shows(image, src)) ?? null;
 }
 
-export function openFromContextMenu(viewer) {
+export function openFromContextMenu(viewer, activation) {
     let lastTarget = null;
 
     window.addEventListener('contextmenu', (event) => (lastTarget = event.composedPath()[0]), true);
@@ -25,7 +25,7 @@ export function openFromContextMenu(viewer) {
 
         sendResponse(true);
 
-        if (viewer.isOpen()) {
+        if (!activation.isEnabled() || viewer.isOpen()) {
             return;
         }
 

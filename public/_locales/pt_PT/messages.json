@@ -1,0 +1,107 @@
+{
+    "extDescription": {
+        "message": "Abre qualquer imagem de uma página web num visualizador em ecrã inteiro, com zoom, deslocação e galeria de todas as imagens."
+    },
+    "showInViewer": {
+        "message": "Mostrar no Magic Image Viewer"
+    },
+    "badgeOff": {
+        "message": "off"
+    },
+    "popup_allSites": {
+        "message": "Todos os sites"
+    },
+    "popup_thisSite": {
+        "message": "Este site"
+    },
+    "popup_localFiles": {
+        "message": "Ficheiros locais"
+    },
+    "popup_unavailable": {
+        "message": "Indisponível nesta página"
+    },
+    "popup_accessTitle": {
+        "message": "Acesso aos sites necessário"
+    },
+    "popup_accessText": {
+        "message": "Sem ele, as imagens não abrem nas páginas web."
+    },
+    "popup_allowAccess": {
+        "message": "Permitir acesso"
+    },
+    "popup_sourceCode": {
+        "message": "Código-fonte"
+    },
+    "popup_version": {
+        "message": "Versão $VERSION$",
+        "placeholders": {
+            "version": {
+                "content": "$1",
+                "example": "1.0.0"
+            }
+        }
+    },
+    "lightbox_dialog": {
+        "message": "Visualizador de imagens"
+    },
+    "lightbox_counter": {
+        "message": ":current / :total"
+    },
+    "lightbox_image": {
+        "message": "Imagem :number"
+    },
+    "lightbox_video": {
+        "message": "Vídeo :number"
+    },
+    "lightbox_open": {
+        "message": "Abrir imagem"
+    },
+    "lightbox_previous": {
+        "message": "Imagem anterior"
+    },
+    "lightbox_next": {
+        "message": "Imagem seguinte"
+    },
+    "lightbox_close": {
+        "message": "Fechar"
+    },
+    "lightbox_zoomIn": {
+        "message": "Ampliar"
+    },
+    "lightbox_zoomOut": {
+        "message": "Reduzir"
+    },
+    "lightbox_play": {
+        "message": "Iniciar apresentação"
+    },
+    "lightbox_pause": {
+        "message": "Pausar apresentação"
+    },
+    "lightbox_fullscreen": {
+        "message": "Ecrã inteiro"
+    },
+    "lightbox_exitFullscreen": {
+        "message": "Sair do ecrã inteiro"
+    },
+    "lightbox_download": {
+        "message": "Transferir"
+    },
+    "lightbox_playVideo": {
+        "message": "Reproduzir"
+    },
+    "lightbox_pauseVideo": {
+        "message": "Pausa"
+    },
+    "lightbox_seek": {
+        "message": "Posição de reprodução"
+    },
+    "lightbox_mute": {
+        "message": "Desativar som"
+    },
+    "lightbox_unmute": {
+        "message": "Ativar som"
+    },
+    "lightbox_volume": {
+        "message": "Volume"
+    }
+}

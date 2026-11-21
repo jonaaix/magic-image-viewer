@@ -71,8 +71,8 @@ function isPrimary(event) {
     return event.button === 0 && !event.ctrlKey && !event.metaKey && !event.shiftKey;
 }
 
-function claimedImage(event, viewer) {
-    if (!isPrimary(event) || viewer.isOpen() || viewer.owns(event) || document.designMode === 'on') {
+function claimedImage(event, viewer, activation) {
+    if (!activation.isSiteEnabled() || !isPrimary(event) || viewer.isOpen() || viewer.owns(event) || document.designMode === 'on') {
         return null;
     }
 
@@ -114,7 +114,7 @@ function inSwipeRegion(image) {
     return false;
 }
 
-export function openOnClick(viewer) {
+export function openOnClick(viewer, activation) {
     let press = null;
 
     for (const type of [...PRESS_EVENTS, ...RELEASE_EVENTS]) {
@@ -123,7 +123,7 @@ export function openOnClick(viewer) {
                 press = pointOf(event);
             }
 
-            const image = claimedImage(event, viewer);
+            const image = claimedImage(event, viewer, activation);
 
             if (image && !inSwipeRegion(image)) {
                 event.stopPropagation();
@@ -134,7 +134,7 @@ export function openOnClick(viewer) {
     window.addEventListener('click', (event) => {
         const moved = event.detail > 0 && movedTooFar(press, pointOf(event));
         press = null;
-        const image = claimedImage(event, viewer);
+        const image = claimedImage(event, viewer, activation);
 
         if (!image || (moved && inSwipeRegion(image))) {
             return;

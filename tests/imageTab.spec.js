@@ -1,4 +1,4 @@
-import { expect, test, viewer } from './support/extension.js';
+import { expect, label, test, viewer } from './support/extension.js';
 
 const shownImage = (page) => viewer(page).locator('img.ilg-image');
 
@@ -27,11 +27,11 @@ test.describe('an image opened in its own tab', () => {
         await expect(shownImage(page)).toHaveAttribute('style', /scale\(1\)/);
         await page.waitForTimeout(450);
 
-        await viewer(page).getByRole('button', { name: 'Zoom in' }).click();
+        await viewer(page).getByRole('button', { name: await label(page, 'zoomIn') }).click();
         await expect(shownImage(page)).not.toHaveAttribute('style', /scale\(1\)/);
 
         const download = page.waitForEvent('download');
-        await viewer(page).getByRole('button', { name: 'Download' }).click();
+        await viewer(page).getByRole('button', { name: await label(page, 'download') }).click();
 
         const file = await download;
         expect(file.suggestedFilename()).toBe('photo.png');

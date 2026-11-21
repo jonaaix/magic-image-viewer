@@ -4,12 +4,13 @@ import { shadowRootCss } from './build/shadowRootCss.js';
 
 export default defineConfig({
     modules: ['@wxt-dev/module-vue'],
-    manifest: {
+    manifest: ({ browser }) => ({
         name: 'Magic Image Viewer',
-        description: 'Opens any image on any web page in a full-screen viewer with zoom, pan and a gallery of every picture on the page.',
+        description: '__MSG_extDescription__',
         default_locale: 'en',
-        permissions: ['contextMenus'],
-    },
+        permissions: ['contextMenus', 'storage', 'activeTab'],
+        ...(browser === 'firefox' && { browser_specific_settings: { gecko: { id: 'magic-image-viewer@jonaaix.github.io' } } }),
+    }),
     vite: () => ({
         plugins: [tailwindcss()],
         resolve: {

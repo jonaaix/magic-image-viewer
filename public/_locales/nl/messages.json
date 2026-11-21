@@ -1,0 +1,107 @@
+{
+    "extDescription": {
+        "message": "Opent elke afbeelding op een webpagina in een schermvullende viewer met zoom, verschuiven en een galerij van alle afbeeldingen."
+    },
+    "showInViewer": {
+        "message": "Weergeven in Magic Image Viewer"
+    },
+    "badgeOff": {
+        "message": "uit"
+    },
+    "popup_allSites": {
+        "message": "Alle websites"
+    },
+    "popup_thisSite": {
+        "message": "Deze website"
+    },
+    "popup_localFiles": {
+        "message": "Lokale bestanden"
+    },
+    "popup_unavailable": {
+        "message": "Niet beschikbaar op deze pagina"
+    },
+    "popup_accessTitle": {
+        "message": "Toegang tot websites vereist"
+    },
+    "popup_accessText": {
+        "message": "Zonder toegang openen afbeeldingen niet op webpagina’s."
+    },
+    "popup_allowAccess": {
+        "message": "Toegang toestaan"
+    },
+    "popup_sourceCode": {
+        "message": "Broncode"
+    },
+    "popup_version": {
+        "message": "Versie $VERSION$",
+        "placeholders": {
+            "version": {
+                "content": "$1",
+                "example": "1.0.0"
+            }
+        }
+    },
+    "lightbox_dialog": {
+        "message": "Afbeeldingsviewer"
+    },
+    "lightbox_counter": {
+        "message": ":current / :total"
+    },
+    "lightbox_image": {
+        "message": "Afbeelding :number"
+    },
+    "lightbox_video": {
+        "message": "Video :number"
+    },
+    "lightbox_open": {
+        "message": "Afbeelding openen"
+    },
+    "lightbox_previous": {
+        "message": "Vorige afbeelding"
+    },
+    "lightbox_next": {
+        "message": "Volgende afbeelding"
+    },
+    "lightbox_close": {
+        "message": "Sluiten"
+    },
+    "lightbox_zoomIn": {
+        "message": "Inzoomen"
+    },
+    "lightbox_zoomOut": {
+        "message": "Uitzoomen"
+    },
+    "lightbox_play": {
+        "message": "Diavoorstelling starten"
+    },
+    "lightbox_pause": {
+        "message": "Diavoorstelling pauzeren"
+    },
+    "lightbox_fullscreen": {
+        "message": "Volledig scherm"
+    },
+    "lightbox_exitFullscreen": {
+        "message": "Volledig scherm sluiten"
+    },
+    "lightbox_download": {
+        "message": "Downloaden"
+    },
+    "lightbox_playVideo": {
+        "message": "Afspelen"
+    },
+    "lightbox_pauseVideo": {
+        "message": "Pauzeren"
+    },
+    "lightbox_seek": {
+        "message": "Afspeelpositie"
+    },
+    "lightbox_mute": {
+        "message": "Dempen"
+    },
+    "lightbox_unmute": {
+        "message": "Dempen opheffen"
+    },
+    "lightbox_volume": {
+        "message": "Volume"
+    }
+}

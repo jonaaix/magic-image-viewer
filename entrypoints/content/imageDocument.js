@@ -12,14 +12,14 @@ function whenReady(callback) {
     }
 }
 
-export function showImageDocument(viewer) {
+export function showImageDocument(viewer, activation) {
     const image = () => document.querySelector('img');
     const show = () => openAlone(viewer, window.location.href, image());
 
-    whenReady(show);
+    activation.ready.then(() => whenReady(() => activation.isSiteEnabled() && show()));
 
     window.addEventListener('click', (event) => {
-        if (event.button !== 0 || viewer.isOpen() || event.composedPath()[0] !== image()) {
+        if (!activation.isSiteEnabled() || event.button !== 0 || viewer.isOpen() || event.composedPath()[0] !== image()) {
             return;
         }
 

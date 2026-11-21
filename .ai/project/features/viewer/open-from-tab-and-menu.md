@@ -30,7 +30,9 @@ page around them. When the viewer cannot run in the tab, for example because the
 before the extension was installed, the image opens in a new tab next to it, where it is shown in
 the viewer.
 
-The entry's text comes from the browser's language files.
+The entry's text comes from the browser's language files. The entry disappears while the
+extension is switched off for all sites; switched off for one site, it keeps working there
+(see `settings-switches`).
 
 ### Local files
 

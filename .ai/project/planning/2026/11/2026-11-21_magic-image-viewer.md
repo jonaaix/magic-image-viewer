@@ -64,9 +64,13 @@ both store packages build from CI.
   it shows the image alone — decorative images and images in iframes included. Only the
   permissions this needs. `file://` behaviour in Chrome and Firefox settled and recorded here.
   Behaviour in the Feature Book chapter `viewer-open-from-tab-and-menu`.
-- [ ] **M5 — Popup, settings, languages.** Popup with global on/off and "off on this site";
-  all strings through the browser's i18n in en, de, fr, es, it, pt, nl, pl, including the
-  library's `labels` and the store description.
+- [x] **M5 — Popup, settings, languages.** Popup with a global switch and a switch for the
+  current host, both live without reload and kept across restarts; a hint instead of the site
+  switch on pages extensions cannot reach; version and repository link; light and dark. Firefox:
+  a button requests website access when it is missing. Badge on the toolbar icon while off.
+  Every string through the browser's i18n in en, de, fr, es, it, pt_BR, pt_PT, nl, pl, including
+  the store description, the menu entry, the popup and the library's `labels`. Behaviour in the
+  Feature Book chapter `settings-switches`.
 - [ ] **M6 — Release readiness.** Icon set, README, MIT licence, privacy statement (no data
   leaves the browser), Playwright end-to-end tests with the extension loaded, CI building both
   store packages, source package for Firefox review.
@@ -89,6 +93,11 @@ regions and the tap distance in the same files, fixture `carousel.html`. Real-si
 checklist run headless; rows blocked for automation stay open for Jonas. M4: `imageDocument.js` takes over raster image tabs,
 `contextMenu.js` answers the background's menu message (`entrypoints/background.js`), both open
 through `galleryOpener.js`. Permission: `contextMenus` only. Locale file `public/_locales/en`.
+M5: settings in `utils/settings.js` (`storage.local`), the content script follows them through
+`activation.js`, the background toggles the menu and the badge, popup in `entrypoints/popup/`.
+Locales in `public/_locales/`, completeness checked by `tests/unit/locales.test.js`. The popup
+takes the page address from `?url=` in test builds, since tests open it as a tab. Browser tests
+read expected texts from the browser's own language files, so they pass in any system language.
 Specs `imageTab.spec.js` and `menu.spec.js`; the menu click is driven through a test-mode hook in
 the service worker, since Playwright cannot click native menus. Firefox MV3 build loads and opens
 headless via WebDriver BiDi (image tab and SVG checked there); not yet part of `npm test`.
@@ -193,9 +202,23 @@ headless via WebDriver BiDi (image tab and SVG checked there); not yet part of `
   `file:///*` match. Accepted for the first version.
 - **No telemetry, no remote code, no network requests of our own.** Keeps the store review of
   the all-sites permission simple and the privacy statement one sentence.
-- **Languages: en, de, fr, es, it, pt, nl, pl.** English is the fallback.
+- **Languages: en, de, fr, es, it, pt_BR, pt_PT, nl, pl.** English is the fallback. Chrome knows
+  no plain `pt`, so Portuguese ships in both variants. The language follows the browser; there is
+  no language setting of its own. The name stays untranslated.
+- **Switch semantics:** "All sites" off stops everything, the context-menu entry included (the
+  background removes it). "This site" off stops only the automatic behaviour (clicks, image tabs);
+  the context-menu entry still opens the viewer, as it is an explicit request.
+- **Settings in `storage.local`**, not `sync`: a per-device choice, and no data leaves the browser.
+- **Permissions: `storage`, `activeTab`** added. `activeTab` gives the popup the current page's
+  address without `tabs`, also in Firefox when website access is withheld.
+- **Badge is set per tab by the content script's report** (no `tabs` permission needed) and
+  globally by the background while all sites are off.
+- **Firefox add-on ID `magic-image-viewer@jonaaix.github.io`**, needed for a stable extension URL
+  and for the store.
+- **Rewritten `@property` defaults live in `@layer properties`.** Unlayered they beat every
+  Tailwind utility and reset `translate`, `scale` and friends (the switch knob sat off-centre).
 
 ## Open
 
-- Firefox: content-script host permission under MV3 for a normal (non-temporary) install, and
-  whether the backdrop blur renders (missing in headless Firefox).
+- Firefox: whether the backdrop blur renders (missing in headless Firefox). Website access: granted
+  at a temporary install, can be withdrawn; the popup then offers the button (checked headless).
