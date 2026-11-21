@@ -28,7 +28,7 @@ const server = createServer(async (request, response) => {
 const pageUrl = `http://localhost:${PORT}/`;
 
 function launch(build) {
-    const extension = join(root, '.output', build);
+    const extension = join(root, 'dist', build);
 
     return chromium.launchPersistentContext('', {
         channel: 'chromium',

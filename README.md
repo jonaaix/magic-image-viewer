@@ -44,14 +44,14 @@ Requirements: Node.js 24 and npm.
 
 ```sh
 npm ci
-npm run build            # Chrome → .output/chrome-mv3
-npm run build:firefox    # Firefox → .output/firefox-mv3
+npm run build            # Chrome → dist/chrome-mv3
+npm run build:firefox    # Firefox → dist/firefox-mv3
 ```
 
 - **Chrome:** open `chrome://extensions`, switch on developer mode, choose "Load unpacked" and
-  select `.output/chrome-mv3`.
+  select `dist/chrome-mv3`.
 - **Firefox:** open `about:debugging#/runtime/this-firefox`, choose "Load Temporary Add-on" and
-  select `.output/firefox-mv3/manifest.json`.
+  select `dist/firefox-mv3/manifest.json`.
 
 `npm run zip` and `npm run zip:firefox` build the store packages, the latter together with the
 source package for the Firefox review.

@@ -35,5 +35,5 @@ runtime.
   140.0).
 - Source code: upload `magic-image-viewer-<version>-sources.zip` from the release. Build
   instructions for the reviewer: Node.js 24, then `npm ci` and `npm run build:firefox`; the result
-  is `.output/firefox-mv3`. Dependencies come from npm and from the public GitHub repositories
+  is `dist/firefox-mv3`. Dependencies come from npm and from the public GitHub repositories
   `jonaaix/laravel-islands` and `jonaaix/laravel-islands-gallery`, pinned in `package-lock.json`.

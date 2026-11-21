@@ -3,6 +3,7 @@ import tailwindcss from '@tailwindcss/vite';
 import { shadowRootCss } from './build/shadowRootCss.js';
 
 export default defineConfig({
+    outDir: 'dist',
     modules: ['@wxt-dev/module-vue'],
     manifest: ({ browser }) => ({
         name: 'Magic Image Viewer',

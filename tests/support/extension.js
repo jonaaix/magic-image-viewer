@@ -1,7 +1,7 @@
 import { test as base, chromium, expect } from '@playwright/test';
 import { fileURLToPath } from 'node:url';
 
-const extensionPath = fileURLToPath(new URL('../../.output/chrome-mv3-test', import.meta.url));
+const extensionPath = fileURLToPath(new URL('../../dist/chrome-mv3-test', import.meta.url));
 
 export function launchExtension(userDataDir = '', options = {}) {
     return chromium.launchPersistentContext(userDataDir, {
