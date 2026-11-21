@@ -35,8 +35,8 @@ The footer shows the version and links to the source code.
 
 ### State at the toolbar icon
 
-While the extension is off — everywhere, or on the current site — the toolbar icon carries a short
-grey badge ("off" in English).
+While the extension is off — everywhere, or on the current site — the toolbar icon turns grey and
+carries a short badge ("off" in English).
 
 ### Languages
 
@@ -48,7 +48,7 @@ language setting of its own. The name "Magic Image Viewer" is never translated.
 ## Examples
 
 - Switching "All sites" off on a shop page: the next click on a product photo opens the shop's own
-  zoom; the context menu no longer offers the entry; the icon shows "off".
+  zoom; the context menu no longer offers the entry; the icon turns grey and shows "off".
 - Switching the site off on a news site: photos there open as the site intends, while photos on
   another site still open in the viewer; after a reload or a browser restart the news site stays
   off; right-clicking a photo there and choosing the entry still opens the viewer.
