@@ -119,6 +119,9 @@ headless via WebDriver BiDi (image tab and SVG checked there); not yet part of `
   native video underneath is silenced. Only the global switch turns it off, because that switches
   the whole extension off. This replaces the earlier rule that closing shows the browser's view.
   Needs a `closable` prop on the library's `Lightbox`.
+- **File tabs show the media immersive** (gallery `immersive` prop): it fills the screen up to a
+  narrow edge and the bars float above it, fading when idle. Page galleries keep the reserved space,
+  since their thumbnail strip stays visible and would cover the picture.
 - **Jonas tests before anything is released.** Changes are built into `dist/` for him first;
   pushes of library tags and the tag `v1.0.0` wait for his OK.
 - **The viewer sits in the browser's top layer while open** (popover on the shadow host), not

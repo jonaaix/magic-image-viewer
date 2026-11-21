@@ -18,7 +18,8 @@ opened in the viewer from its context menu.
 
 When a tab shows a single image or video file — a PNG, JPEG, WebP, GIF or other raster image, or
 a video the browser plays — the file exists only in the viewer. It opens at once, with the video in
-the viewer's own player, and it cannot be closed: there is no close button, and neither Escape, a
+the viewer's own player, filling the screen up to a narrow edge with the bars floating above it
+and fading when idle. It cannot be closed: there is no close button, and neither Escape, a
 downward drag nor a click beside the picture closes it; Escape only resets the zoom. The browser's
 own video underneath stays paused and silent. The per-site switch does not apply to such tabs and
 the popup does not offer it there; only the switch for all sites turns this off. SVG files are left

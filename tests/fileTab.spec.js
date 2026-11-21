@@ -75,3 +75,39 @@ test('a video file in its own tab plays only in the viewer', async ({ page }) =>
     await page.waitForTimeout(400);
     await expect(viewer(page)).toBeVisible();
 });
+
+test.describe('a file tab uses the whole screen', () => {
+    const EDGE = 24;
+
+    async function settledBox(page, file) {
+        await page.goto(`/images/${file}`);
+        await expect(shownImage(page)).toHaveAttribute('style', /scale\(1\)/);
+        await page.waitForTimeout(450);
+
+        return shownImage(page).boundingBox();
+    }
+
+    for (const file of ['landscape.jpg', 'portrait.jpg']) {
+        test(`${file} fills the screen up to the edge`, async ({ page }) => {
+            const box = await settledBox(page, file);
+            const { width, height } = page.viewportSize();
+            const gaps = [width - 2 * EDGE - box.width, height - 2 * EDGE - box.height];
+
+            expect(Math.min(...gaps.map(Math.abs))).toBeLessThan(2);
+            expect(Math.min(...gaps)).toBeGreaterThan(-2);
+        });
+    }
+
+    test('the bars fade when idle and return on movement, the image stays put', async ({ page }) => {
+        const before = await settledBox(page, 'landscape.jpg');
+        const bar = viewer(page).locator('.ilg-island').first().locator('..');
+        await page.mouse.move(640, 360);
+
+        await expect(bar).toHaveCSS('opacity', '0', { timeout: 5000 });
+        await page.mouse.move(300, 300);
+        await page.mouse.move(320, 320);
+        await expect(bar).toHaveCSS('opacity', '1');
+
+        expect(await shownImage(page).boundingBox()).toEqual(before);
+    });
+});

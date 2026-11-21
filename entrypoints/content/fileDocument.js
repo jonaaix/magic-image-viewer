@@ -40,7 +40,7 @@ export function showFileDocument(viewer, activation) {
         const video = isVideoDocument() ? document.querySelector('video') : null;
         video && silence(video);
 
-        viewer.open([{ src: window.location.href, type: video ? 'video' : 'image' }], 0, { closable: false });
+        viewer.open([{ src: window.location.href, type: video ? 'video' : 'image' }], 0, { closable: false, immersive: true });
     };
 
     browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
