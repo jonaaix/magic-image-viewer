@@ -16,7 +16,8 @@ test('a decorative image opens alone', async ({ page }) => {
 
     const src = await chooseMenuEntry(page, page.getByAltText('Site logo'));
 
-    await expect(counter(page)).toHaveText('1 / 1');
+    await expect(viewer(page)).toBeVisible();
+    await expect(counter(page)).toHaveCount(0);
     await expect(shownImage(page)).toHaveAttribute('src', src);
 });
 
@@ -25,7 +26,8 @@ test('an image inside an iframe opens alone in the page', async ({ page }) => {
 
     const src = await chooseMenuEntry(page, page.frameLocator('#frame').locator('#framed'), { inFrame: true });
 
-    await expect(counter(page)).toHaveText('1 / 1');
+    await expect(viewer(page)).toBeVisible();
+    await expect(counter(page)).toHaveCount(0);
     await expect(shownImage(page)).toHaveAttribute('src', src);
 });
 
