@@ -1,35 +1,11 @@
-import { collectImages, isContentElement } from './collector/index.js';
-import { cornerRadius } from './collector/rules.js';
+import { isContentElement } from './collector/index.js';
+import { openInGallery } from './galleryOpener.js';
 import { CAROUSEL_MARKUP, isSwipeStyle, linkKind, movedTooFar, shouldOpen } from './clickRules.js';
 
 const PRESS_EVENTS = ['pointerdown', 'mousedown', 'touchstart'];
 const RELEASE_EVENTS = ['pointerup', 'mouseup', 'touchend'];
 const CONTROLS = 'button, [role="button"], input, select, textarea, option, summary, [contenteditable]:not([contenteditable="false"])';
 const ANCESTOR_SEARCH_DEPTH = 3;
-
-function onScreen(rect) {
-    return rect.width > 0 && rect.bottom > 0 && rect.right > 0 && rect.top < window.innerHeight && rect.left < window.innerWidth;
-}
-
-function originOf(elements) {
-    return (index) => {
-        const element = elements[index];
-
-        if (!element?.isConnected) {
-            return null;
-        }
-
-        const rect = element.getBoundingClientRect();
-
-        return onScreen(rect) ? rect : null;
-    };
-}
-
-function radiusOf(element) {
-    const rect = element.getBoundingClientRect();
-
-    return cornerRadius(getComputedStyle(element).borderTopLeftRadius, rect.width, rect.height);
-}
 
 function pointOf(event) {
     const touch = event.changedTouches?.[0];
@@ -138,18 +114,6 @@ function inSwipeRegion(image) {
     return false;
 }
 
-function open(viewer, image) {
-    const { entries, indexOf } = collectImages();
-    const start = indexOf(image);
-
-    if (start === -1) {
-        return;
-    }
-
-    const elements = entries.map((entry) => entry.element);
-    viewer.open(entries.map((entry) => entry.item), start, { origin: originOf(elements), originRadius: radiusOf(image) });
-}
-
 export function openOnClick(viewer) {
     let press = null;
 
@@ -180,7 +144,7 @@ export function openOnClick(viewer) {
         event.preventDefault();
 
         if (!moved) {
-            open(viewer, image);
+            openInGallery(viewer, image);
         }
     }, true);
 }

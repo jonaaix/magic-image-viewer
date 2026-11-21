@@ -56,13 +56,14 @@ both store packages build from CI.
   regions everything stays as in M3. Proven by `carousel.html`: a pointer carousel swipes with
   mouse and touch, a markup-known carousel with the mouse, a tap opens our viewer, a drag across
   a free image opens nothing.
-- [ ] **M4 — Direct image tabs and context menu.** An image document whose `document.contentType`
+- [x] **M4 — Direct image tabs and context menu.** An image document whose `document.contentType`
   is an image type other than SVG opens the viewer at once with that one image; closing shows the
   browser's view, a click on the image opens the viewer again. Context-menu entry "Show in Magic
   Image Viewer" on images, its text through the browser's i18n from the start (English only until
   M5). When the image is part of the page gallery the viewer opens there at its place, otherwise
   it shows the image alone — decorative images and images in iframes included. Only the
   permissions this needs. `file://` behaviour in Chrome and Firefox settled and recorded here.
+  Behaviour in the Feature Book chapter `viewer-open-from-tab-and-menu`.
 - [ ] **M5 — Popup, settings, languages.** Popup with global on/off and "off on this site";
   all strings through the browser's i18n in en, de, fr, es, it, pt, nl, pl, including the
   library's `labels` and the store description.
@@ -85,8 +86,12 @@ content image opens the viewer on the page gallery; `npm run test:unit` covers t
 M3: gestures on images we open are taken at `window` capture (`clickToOpen.js`), click rules
 in `clickRules.js`, fixture `lightboxes.html` covers the common lightbox patterns. M3b: swipe
 regions and the tap distance in the same files, fixture `carousel.html`. Real-site
-checklist run headless; rows blocked for automation stay open for Jonas. Firefox MV3 build loads and opens headless via
-WebDriver BiDi; not yet part of `npm test`.
+checklist run headless; rows blocked for automation stay open for Jonas. M4: `imageDocument.js` takes over raster image tabs,
+`contextMenu.js` answers the background's menu message (`entrypoints/background.js`), both open
+through `galleryOpener.js`. Permission: `contextMenus` only. Locale file `public/_locales/en`.
+Specs `imageTab.spec.js` and `menu.spec.js`; the menu click is driven through a test-mode hook in
+the service worker, since Playwright cannot click native menus. Firefox MV3 build loads and opens
+headless via WebDriver BiDi (image tab and SVG checked there); not yet part of `npm test`.
 
 ## Decisions
 
@@ -174,7 +179,18 @@ WebDriver BiDi; not yet part of `npm test`.
 - **Tooltips are fixed in the islands library, not switched off in the viewer.** Same line as
   the gallery changes: one generic injected teleport target, default unchanged. Rejected: a
   `tooltips` switch on `Lightbox` — icon-only buttons would lose their hints.
-- **Top frame only in the first version.** Images inside iframes are not collected.
+- **Top frame only in the first version.** Images inside iframes are not collected. The context
+  menu still reaches them: the background always messages the top frame, which shows the frame's
+  image alone.
+- **Context menu falls back to a new tab.** When the tab has no content script (open before the
+  install, or a page scripts cannot reach), the image opens in a new tab beside it, where the image
+  tab shows the viewer. Needs no permission beyond `contextMenus`.
+- **The menu target is the last right-clicked image** in the top frame when its source matches the
+  menu's `srcUrl`, else the first image showing that source.
+- **`file://`:** Chrome runs the content script on local files only with "Allow access to file URLs"
+  (store installs off by default, unpacked installs on); verified with Chromium unpacked. Firefox
+  160 (headless, temporary install) does not run it on `file://`, not even with an explicit
+  `file:///*` match. Accepted for the first version.
 - **No telemetry, no remote code, no network requests of our own.** Keeps the store review of
   the all-sites permission simple and the privacy statement one sentence.
 - **Languages: en, de, fr, es, it, pt, nl, pl.** English is the fallback.
@@ -183,5 +199,3 @@ WebDriver BiDi; not yet part of `npm test`.
 
 - Firefox: content-script host permission under MV3 for a normal (non-temporary) install, and
   whether the backdrop blur renders (missing in headless Firefox).
-- To verify in M4: content scripts on `file://` images (Chrome needs the user's "Allow access to
-  file URLs"; Firefox behaviour to be checked).

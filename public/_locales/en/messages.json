@@ -1,0 +1,6 @@
+{
+    "showInViewer": {
+        "message": "Show in Magic Image Viewer",
+        "description": "Context menu entry on images."
+    }
+}

@@ -7,6 +7,8 @@ export default defineConfig({
     manifest: {
         name: 'Magic Image Viewer',
         description: 'Opens any image on any web page in a full-screen viewer with zoom, pan and a gallery of every picture on the page.',
+        default_locale: 'en',
+        permissions: ['contextMenus'],
     },
     vite: () => ({
         plugins: [tailwindcss()],
