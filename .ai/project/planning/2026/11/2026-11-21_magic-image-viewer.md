@@ -21,8 +21,7 @@ both store packages build from CI.
 - [x] **M0 — Library release 1.0.9.** In the working copy
   of `laravel-islands-gallery` (its own git repo):
   the five shadow-root changes under Decisions and the thumbnail-ring bug, demo tests green,
-  changelog and version bumped, committed locally (`479e2c9`, `9ad4300`). Tag and push only
-  after Jonas says so.
+  changelog and version bumped. Released as `v1.0.9`.
 - [ ] **M1 — Skeleton and viewer in the page.** WXT + Vue 3 + Tailwind 4, MV3 builds for Chrome
   and Firefox. Content script mounts the library's `Lightbox` inside a Shadow DOM host and opens
   it with a fixed image list on a fixture page. Proves isolation in both directions: page CSS
@@ -33,9 +32,9 @@ both store packages build from CI.
   Built and proven (`cb1abd1`) except the last check, which is M1b.
 - [x] **M1b — Tooltips inside the viewer.** `Tooltip` in `@aaix/laravel-islands` takes its
   teleport target from an injected value, `body` when nothing is provided; the gallery's
-  `Lightbox` provides its own root when `teleport` is not `body`. Both libraries committed
-  locally, no tag, no push. The extension links both from the working copies, the test
-  `puts nothing into the page body` passes without the expected-to-fail mark.
+  `Lightbox` provides its own root when `teleport` is not `body`. Released as islands `v1.0.176`
+  and gallery `v1.0.9`; the test `puts nothing into the page body` passes without the
+  expected-to-fail mark.
 - [x] **M2 — Image detection and click to open.** Collector module finds the content images of a
   page in document order, resolves the largest version of each, reads the list fresh at the
   moment of opening (lazy images that have not loaded yet included), and a click opens the viewer at that image with the grow-from-thumbnail
@@ -62,11 +61,11 @@ both store packages build from CI.
 
 ## State
 
-Library 1.0.9 committed locally, not tagged or pushed. New `Lightbox` prop `teleport`
+Gallery `v1.0.9` and islands `v1.0.176` are tagged on GitHub. New `Lightbox` prop `teleport`
 (`'body'` default, selector or element, `false` renders in place). Demo has `shadow.html` with a
 Playwright spec for the shadow-root behaviour.
 
-Extension (own git repo): WXT 0.21 + Vue + Tailwind 4, content script at `document_start`
+Extension (`github.com/jonaaix/magic-image-viewer`, branches `dev` and `main`): WXT 0.21 + Vue + Tailwind 4, content script at `document_start`
 mounting the viewer lazily on first open in a shadow host appended to `<html>`. Opening is only
 reachable through a test hook (`--mode test`, event `magic-image-viewer:test-open`) until M2.
 `npm test` builds the test package and runs Playwright in Chromium with the extension loaded
@@ -111,8 +110,10 @@ WebDriver BiDi; not yet part of `npm test`.
 - **The library's CSS must be placed in the shadow root by the extension build.** Vite appends
   the library's `<style>` blocks to the page `<head>`; without them in the shadow root the stage
   covers the toolbar and nothing is clickable.
-- **Until 1.0.9 is tagged on GitHub the extension links the library from the local working
-  copy.** Before publication the dependency becomes `github:jonaaix/laravel-islands-gallery#v1.0.9`.
+- **Both libraries come from their GitHub tags** (`github:jonaaix/laravel-islands-gallery#v1.0.9`,
+  `github:jonaaix/laravel-islands#v1.0.176`), so a fresh clone builds with `npm ci` alone; a
+  library change reaches the extension through a new tag. Islands `v1.0.175` already existed on
+  GitHub, so the teleport target shipped as `v1.0.176`.
 - **Shadow-root CSS is rewritten at build time** (`build/shadowRootCss.js`, a PostCSS plugin):
   `@property` rules become variable defaults on `:host, *, ::before, ::after, ::backdrop`,
   because `@property` is ignored inside a shadow root and WXT would otherwise move it into the
