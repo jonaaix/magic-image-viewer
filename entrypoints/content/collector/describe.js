@@ -25,8 +25,8 @@ function absoluteSrcset(srcset) {
         .join(', ');
 }
 
-function isRendered(element, rect) {
-    if (rect.width === 0 || rect.height === 0) {
+function isRendered(element) {
+    if (element.getClientRects().length === 0) {
         return false;
     }
 
@@ -45,8 +45,9 @@ export function describe(element) {
     return {
         width: rect.width,
         height: rect.height,
-        visible: isRendered(element, rect),
-        inControl: !!element.closest(CONTROLS),
+        visible: isRendered(element),
+        pending: !loaded && (element.loading === 'lazy' || FULL_SIZE_ATTRIBUTES.some((name) => element.hasAttribute(name)) || element.hasAttribute('data-srcset')),
+        inControl: !!element.closest(CONTROLS) || element.isContentEditable,
         src: absolute(element.getAttribute('src')) ?? '',
         currentSrc: loaded ? element.currentSrc || null : null,
         srcset: absoluteSrcset(element.getAttribute('srcset') || element.getAttribute('data-srcset')),

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Lightbox patterns</title>
+        <script src="fixture.js"></script>
+        <style>
+            body { font-family: system-ui, sans-serif; margin: 24px; }
+            section { display: inline-block; vertical-align: top; margin: 0 16px 16px 0; }
+            section img { width: 200px; display: block; }
+            .tile { position: relative; width: 200px; }
+            .tile .cover { position: absolute; inset: 0; background: linear-gradient(transparent, rgb(0 0 0 / 0.4)); cursor: zoom-in; }
+            #site-lightbox { position: fixed; inset: 0; background: rgb(0 0 0 / 0.8); color: white; display: none; align-items: center; justify-content: center; font-size: 32px; }
+            #site-lightbox.open { display: flex; }
+            #drop { width: 200px; height: 120px; border: 2px dashed #9ca3af; }
+        </style>
+    </head>
+    <body>
+        <section><p>Listener on the image</p><img id="direct" src="images/photo-1.svg" alt="Direct" /></section>
+        <section><p>Delegated on document</p><img id="delegated" class="js-zoom" src="images/photo-2.svg" alt="Delegated" /></section>
+        <section><p>Opens on mousedown</p><img id="mousedown" src="images/photo-3.svg" alt="Mousedown" /></section>
+        <section><p>Opens on pointerup</p><img id="pointerup" src="images/photo-4.svg" alt="Pointerup" /></section>
+        <section><p>Anchor on the image file</p><a id="anchor" class="lightbox" href="images/photo-8-full.svg"><img src="images/photo-8-thumb.svg" alt="Anchor" /></a></section>
+        <section><p>Hash link with script</p><a id="hash" class="lightbox" href="#"><img src="images/photo-5-1600.svg" alt="Hash" /></a></section>
+        <section><p>Overlay above the image</p><div class="tile"><img id="covered" src="images/photo-6-large.svg" alt="Covered" /><span id="cover" class="cover"></span></div></section>
+        <section><p>Link to another page</p><a id="page-link" href="other.html"><img src="images/teaser.svg" alt="Page link" /></a></section>
+        <section><p>Same image again</p><img id="duplicate" src="images/photo-1.svg" alt="Duplicate" /></section>
+        <section><p>Editable content</p><div id="editor" contenteditable="true"><img id="editable" src="images/late.svg" alt="Editable" /></div></section>
+        <section><p>Drop here</p><div id="drop"></div></section>
+
+        <div id="site-lightbox"></div>
+
+        <script>
+            window.siteLog = [];
+            const box = document.getElementById('site-lightbox');
+            const openSite = (pattern) => {
+                window.siteLog.push(pattern);
+                box.textContent = `Site lightbox: ${pattern}`;
+                box.classList.add('open');
+            };
+            box.addEventListener('click', () => box.classList.remove('open'));
+
+            document.getElementById('direct').addEventListener('click', () => openSite('direct'));
+            document.addEventListener('click', (event) => event.target.closest('.js-zoom') && openSite('delegated'));
+            document.getElementById('mousedown').addEventListener('mousedown', () => openSite('mousedown'));
+            document.getElementById('pointerup').addEventListener('pointerup', () => openSite('pointerup'));
+            for (const link of document.querySelectorAll('a.lightbox')) {
+                link.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    openSite(link.id);
+                });
+            }
+            document.getElementById('cover').addEventListener('click', () => openSite('overlay'));
+            document.getElementById('duplicate').addEventListener('click', () => openSite('duplicate'));
+            document.getElementById('editable').addEventListener('click', () => window.siteLog.push('editable-click'));
+            document.addEventListener('dragstart', (event) => window.siteLog.push(`dragstart:${event.target.id}`));
+            document.addEventListener('contextmenu', (event) => window.siteLog.push(`contextmenu:${event.target.id}`));
+        </script>
+    </body>
+</html>

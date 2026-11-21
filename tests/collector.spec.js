@@ -79,7 +79,7 @@ test.describe('sources', () => {
         await page.goto('/sources.html');
         await clickToOpen(page, '#srcset');
 
-        expect(await shownSources(page)).toEqual(['photo-5-1600.svg', 'photo-6-large.svg', 'photo-8-full.svg', 'photo-7-full.svg']);
+        expect(await shownSources(page)).toEqual(['photo-5-1600.svg', 'photo-6-large.svg', 'photo-8-full.svg', 'late.svg', 'photo-7-full.svg']);
     });
 
     test('lists a lazy image that has not loaded yet', async ({ page }) => {
@@ -87,7 +87,17 @@ test.describe('sources', () => {
         expect(await page.locator('#lazy').evaluate((image) => image.naturalWidth)).toBeLessThanOrEqual(1);
 
         await clickToOpen(page, '#picture');
-        await expect(counter(page)).toHaveText('2 / 4');
+        await expect(counter(page)).toHaveText('2 / 5');
+    });
+});
+
+test.describe('fallback', () => {
+    test('a link that is not an image file falls back to the picture itself', async ({ page }) => {
+        await page.goto('/sources.html');
+        await clickToOpen(page, '#file-page');
+
+        await expect(counter(page)).toHaveText('4 / 5');
+        await expect(shownImage(page)).toHaveAttribute('src', /images\/late\.svg$/);
     });
 });
 

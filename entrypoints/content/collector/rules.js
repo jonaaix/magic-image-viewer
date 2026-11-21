@@ -45,6 +45,10 @@ export function isContentImage(image) {
 
     const shortSide = Math.min(image.width, image.height);
 
+    if (image.pending && shortSide === 0) {
+        return true;
+    }
+
     if (shortSide >= MIN_SHORT_SIDE) {
         return true;
     }
@@ -52,20 +56,34 @@ export function isContentImage(image) {
     return shortSide >= MIN_LINKED_THUMBNAIL_SIDE && !!image.link && isImageUrl(image.link);
 }
 
+export function sourcesBySize(image) {
+    const sources = [
+        image.link && isImageUrl(image.link) ? image.link : null,
+        largestCandidate([image.srcset, ...image.sourceSrcsets].flatMap(parseSrcset)),
+        ...FULL_SIZE_ATTRIBUTES.map((name) => image.attributes[name]),
+        image.currentSrc,
+        image.src,
+    ];
+
+    return [...new Set(sources.filter(Boolean))];
+}
+
+export function thumbnailSource(image) {
+    if (image.currentSrc) {
+        return image.currentSrc;
+    }
+
+    if (image.src && !image.src.startsWith('data:')) {
+        return image.src;
+    }
+
+    const link = image.link && isImageUrl(image.link) ? image.link : null;
+
+    return sourcesBySize(image).find((source) => source !== link && !source.startsWith('data:')) ?? image.src;
+}
+
 export function largestSource(image) {
-    if (image.link && isImageUrl(image.link)) {
-        return image.link;
-    }
-
-    const fromSrcset = largestCandidate([image.srcset, ...image.sourceSrcsets].flatMap(parseSrcset));
-
-    if (fromSrcset) {
-        return fromSrcset;
-    }
-
-    const fromAttribute = FULL_SIZE_ATTRIBUTES.map((name) => image.attributes[name]).find(Boolean);
-
-    return fromAttribute ?? image.currentSrc ?? image.src;
+    return sourcesBySize(image)[0] ?? null;
 }
 
 export function cornerRadius(value, width, height) {

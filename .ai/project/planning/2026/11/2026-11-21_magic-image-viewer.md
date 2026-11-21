@@ -41,9 +41,15 @@ both store packages build from CI.
   moment of opening (lazy images that have not loaded yet included), and a click opens the viewer at that image with the grow-from-thumbnail
   animation (`origin`). Pure detection functions with unit tests. Behaviour in the Feature Book
   chapter `viewer-click-to-open`.
-- [ ] **M3 — Taking over site galleries.** Capture-phase interception from `document_start` so
-  the site's lightbox never sees the click; linked images handled per the click rule in
-  Decisions, including Alt-click; fixture pages for common lightbox patterns and a real-site checklist.
+- [x] **M3 — Taking over site galleries.** The site's lightbox never opens for an image we open:
+  besides `click`, the pointer, mouse and touch events leading to it are kept from the page
+  (propagation only, defaults stay, so dragging an image still works). Click rule from Decisions
+  in full: link to an image file opens on a plain click, `href="#"` and `javascript:` links count
+  as unlinked, a link to another page keeps navigating, Alt-click opens any content image.
+  The image under the pointer is found even when an overlay element covers it. A clicked image
+  whose source is already in the list opens at that entry. Images inside editable content are
+  left alone. Fixture pages for the common lightbox patterns, a real-site checklist, and the
+  first build Jonas loads in his own browser.
 - [ ] **M4 — Direct image tabs and context menu.** An image document (`document.contentType`
   starts with `image/`) is shown in the viewer; context-menu entry "Show in Magic Image Viewer"
   on images opens the viewer on that image, within the page gallery when the image is part of it.
@@ -65,7 +71,10 @@ mounting the viewer lazily on first open in a shadow host appended to `<html>`. 
 reachable through a test hook (`--mode test`, event `magic-image-viewer:test-open`) until M2.
 `npm test` builds the test package and runs Playwright in Chromium with the extension loaded
 against `tests/fixtures/` (plain, aggressive, article, sources). A plain click on an unlinked
-content image opens the viewer on the page gallery; `npm run test:unit` covers the rules. Firefox MV3 build loads and opens headless via
+content image opens the viewer on the page gallery; `npm run test:unit` covers the rules.
+M3: gestures on images we open are taken at `window` capture (`clickToOpen.js`), click rules
+in `clickRules.js`, fixture `lightboxes.html` covers the common lightbox patterns. Real-site
+checklist run headless; rows blocked for automation stay open for Jonas. Firefox MV3 build loads and opens headless via
 WebDriver BiDi; not yet part of `npm test`.
 
 ## Decisions
@@ -117,6 +126,13 @@ WebDriver BiDi; not yet part of `npm test`.
   was rejected: other listeners on the same node still fire.
 - **The host is pinned with inline `!important` styles** (fixed, 0×0, z-index max), which beat
   any page rule including `* { all: unset }`.
+- **Gesture takeover is decided per event, not per gesture.** Each of `pointerdown`, `mousedown`,
+  `touchstart`, `pointerup`, `mouseup`, `touchend`, `click` re-resolves the image under the point;
+  same point, same answer, no state to get stuck. Only `click` is prevented.
+- **Source fallback is probed lazily**: only the shown picture and its neighbours are test-loaded,
+  so a page of 200 thumbnails linking to file pages does not trigger 200 downloads.
+- **Unsized lazy images count**: docs sites lazy-load screenshots without width or height, 0×0
+  until loaded (VS Code docs: 1 instead of 26 pictures before this rule).
 - **WXT as the extension framework.** One codebase for Chrome and Firefox MV3, Vite-based like
   the library, with Vue module, shadow-root UI helper and i18n. Rejected: hand-written manifests
   and two build configs.
@@ -149,6 +165,8 @@ WebDriver BiDi; not yet part of `npm test`.
 
 - Firefox: content-script host permission under MV3 for a normal (non-temporary) install, and
   whether the backdrop blur renders (missing in headless Firefox).
+- Swipe carousels whose slides are content images: the press on the image is kept from the page,
+  so a swipe that starts on the image may not move the carousel. To check on real sites.
 
 - To verify in M4: content scripts on `file://` images (Chrome needs the user's "Allow access to
   file URLs"; Firefox behaviour to be checked).

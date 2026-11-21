@@ -1,4 +1,4 @@
-import { createApp, h, nextTick, ref, shallowRef } from 'vue';
+import { createApp, h, nextTick, ref, shallowRef, watch } from 'vue';
 import { Lightbox } from '@aaix/laravel-islands-gallery/vue';
 
 const HOST_NAME = 'magic-image-viewer';
@@ -25,6 +25,36 @@ export function createViewer(ctx, { onOpened }) {
     const options = shallowRef({});
     const index = ref(null);
     let ui = null;
+
+    function fallBack(position, failed) {
+        const item = images.value[position];
+
+        if (item?.src !== failed || !item.fallbacks?.length) {
+            return;
+        }
+
+        const [src, ...fallbacks] = item.fallbacks;
+        images.value = images.value.with(position, { ...item, src, fallbacks });
+        probe(position);
+    }
+
+    function probe(position) {
+        const item = images.value[position];
+
+        if (!item?.fallbacks?.length) {
+            return;
+        }
+
+        const image = new Image();
+        image.onerror = () => fallBack(position, item.src);
+        image.src = item.src;
+    }
+
+    watch(index, (position) => {
+        if (position !== null) {
+            [position - 1, position, position + 1].forEach(probe);
+        }
+    });
 
     async function ensureMounted() {
         if (ui?.shadowHost.isConnected) {

@@ -1,6 +1,6 @@
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
-import { cornerRadius, isContentImage, isImageUrl, largestCandidate, largestSource, parseSrcset } from '../../entrypoints/content/collector/rules.js';
+import { cornerRadius, isContentImage, isImageUrl, largestCandidate, largestSource, parseSrcset, sourcesBySize, thumbnailSource } from '../../entrypoints/content/collector/rules.js';
 
 const image = (overrides = {}) => ({
     width: 300,
@@ -34,6 +34,12 @@ describe('isContentImage', () => {
 
     test('skips a linked icon below the thumbnail size', () => {
         assert.equal(isContentImage(image({ width: 24, height: 24, link: 'https://example.com/large.jpg' })), false);
+    });
+
+    test('takes a lazy image that has no size until it loads', () => {
+        assert.equal(isContentImage(image({ width: 0, height: 0, pending: true })), true);
+        assert.equal(isContentImage(image({ width: 0, height: 0, pending: false })), false);
+        assert.equal(isContentImage(image({ width: 0, height: 0, pending: true, visible: false })), false);
     });
 
     test('skips hidden images, images in controls and sprites', () => {
@@ -100,6 +106,34 @@ describe('largestSource', () => {
     test('falls back to the loaded source, then to src', () => {
         assert.equal(largestSource(image({ currentSrc: 'https://example.com/current.jpg' })), 'https://example.com/current.jpg');
         assert.equal(largestSource(image({ currentSrc: null })), 'https://example.com/photo.jpg');
+    });
+});
+
+describe('sourcesBySize', () => {
+    test('lists every distinct source from largest to loaded, for falling back', () => {
+        const linked = image({
+            link: 'https://example.com/wiki/File:photo.jpg',
+            srcset: 'https://example.com/photo-2x.jpg 2x',
+            currentSrc: 'https://example.com/photo.jpg',
+        });
+
+        assert.deepEqual(sourcesBySize(linked), ['https://example.com/wiki/File:photo.jpg', 'https://example.com/photo-2x.jpg', 'https://example.com/photo.jpg']);
+    });
+});
+
+describe('thumbnailSource', () => {
+    test('uses the picture the page loaded', () => {
+        assert.equal(thumbnailSource(image({ currentSrc: 'https://example.com/loaded.jpg' })), 'https://example.com/loaded.jpg');
+    });
+
+    test('before loading, uses src rather than the link around the image', () => {
+        assert.equal(thumbnailSource(image({ currentSrc: null, src: 'https://example.com/thumb.jpg', link: 'https://example.com/wiki/File:x.jpg' })), 'https://example.com/thumb.jpg');
+    });
+
+    test('skips a placeholder and the link for a lazy image', () => {
+        const lazy = image({ currentSrc: null, src: 'data:image/gif;base64,R0lGOD', link: 'https://example.com/full.jpg', attributes: { 'data-src': 'https://example.com/lazy.jpg' } });
+
+        assert.equal(thumbnailSource(lazy), 'https://example.com/lazy.jpg');
     });
 });
 

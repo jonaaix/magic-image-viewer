@@ -1,8 +1,13 @@
 import { describe } from './describe.js';
-import { isContentImage, largestSource } from './rules.js';
+import { isContentImage, sourcesBySize, thumbnailSource } from './rules.js';
+
+export function isContentElement(element) {
+    return isContentImage(describe(element));
+}
 
 export function collectImages(root = document) {
-    const seen = new Set();
+    const indexBySource = new Map();
+    const indexByElement = new Map();
     const entries = [];
 
     for (const element of root.querySelectorAll('img')) {
@@ -12,23 +17,30 @@ export function collectImages(root = document) {
             continue;
         }
 
-        const src = largestSource(image);
+        const [src, ...fallbacks] = sourcesBySize(image);
 
-        if (!src || seen.has(src)) {
+        if (!src) {
             continue;
         }
 
-        seen.add(src);
+        if (indexBySource.has(src)) {
+            indexByElement.set(element, indexBySource.get(src));
+            continue;
+        }
+
+        indexBySource.set(src, entries.length);
+        indexByElement.set(element, entries.length);
         entries.push({
             element,
             item: {
                 src,
-                thumb: image.currentSrc ?? src,
+                fallbacks,
+                thumb: thumbnailSource(image),
                 alt: image.alt ?? undefined,
                 caption: image.caption ?? undefined,
             },
         });
     }
 
-    return entries;
+    return { entries, indexOf: (element) => indexByElement.get(element) ?? -1 };
 }
