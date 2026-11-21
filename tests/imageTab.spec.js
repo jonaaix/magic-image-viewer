@@ -23,6 +23,32 @@ test.describe('an image opened in its own tab', () => {
         await expect(viewer(page)).toBeVisible();
     });
 
+    test('opens again when the tab is shown again', async ({ page, context }) => {
+        await expect(shownImage(page)).toHaveAttribute('style', /scale\(1\)/);
+        await page.waitForTimeout(450);
+        await page.keyboard.press('Escape');
+        await expect(viewer(page)).toHaveCount(0);
+
+        const other = await context.newPage();
+        await other.goto('/carousel.html');
+        await page.bringToFront();
+        await page.evaluate(() => document.dispatchEvent(new Event('visibilitychange')));
+
+        await expect(viewer(page)).toBeVisible();
+        await other.close();
+    });
+
+    test('opens again on back and forward', async ({ page }) => {
+        await expect(viewer(page)).toBeVisible();
+        await page.goto('/carousel.html');
+        await page.goBack();
+        await expect(shownImage(page)).toHaveAttribute('src', /photo\.png$/);
+        await page.goForward();
+        await page.goBack();
+
+        await expect(shownImage(page)).toHaveAttribute('src', /photo\.png$/);
+    });
+
     test('zooms and downloads', async ({ page }) => {
         await expect(shownImage(page)).toHaveAttribute('style', /scale\(1\)/);
         await page.waitForTimeout(450);
