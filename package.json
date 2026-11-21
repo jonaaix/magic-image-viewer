@@ -1,0 +1,32 @@
+{
+    "name": "magic-image-viewer",
+    "description": "Opens any image on any web page in a full-screen viewer with zoom, pan and a gallery of every picture on the page.",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "license": "MIT",
+    "scripts": {
+        "dev": "wxt",
+        "dev:firefox": "wxt -b firefox --mv3",
+        "build": "wxt build",
+        "build:firefox": "wxt build -b firefox --mv3",
+        "build:test": "wxt build --mode test",
+        "build:test:firefox": "wxt build -b firefox --mv3 --mode test",
+        "zip": "wxt zip",
+        "zip:firefox": "wxt zip -b firefox --mv3",
+        "test": "npm run build:test && playwright test",
+        "postinstall": "wxt prepare"
+    },
+    "dependencies": {
+        "@aaix/laravel-islands": "github:jonaaix/laravel-islands#v1.0.134",
+        "@aaix/laravel-islands-gallery": "file:../laravel-islands-gallery",
+        "vue": "^3.5.42"
+    },
+    "devDependencies": {
+        "@playwright/test": "1.64.1",
+        "@tailwindcss/vite": "^4.3.3",
+        "@wxt-dev/module-vue": "^1.0.3",
+        "tailwindcss": "^4.3.3",
+        "wxt": "^0.21.5"
+    }
+}

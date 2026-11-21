@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Aggressive page</title>
+        <script src="fixture.js"></script>
+        <style>
+            :root {
+                --spacing: 1px;
+                --color-white: red;
+                --tw-ring-shadow: 0 0 0 12px lime;
+                --tw-shadow: 0 0 0 12px lime;
+                --tw-backdrop-blur: blur(0);
+                --default-font-family: 'Comic Sans MS', cursive;
+                --text-sm: 40px;
+                --radius-il-control: 0;
+            }
+            * {
+                all: unset;
+                box-sizing: content-box !important;
+                font-family: 'Comic Sans MS', cursive !important;
+                transition: none !important;
+                animation: none !important;
+                outline: 3px dashed magenta !important;
+            }
+            html, body, div, p, h1 { display: block; }
+            body { padding: 24px; background: #fef3c7; color: #7c2d12; line-height: 3 !important; }
+            h1 { font-size: 32px; }
+            img { display: inline-block; width: 300px; filter: grayscale(1) !important; border: 6px solid red !important; transform: rotate(3deg) !important; }
+            button, [role='button'] { background: red !important; color: yellow !important; padding: 20px !important; border-radius: 0 !important; }
+            svg { width: 8px !important; height: 8px !important; fill: red !important; }
+            div { margin: 10px !important; }
+            span { font-size: 30px !important; letter-spacing: 6px !important; }
+            [role='dialog'] { display: none !important; }
+            .fixed { position: static !important; }
+            .ilg-lightbox, .ilg-island, .ilg-thumbnails { background: red !important; display: none !important; }
+            .h-10, .w-10, .size-10 { width: 200px !important; height: 200px !important; }
+        </style>
+    </head>
+    <body>
+        <h1>Aggressive page</h1>
+        <p>Resets everything, styles every tag and even the viewer's own class names.</p>
+        <img src="images/photo-1.svg" alt="Photo 1" />
+        <img src="images/photo-2.svg" alt="Photo 2" />
+        <img src="images/photo-3.svg" alt="Photo 3" />
+        <img src="images/photo-4.svg" alt="Photo 4" />
+        <div><button type="button">A page button</button></div>
+    </body>
+</html>

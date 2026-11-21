@@ -1,0 +1,11 @@
+@import 'tailwindcss';
+@import '@aaix/laravel-islands/css/theme.css';
+
+@source '../../node_modules/@aaix/laravel-islands-gallery/resources/js';
+@source '../../node_modules/@aaix/laravel-islands/resources/js/vue/helpers';
+
+:host > div {
+    @apply font-sans leading-normal;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
