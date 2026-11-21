@@ -1,7 +1,13 @@
-# Magic Image Viewer
+<p align="center">
+  <img src="public/icons/128.png" alt="Magic Image Viewer icon" width="128" height="128">
+</p>
 
+<h1 align="center">Magic Image Viewer</h1>
+
+<p align="center">
 A browser extension for Chrome and Firefox that opens any image on any web page in a full-screen
 viewer — with zoom, pan and a gallery of every picture on the page.
+</p>
 
 ![The viewer over a page of photos](store/screenshots/01-viewer.png)
 
