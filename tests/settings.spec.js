@@ -118,3 +118,30 @@ test('a page extensions cannot reach shows a hint instead of the site switch', a
     await expect(popup.locator('[data-hint="unreachable"]')).toHaveText(await message(page.context(), 'popup_unavailable'));
     await expect(siteSwitch(popup)).toHaveCount(0);
 });
+
+test('the toolbar icon turns grey while off and back when on', async ({ page }) => {
+    await page.goto('/lightboxes.html');
+    await page.waitForTimeout(500);
+    const worker = await backgroundOf(page.context());
+
+    const shown = await worker.evaluate(async () => {
+        const calls = [];
+        const setIcon = chrome.action.setIcon.bind(chrome.action);
+        const pause = () => new Promise((resolve) => setTimeout(resolve, 500));
+        chrome.action.setIcon = async (details) => {
+            await setIcon(details);
+            calls.push(details.path[16]);
+        };
+
+        await chrome.storage.local.set({ enabled: false });
+        await pause();
+        const whileOff = [...calls];
+        await chrome.storage.local.set({ enabled: true });
+        await pause();
+
+        return { whileOff, afterOn: calls.slice(whileOff.length) };
+    });
+
+    expect(shown.whileOff.at(-1)).toBe('/icons/off/16.png');
+    expect(shown.afterOn.at(-1)).toBe('/icons/16.png');
+});
