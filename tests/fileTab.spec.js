@@ -139,3 +139,48 @@ test('a toolbar tooltip stays while the pointer moves over its button', async ({
 
     await expect(viewer(page).getByRole('tooltip')).toHaveText(await label(page, 'zoomIn'));
 });
+
+test.describe('the zoom button', () => {
+    test.beforeEach(async ({ page }) => {
+        await page.goto('/images/landscape.jpg');
+        await expect(shownImage(page)).toHaveAttribute('style', /scale\(1\)/);
+        await page.waitForTimeout(450);
+    });
+
+    const width = async (page) => (await shownImage(page).boundingBox()).width;
+    const zoomButton = (page) => viewer(page).locator('.ilg-tool').first();
+    const settle = (page) => page.waitForTimeout(600);
+
+    test('shows the image at actual size, then fits it again', async ({ page }) => {
+        const fitted = await width(page);
+
+        await zoomButton(page).click();
+        await settle(page);
+        expect(Math.round(await width(page))).toBe(2400);
+
+        await zoomButton(page).click();
+        await settle(page);
+        expect(await width(page)).toBeCloseTo(fitted, 0);
+    });
+
+    test('fits the image again after zooming with the wheel', async ({ page }) => {
+        const fitted = await width(page);
+        await page.mouse.move(640, 360);
+        await page.mouse.wheel(0, -200);
+        await settle(page);
+        expect(await width(page)).toBeGreaterThan(fitted * 1.1);
+
+        await zoomButton(page).click();
+        await settle(page);
+        expect(await width(page)).toBeCloseTo(fitted, 0);
+    });
+
+    test('a click on the image still zooms two and a half times', async ({ page }) => {
+        const fitted = await width(page);
+
+        await page.mouse.click(640, 360);
+        await settle(page);
+
+        expect(await width(page)).toBeCloseTo(fitted * 2.5, 0);
+    });
+});

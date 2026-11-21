@@ -122,6 +122,9 @@ headless via WebDriver BiDi (image tab and SVG checked there); not yet part of `
 - **File tabs show the media immersive** (gallery `immersive` prop): it fills the screen up to a
   narrow edge and the bars float above it, fading when idle. Page galleries keep the reserved space,
   since their thumbnail strip stays visible and would cover the picture.
+- **The zoom button toggles actual size** (gallery 1.0.12): fitted → 1:1, any zoom → fitted; an
+  image no larger than fitted zooms 2.5×. A click or double tap on the image keeps zooming 2.5×,
+  as Jonas asked. The zoom limit rises to 1:1 where that lies above `maxZoom`.
 - **Jonas tests before anything is released.** Changes are built into `dist/` for him first;
   pushes of library tags and the tag `v1.0.0` wait for his OK.
 - **The viewer sits in the browser's top layer while open** (popover on the shadow host), not
