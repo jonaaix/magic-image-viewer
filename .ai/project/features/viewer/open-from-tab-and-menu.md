@@ -17,8 +17,10 @@ opened in the viewer from its context menu.
 ### An image in its own tab
 
 When a tab shows a single image file — a PNG, JPEG, WebP, GIF or other raster image — the viewer
-opens at once with that one picture. Closing it shows the browser's own view of the image; a click
-on the picture opens the viewer again. SVG files are left to the browser.
+opens at once with that one picture, and again every time the tab is shown again — on switching
+back to it, reloading it, or returning to it with Back or Forward. Closing it shows the browser's
+own view of the image; a click on the picture opens the viewer again. SVG files are left to the
+browser.
 
 ### The context menu
 
