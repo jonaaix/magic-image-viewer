@@ -1,7 +1,17 @@
-# Magic Image Viewer
+<p align="center">
+  <img src="public/icons/128.png" alt="Magic Image Viewer icon" width="128" height="128">
+</p>
 
+<h1 align="center">Magic Image Viewer</h1>
+
+<p align="center">
 A browser extension for Chrome and Firefox that opens any image on any web page in a full-screen
 viewer — with zoom, pan and a gallery of every picture on the page.
+</p>
+
+<p align="center">
+  <b>Chrome Web Store</b> · <b>Firefox Add-ons</b> · <b>Microsoft Edge Add-ons</b> — coming soon
+</p>
 
 ![The viewer over a page of photos](store/screenshots/01-viewer.png)
 
@@ -38,7 +48,15 @@ viewer — with zoom, pan and a gallery of every picture on the page.
 | Any image | Right-click → Show in Magic Image Viewer |
 | Switch off | Toolbar button → All sites / This site |
 
-## Install from source
+## Install
+
+| Store | Link |
+| --- | --- |
+| Chrome Web Store | Coming soon |
+| Firefox Add-ons | Coming soon |
+| Microsoft Edge Add-ons | Coming soon |
+
+### From source
 
 Requirements: Node.js 24 and npm.
 
@@ -69,6 +87,12 @@ Built with [WXT](https://wxt.dev), Vue 3 and Tailwind CSS 4. The viewer is the `
 [laravel-islands-gallery](https://github.com/jonaaix/laravel-islands-gallery), its buttons and the
 popup's controls come from [laravel-islands](https://github.com/jonaaix/laravel-islands). The viewer
 runs inside a Shadow DOM, so pages and viewer do not affect each other's styles.
+
+## Support
+
+Magic Image Viewer is free and stays free. If it saves you time, you can buy me a coffee:
+
+<a href="https://buymeacoffee.com/jonaaix"><img src="https://img.shields.io/badge/Buy%20me%20a%20coffee-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=black" alt="Buy me a coffee" height="40"></a>
 
 ## Licence
 

@@ -113,6 +113,9 @@ headless via WebDriver BiDi (image tab and SVG checked there); not yet part of `
 
 ## Decisions
 
+- **The popup carries status, image count, trust and author links** (Jonas' choice of ten
+  elements); quick guide and shortcuts stay out. The coffee link lives only in `utils/links.js`;
+  empty hides the button. No new permissions, no network access.
 - **A file opened directly in a tab exists only in the viewer.** Image or video, local or from
   the web: the viewer shows it at once and cannot be closed — no close button, Esc only resets
   the zoom, no drag-down, and no "off on this site". The browser's own view never appears; a
@@ -122,6 +125,9 @@ headless via WebDriver BiDi (image tab and SVG checked there); not yet part of `
 - **File tabs show the media immersive** (gallery `immersive` prop): it fills the screen up to a
   narrow edge and the bars float above it, fading when idle. Page galleries keep the reserved space,
   since their thumbnail strip stays visible and would cover the picture.
+- **The zoom button toggles actual size** (gallery 1.0.12): fitted → 1:1, any zoom → fitted; an
+  image no larger than fitted zooms 2.5×. A click or double tap on the image keeps zooming 2.5×,
+  as Jonas asked. The zoom limit rises to 1:1 where that lies above `maxZoom`.
 - **Jonas tests before anything is released.** Changes are built into `dist/` for him first;
   pushes of library tags and the tag `v1.0.0` wait for his OK.
 - **The viewer sits in the browser's top layer while open** (popover on the shadow host), not

@@ -68,6 +68,9 @@
     "lightbox_zoomIn": {
         "message": "Vergrößern"
     },
+    "lightbox_zoomActualSize": {
+        "message": "Vergrößern (1:1)"
+    },
     "lightbox_zoomOut": {
         "message": "Verkleinern"
     },
@@ -103,5 +106,56 @@
     },
     "lightbox_volume": {
         "message": "Lautstärke"
+    },
+    "popup_statusActive": {
+        "message": "Aktiv auf dieser Seite"
+    },
+    "popup_statusSiteOff": {
+        "message": "Auf dieser Seite aus"
+    },
+    "popup_statusAllOff": {
+        "message": "Überall aus"
+    },
+    "popup_imagesOne": {
+        "message": "1 Bild auf dieser Seite"
+    },
+    "popup_imagesOther": {
+        "message": "$COUNT$ Bilder auf dieser Seite",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "12"
+            }
+        }
+    },
+    "popup_private": {
+        "message": "100 % privat"
+    },
+    "popup_privateText": {
+        "message": "Keine Daten verlassen den Browser"
+    },
+    "popup_free": {
+        "message": "Für immer kostenlos"
+    },
+    "popup_freeText": {
+        "message": "Open Source"
+    },
+    "popup_by": {
+        "message": "von $NAME$",
+        "placeholders": {
+            "name": {
+                "content": "$1",
+                "example": "jonaaix"
+            }
+        }
+    },
+    "popup_star": {
+        "message": "Stern auf GitHub"
+    },
+    "popup_reportBug": {
+        "message": "Fehler melden"
+    },
+    "popup_coffee": {
+        "message": "Buy me a coffee"
     }
 }

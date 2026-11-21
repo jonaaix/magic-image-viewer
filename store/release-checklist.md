@@ -24,8 +24,14 @@ Load `dist/chrome-mv3` in Chrome, then repeat the marked rows in Firefox.
 - [ ] Local files: switch on "Allow access to file URLs" for the extension, open a local `.jpg` — the viewer shows it.
 - [ ] Toolbar icon grey while switched off for the current site, coloured on other sites.
 
-## 4. Publish
+## 4. Edge
+
+- [ ] Load `dist/chrome-mv3` in Edge (`edge://extensions`, developer mode, "Load unpacked") and repeat the rows of section 1.
+
+## 5. Publish
 
 - [ ] Say OK to tag: `v1.0.0` is then pushed, and CI attaches the Chrome package, the Firefox package and the Firefox source package to the GitHub release.
 - [ ] Chrome Web Store: upload `magic-image-viewer-1.0.0-chrome.zip`, fill the listing from `listings/`, screenshots, icon, review answers from `permissions.md`.
 - [ ] AMO: upload `magic-image-viewer-1.0.0-firefox.zip` and the sources zip, listing from `listings/`, screenshots.
+- [ ] Microsoft Partner Center: upload the same `magic-image-viewer-1.0.0-chrome.zip`, listing from `listings/`, screenshots.
+- [ ] Hand over the three store addresses; they replace "coming soon" in the README's head line and its Install table.

@@ -5,6 +5,8 @@ import { openOnClick } from './clickToOpen.js';
 import { openFromContextMenu } from './contextMenu.js';
 import { isFileDocument, showFileDocument } from './fileDocument.js';
 import { createActivation } from './activation.js';
+import { collectImages } from './collector/index.js';
+import { IMAGE_COUNT } from '../../utils/messages.js';
 
 export default defineContentScript({
     matches: ['<all_urls>'],
@@ -22,6 +24,11 @@ export default defineContentScript({
             showFileDocument(viewer, activation);
         } else {
             openOnClick(viewer, activation);
+            browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+                if (message?.type === IMAGE_COUNT) {
+                    sendResponse(collectImages().entries.length);
+                }
+            });
         }
 
         if (import.meta.env.MODE === 'test') {

@@ -124,3 +124,65 @@ test('a single file shows no counter and keeps its toolbar icons steady', async 
     await page.waitForTimeout(60);
     expect(await zoom.locator('svg').evaluate((icon) => icon.getBoundingClientRect().width)).toBe(20);
 });
+
+test('a toolbar tooltip stays while the pointer moves over its button', async ({ page }) => {
+    await page.goto('/images/landscape.jpg');
+    await expect(shownImage(page)).toHaveAttribute('style', /scale\(1\)/);
+    await page.waitForTimeout(450);
+    const zoom = viewer(page).locator('.ilg-tool').first();
+    const box = await zoom.boundingBox();
+
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await expect(viewer(page).getByRole('tooltip')).toHaveText(await label(page, 'zoomActualSize'));
+    await page.mouse.move(box.x + box.width / 2 + 3, box.y + box.height / 2 + 2);
+    await page.waitForTimeout(300);
+
+    await expect(viewer(page).getByRole('tooltip')).toHaveText(await label(page, 'zoomActualSize'));
+});
+
+test.describe('the zoom button', () => {
+    test.beforeEach(async ({ page }) => {
+        await page.goto('/images/landscape.jpg');
+        await expect(shownImage(page)).toHaveAttribute('style', /scale\(1\)/);
+        await page.waitForTimeout(450);
+    });
+
+    const width = async (page) => (await shownImage(page).boundingBox()).width;
+    const zoomButton = (page) => viewer(page).locator('.ilg-tool').first();
+    const settle = (page) => page.waitForTimeout(600);
+
+    test('shows the image at actual size, then fits it again', async ({ page }) => {
+        const fitted = await width(page);
+        await expect(zoomButton(page)).toHaveAccessibleName(await label(page, 'zoomActualSize'));
+
+        await zoomButton(page).click();
+        await settle(page);
+        expect(Math.round(await width(page))).toBe(2400);
+        await expect(zoomButton(page)).toHaveAccessibleName(await label(page, 'zoomOut'));
+
+        await zoomButton(page).click();
+        await settle(page);
+        expect(await width(page)).toBeCloseTo(fitted, 0);
+    });
+
+    test('fits the image again after zooming with the wheel', async ({ page }) => {
+        const fitted = await width(page);
+        await page.mouse.move(640, 360);
+        await page.mouse.wheel(0, -200);
+        await settle(page);
+        expect(await width(page)).toBeGreaterThan(fitted * 1.1);
+
+        await zoomButton(page).click();
+        await settle(page);
+        expect(await width(page)).toBeCloseTo(fitted, 0);
+    });
+
+    test('a click on the image still zooms two and a half times', async ({ page }) => {
+        const fitted = await width(page);
+
+        await page.mouse.click(640, 360);
+        await settle(page);
+
+        expect(await width(page)).toBeCloseTo(fitted * 2.5, 0);
+    });
+});

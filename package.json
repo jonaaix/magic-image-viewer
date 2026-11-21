@@ -24,8 +24,8 @@
         "icons": "node scripts/render-icons.mjs"
     },
     "dependencies": {
-        "@aaix/laravel-islands": "github:jonaaix/laravel-islands#v1.0.176",
-        "@aaix/laravel-islands-gallery": "github:jonaaix/laravel-islands-gallery#v1.0.11",
+        "@aaix/laravel-islands": "github:jonaaix/laravel-islands#v1.0.177",
+        "@aaix/laravel-islands-gallery": "github:jonaaix/laravel-islands-gallery#v1.0.12",
         "vue": "^3.5.42"
     },
     "devDependencies": {
