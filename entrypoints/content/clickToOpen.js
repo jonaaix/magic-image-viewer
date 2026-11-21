@@ -1,8 +1,9 @@
 import { collectImages, isContentElement } from './collector/index.js';
 import { cornerRadius } from './collector/rules.js';
-import { linkKind, shouldOpen } from './clickRules.js';
+import { CAROUSEL_MARKUP, isSwipeStyle, linkKind, movedTooFar, shouldOpen } from './clickRules.js';
 
-const GESTURE_EVENTS = ['pointerdown', 'mousedown', 'touchstart', 'pointerup', 'mouseup', 'touchend', 'click'];
+const PRESS_EVENTS = ['pointerdown', 'mousedown', 'touchstart'];
+const RELEASE_EVENTS = ['pointerup', 'mouseup', 'touchend'];
 const CONTROLS = 'button, [role="button"], input, select, textarea, option, summary, [contenteditable]:not([contenteditable="false"])';
 const ANCESTOR_SEARCH_DEPTH = 3;
 
@@ -111,6 +112,32 @@ function claimedImage(event, viewer) {
     return shouldOpen({ link, altKey: event.altKey }) ? image : null;
 }
 
+function scrollsSideways(element, style) {
+    return element.scrollWidth > element.clientWidth && ['auto', 'scroll'].includes(style.overflowX);
+}
+
+function inSwipeRegion(image) {
+    if (image.closest(CAROUSEL_MARKUP)) {
+        return true;
+    }
+
+    for (let element = image; element && element !== document.body && element !== document.documentElement; element = element.parentElement) {
+        const style = getComputedStyle(element);
+        const swipes = isSwipeStyle({
+            overflowX: style.overflowX,
+            scrollsSideways: scrollsSideways(element, style),
+            scrollSnapType: style.scrollSnapType,
+            touchAction: style.touchAction,
+        });
+
+        if (swipes) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 function open(viewer, image) {
     const { entries, indexOf } = collectImages();
     const start = indexOf(image);
@@ -124,20 +151,36 @@ function open(viewer, image) {
 }
 
 export function openOnClick(viewer) {
-    for (const type of GESTURE_EVENTS) {
-        window.addEventListener(type, (event) => {
-            const image = claimedImage(event, viewer);
+    let press = null;
 
-            if (!image) {
-                return;
+    for (const type of [...PRESS_EVENTS, ...RELEASE_EVENTS]) {
+        window.addEventListener(type, (event) => {
+            if (PRESS_EVENTS.includes(type)) {
+                press = pointOf(event);
             }
 
-            event.stopPropagation();
+            const image = claimedImage(event, viewer);
 
-            if (type === 'click') {
-                event.preventDefault();
-                open(viewer, image);
+            if (image && !inSwipeRegion(image)) {
+                event.stopPropagation();
             }
         }, true);
     }
+
+    window.addEventListener('click', (event) => {
+        const moved = event.detail > 0 && movedTooFar(press, pointOf(event));
+        press = null;
+        const image = claimedImage(event, viewer);
+
+        if (!image || (moved && inSwipeRegion(image))) {
+            return;
+        }
+
+        event.stopPropagation();
+        event.preventDefault();
+
+        if (!moved) {
+            open(viewer, image);
+        }
+    }, true);
 }

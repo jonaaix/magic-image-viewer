@@ -23,3 +23,23 @@ export function linkKind(href, baseUri) {
 export function shouldOpen({ link, altKey }) {
     return altKey || link !== 'page';
 }
+
+export const MAX_TAP_DISTANCE = 10;
+
+export const CAROUSEL_MARKUP = [
+    '.swiper', '.swiper-container', '.slick-slider', '.splide', '.glide', '.flickity-enabled', '[data-flickity]',
+    '.owl-carousel', '.keen-slider', '.embla', '.carousel', '.f-carousel', '.tns-outer', '.glider',
+].join(', ');
+
+const SCROLLING_OVERFLOW = ['auto', 'scroll'];
+const FREE_TOUCH_ACTIONS = ['auto', 'manipulation'];
+
+export function isSwipeStyle({ overflowX, scrollsSideways, scrollSnapType, touchAction }) {
+    return (SCROLLING_OVERFLOW.includes(overflowX) && scrollsSideways)
+        || (!!scrollSnapType && scrollSnapType !== 'none')
+        || (!!touchAction && !FREE_TOUCH_ACTIONS.includes(touchAction));
+}
+
+export function movedTooFar(from, to) {
+    return !!from && !!to && Math.hypot(to.x - from.x, to.y - from.y) > MAX_TAP_DISTANCE;
+}

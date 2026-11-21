@@ -22,14 +22,14 @@ both store packages build from CI.
   of `laravel-islands-gallery` (its own git repo):
   the five shadow-root changes under Decisions and the thumbnail-ring bug, demo tests green,
   changelog and version bumped. Released as `v1.0.9`.
-- [ ] **M1 — Skeleton and viewer in the page.** WXT + Vue 3 + Tailwind 4, MV3 builds for Chrome
+- [x] **M1 — Skeleton and viewer in the page.** WXT + Vue 3 + Tailwind 4, MV3 builds for Chrome
   and Firefox. Content script mounts the library's `Lightbox` inside a Shadow DOM host and opens
   it with a fixed image list on a fixture page. Proves isolation in both directions: page CSS
   does not reach the viewer, viewer CSS does not reach the page. Checks: Tailwind 4 inside a
   shadow root (`@property` rules and `:root` theme variables), `rem` on pages with a changed root
   font size, keyboard events not reaching the page, focus trap, fullscreen, page scroll lock,
   whether `IconButton` from `@aaix/laravel-islands` teleports anything to `body`.
-  Built and proven (`cb1abd1`) except the last check, which is M1b.
+  The last check became M1b.
 - [x] **M1b — Tooltips inside the viewer.** `Tooltip` in `@aaix/laravel-islands` takes its
   teleport target from an injected value, `body` when nothing is provided; the gallery's
   `Lightbox` provides its own root when `teleport` is not `body`. Released as islands `v1.0.176`
@@ -49,9 +49,20 @@ both store packages build from CI.
   whose source is already in the list opens at that entry. Images inside editable content are
   left alone. Fixture pages for the common lightbox patterns, a real-site checklist, and the
   first build Jonas loads in his own browser.
-- [ ] **M4 — Direct image tabs and context menu.** An image document (`document.contentType`
-  starts with `image/`) is shown in the viewer; context-menu entry "Show in Magic Image Viewer"
-  on images opens the viewer on that image, within the page gallery when the image is part of it.
+- [x] **M3b — Swiping stays with the page.** In a swipe region — an ancestor of the image scrolls
+  sideways, uses scroll snap, restricts `touch-action`, or carries the markup of a known carousel
+  library — presses and releases reach the page unchanged and only `click` is taken. More than
+  `MAX_TAP_DISTANCE` (10 px) between press and click never opens the viewer. Outside swipe
+  regions everything stays as in M3. Proven by `carousel.html`: a pointer carousel swipes with
+  mouse and touch, a markup-known carousel with the mouse, a tap opens our viewer, a drag across
+  a free image opens nothing.
+- [ ] **M4 — Direct image tabs and context menu.** An image document whose `document.contentType`
+  is an image type other than SVG opens the viewer at once with that one image; closing shows the
+  browser's view, a click on the image opens the viewer again. Context-menu entry "Show in Magic
+  Image Viewer" on images, its text through the browser's i18n from the start (English only until
+  M5). When the image is part of the page gallery the viewer opens there at its place, otherwise
+  it shows the image alone — decorative images and images in iframes included. Only the
+  permissions this needs. `file://` behaviour in Chrome and Firefox settled and recorded here.
 - [ ] **M5 — Popup, settings, languages.** Popup with global on/off and "off on this site";
   all strings through the browser's i18n in en, de, fr, es, it, pt, nl, pl, including the
   library's `labels` and the store description.
@@ -72,7 +83,8 @@ reachable through a test hook (`--mode test`, event `magic-image-viewer:test-ope
 against `tests/fixtures/` (plain, aggressive, article, sources). A plain click on an unlinked
 content image opens the viewer on the page gallery; `npm run test:unit` covers the rules.
 M3: gestures on images we open are taken at `window` capture (`clickToOpen.js`), click rules
-in `clickRules.js`, fixture `lightboxes.html` covers the common lightbox patterns. Real-site
+in `clickRules.js`, fixture `lightboxes.html` covers the common lightbox patterns. M3b: swipe
+regions and the tap distance in the same files, fixture `carousel.html`. Real-site
 checklist run headless; rows blocked for automation stay open for Jonas. Firefox MV3 build loads and opens headless via
 WebDriver BiDi; not yet part of `npm test`.
 
@@ -127,6 +139,11 @@ WebDriver BiDi; not yet part of `npm test`.
   was rejected: other listeners on the same node still fire.
 - **The host is pinned with inline `!important` styles** (fixed, 0×0, z-index max), which beat
   any page rule including `* { all: unset }`.
+- **Swiping wins over taking a site lightbox's press.** In swipe regions only the finished click
+  is taken, and a movement beyond `MAX_TAP_DISTANCE` never opens the viewer anywhere. Price: a
+  site lightbox inside a carousel that opens on press may open in addition to ours — rarer and
+  less harmful than a carousel that no longer swipes. Outside swipe regions a dragged click is
+  swallowed, so neither viewer opens.
 - **Gesture takeover is decided per event, not per gesture.** Each of `pointerdown`, `mousedown`,
   `touchstart`, `pointerup`, `mouseup`, `touchend`, `click` re-resolves the image under the point;
   same point, same answer, no state to get stuck. Only `click` is prevented.
@@ -166,8 +183,5 @@ WebDriver BiDi; not yet part of `npm test`.
 
 - Firefox: content-script host permission under MV3 for a normal (non-temporary) install, and
   whether the backdrop blur renders (missing in headless Firefox).
-- Swipe carousels whose slides are content images: the press on the image is kept from the page,
-  so a swipe that starts on the image may not move the carousel. To check on real sites.
-
 - To verify in M4: content scripts on `file://` images (Chrome needs the user's "Allow access to
   file URLs"; Firefox behaviour to be checked).
