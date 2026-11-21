@@ -133,11 +133,11 @@ test('a toolbar tooltip stays while the pointer moves over its button', async ({
     const box = await zoom.boundingBox();
 
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-    await expect(viewer(page).getByRole('tooltip')).toHaveText(await label(page, 'zoomIn'));
+    await expect(viewer(page).getByRole('tooltip')).toHaveText(await label(page, 'zoomActualSize'));
     await page.mouse.move(box.x + box.width / 2 + 3, box.y + box.height / 2 + 2);
     await page.waitForTimeout(300);
 
-    await expect(viewer(page).getByRole('tooltip')).toHaveText(await label(page, 'zoomIn'));
+    await expect(viewer(page).getByRole('tooltip')).toHaveText(await label(page, 'zoomActualSize'));
 });
 
 test.describe('the zoom button', () => {
@@ -153,10 +153,12 @@ test.describe('the zoom button', () => {
 
     test('shows the image at actual size, then fits it again', async ({ page }) => {
         const fitted = await width(page);
+        await expect(zoomButton(page)).toHaveAccessibleName(await label(page, 'zoomActualSize'));
 
         await zoomButton(page).click();
         await settle(page);
         expect(Math.round(await width(page))).toBe(2400);
+        await expect(zoomButton(page)).toHaveAccessibleName(await label(page, 'zoomOut'));
 
         await zoomButton(page).click();
         await settle(page);

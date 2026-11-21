@@ -68,6 +68,9 @@
     "lightbox_zoomIn": {
         "message": "Zoom avant"
     },
+    "lightbox_zoomActualSize": {
+        "message": "Zoom avant (1:1)"
+    },
     "lightbox_zoomOut": {
         "message": "Zoom arrière"
     },

@@ -68,6 +68,9 @@
     "lightbox_zoomIn": {
         "message": "Ingrandisci"
     },
+    "lightbox_zoomActualSize": {
+        "message": "Ingrandisci (1:1)"
+    },
     "lightbox_zoomOut": {
         "message": "Riduci"
     },

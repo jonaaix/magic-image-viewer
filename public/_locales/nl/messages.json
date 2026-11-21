@@ -68,6 +68,9 @@
     "lightbox_zoomIn": {
         "message": "Inzoomen"
     },
+    "lightbox_zoomActualSize": {
+        "message": "Inzoomen (1:1)"
+    },
     "lightbox_zoomOut": {
         "message": "Uitzoomen"
     },
