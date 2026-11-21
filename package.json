@@ -1,10 +1,14 @@
 {
     "name": "magic-image-viewer",
     "description": "Opens any image on any web page in a full-screen viewer with zoom, pan and a gallery of every picture on the page.",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "private": true,
     "type": "module",
     "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/jonaaix/magic-image-viewer.git"
+    },
     "scripts": {
         "dev": "wxt",
         "dev:firefox": "wxt -b firefox --mv3",
@@ -16,7 +20,8 @@
         "zip:firefox": "wxt zip -b firefox --mv3",
         "test": "npm run test:unit && npm run build:test && playwright test",
         "test:unit": "node --test tests/unit/*.test.js",
-        "postinstall": "wxt prepare"
+        "postinstall": "wxt prepare",
+        "icons": "node scripts/render-icons.mjs"
     },
     "dependencies": {
         "@aaix/laravel-islands": "github:jonaaix/laravel-islands#v1.0.176",

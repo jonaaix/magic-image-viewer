@@ -71,9 +71,13 @@ both store packages build from CI.
   Every string through the browser's i18n in en, de, fr, es, it, pt_BR, pt_PT, nl, pl, including
   the store description, the menu entry, the popup and the library's `labels`. Behaviour in the
   Feature Book chapter `settings-switches`.
-- [ ] **M6 — Release readiness.** Icon set, README, MIT licence, privacy statement (no data
-  leaves the browser), Playwright end-to-end tests with the extension loaded, CI building both
-  store packages, source package for Firefox review.
+- [ ] **M6 — Release readiness.** Three icon designs, one built in as the provisional default,
+  all sizes plus a grey variant for "off". README with screenshots, MIT `LICENSE`, `PRIVACY.md`
+  with a reason per permission, `CHANGELOG.md`. GitHub CI runs unit tests, browser tests and both
+  builds on every push; a version tag attaches the Chrome package, the Firefox package and the
+  Firefox source package to a GitHub release. Store material in `store/` (listings in every
+  language, screenshots, permission justifications) and a release checklist for Jonas. Version
+  1.0.0 prepared, not tagged; `main` follows `dev`. Own security check of the whole extension.
 
 ## State
 
@@ -165,6 +169,15 @@ headless via WebDriver BiDi (image tab and SVG checked there); not yet part of `
   so a page of 200 thumbnails linking to file pages does not trigger 200 downloads.
 - **Unsized lazy images count**: docs sites lazy-load screenshots without width or height, 0×0
   until loaded (VS Code docs: 1 instead of 26 pictures before this rule).
+- **We deliver the store packages, texts and screenshots; Jonas uploads.** Both stores need his
+  developer accounts. The version tag is set only after his OK; CI then builds the packages.
+- **Firefox manifest declares `data_collection_permissions: { required: ["none"] }`** with
+  `strict_min_version` 140.0: required for new AMO submissions since November 2025, understood from
+  Firefox 140.
+- **CI fetches the git dependencies over HTTPS.** npm records `github:` dependencies as
+  `git+ssh` in the lockfile; the workflow rewrites `ssh://git@github.com/` to HTTPS so no key is
+  needed.
+- **The context menu's new-tab fallback only opens http, https and file images.**
 - **WXT as the extension framework.** One codebase for Chrome and Firefox MV3, Vite-based like
   the library, with Vue module, shadow-root UI helper and i18n. Rejected: hand-written manifests
   and two build configs.

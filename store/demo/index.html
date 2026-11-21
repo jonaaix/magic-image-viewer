@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Six landscapes — a travel journal</title>
+        <style>
+            body { margin: 0; font-family: Georgia, serif; color: #1f2937; background: #fafaf9; }
+            header { display: flex; align-items: center; justify-content: space-between; padding: 18px 48px; border-bottom: 1px solid #e7e5e4; font-family: system-ui, sans-serif; }
+            header b { font-size: 18px; letter-spacing: -0.01em; }
+            header nav { display: flex; gap: 24px; color: #57534e; font-size: 14px; }
+            main { max-width: 1040px; margin: 0 auto; padding: 32px 24px; }
+            h1 { font-size: 40px; margin: 0 0 8px; }
+            p.lead { font-size: 18px; color: #57534e; margin: 0 0 28px; }
+            .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+            .grid img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 12px; display: block; cursor: zoom-in; }
+        </style>
+    </head>
+    <body>
+        <header><b>Field notes</b><nav><span>Journal</span><span>Maps</span><span>About</span></nav></header>
+        <main>
+            <h1>Six landscapes</h1>
+            <p class="lead">Photos from a slow journey across mountains, dunes and coastlines.</p>
+            <div class="grid">
+                <img src="images/dawn.svg" alt="Dawn over the ridge" />
+                <img src="images/lake.svg" alt="Mountain lake" />
+                <img src="images/dunes.svg" alt="Dunes at sunset" />
+                <img src="images/forest.svg" alt="Green valley" />
+                <img src="images/night.svg" alt="Night in the hills" />
+                <img src="images/coast.svg" alt="Coastline" />
+            </div>
+        </main>
+    </body>
+</html>
