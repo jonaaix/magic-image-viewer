@@ -1,4 +1,4 @@
-import { allSitesSwitch, expect, message, openPopup, siteSwitch, test, viewer } from './support/extension.js';
+import { allSitesSwitch, expect, message, openPopup, siteSwitch, test } from './support/extension.js';
 
 const shots = process.env.SHOTS_DIR;
 const status = (popup) => popup.locator('[data-status]');
@@ -15,11 +15,9 @@ async function shoot(popup, name) {
     }
 }
 
-test('counts the same images the viewer shows', async ({ page }) => {
+test('counts the content images of the page', async ({ page }) => {
     await page.goto('/article.html');
-    await page.locator('img[alt="Cliffs at dawn"]').click();
-    await expect(viewer(page).locator('span.tabular-nums')).toHaveText('1 / 4');
-    await page.keyboard.press('Escape');
+    await page.waitForTimeout(300);
 
     const popup = await openPopup(page);
 

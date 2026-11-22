@@ -224,7 +224,11 @@ headless via WebDriver BiDi (image tab and SVG checked there); not yet part of `
 - **The collector reads the DOM into plain descriptors** (`collector/describe.js`) and decides on
   them with pure functions (`collector/rules.js`), so the rules run under `node --test` without a
   browser.
-- **Gallery scope: all content images of the page**, in document order.
+- **Gallery scope: the group of the opened image**, not the whole page (Jonas, 2026-11-23). Up
+  the tree from the image to the innermost level with siblings of the same shape; grows only
+  through pure wrappers; a preview strip's main image opens the strip's group; otherwise alone.
+  Rules in `feature viewer-click-to-open`. Rejected: all content images of the page — mixed
+  unrelated pictures. The popup still counts all content images of the page.
 - **Active on every site by default**, with a global and a per-site switch in the popup.
 - **Images only in the first version.** The library plays videos, but page videos are left alone.
 - **Tooltips are fixed in the islands library, not switched off in the viewer.** Same line as

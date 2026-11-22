@@ -9,9 +9,10 @@ tags: [viewer, image-detection, gallery]
 ## What is it for?
 
 On any web page, a click on a picture that is meant to be looked at opens it full screen in the
-viewer, where it can be zoomed and panned. All such pictures of the page form one gallery, so the
-visitor can step through them without going back to the page. Logos, icons, avatars and other
-decoration never open.
+viewer, where it can be zoomed and panned. The pictures that belong together with it — the
+gallery, grid, carousel or article it sits in — form the viewer's gallery, so the visitor can step
+through them without going back to the page. Logos, icons, avatars and other decoration never
+open.
 
 ## How does it work?
 
@@ -25,9 +26,27 @@ and tracking pixels never count. Only the page itself is searched, not embedded 
 
 ### The gallery
 
-The list is read fresh at the moment of opening, so images the page added since the last opening
-are included. It follows the page's order, lists every picture once, and includes lazy images that
-have not loaded yet.
+The gallery is the group the opened picture belongs to, found by the page's structure:
+
+- **Siblings of the same shape.** Starting at the picture, the search goes up the page's element
+  tree. On each level it compares the part holding the picture with its siblings. A sibling has
+  the same shape when it is the same kind of element, leads down to exactly one picture by the same
+  path, and shows it at a similar size — about the same width or about the same height, so masonry
+  tiles of changing height still match. The innermost level with at least one such sibling is the
+  group; other content on that level, such as paragraphs between the figures of an article, stays
+  out.
+- **Rows and columns join.** The group grows upwards only through containers that hold nothing but
+  such items, such as the rows or columns of a grid. A container with a heading or any other content
+  ends it, so two galleries in separate sections of a page stay two galleries.
+- **The main image of a preview strip.** A picture without a group of its own that shows the large
+  version of a grouped picture — the main photo above the thumbnails of a product page — opens that
+  group at the matching place.
+- **Otherwise alone.** A picture with none of these opens on its own, without a counter.
+
+Pictures of a group count even below the 100 px threshold, down to about 40 px, as long as they
+are visible and not sprites or inside controls. The group is read fresh at the moment of opening,
+so images the page added since are included. It follows the page's order, lists every picture once
+— cloned carousel slides included — and includes lazy images that have not loaded yet.
 
 For each picture the viewer shows the largest version the page offers, looked up in this order: a
 link around the image to an image file, the largest candidate of `srcset` or `<picture>`, a
@@ -47,7 +66,7 @@ the middle button are left to the browser.
 
 The image is found under the pointer even when a transparent element lies on top of it, as long
 as that element is not a button or form control; a link lying on top counts as the image's link.
-When the same picture appears twice on the page, a click on either opens its one gallery entry.
+When the same picture appears twice in a group, a click on either opens its one gallery entry.
 
 For an image the viewer opens, the page sees neither the click nor the pointer, mouse and touch
 presses leading to it, so the site's own lightbox stays closed. Dragging the image and its context
@@ -65,17 +84,22 @@ fades instead.
 
 ## Examples
 
-- An article with a header logo, a round author avatar, three photos and a teaser image linking to
-  the next article: clicking the second photo opens "2 / 4"; the logo and avatar do nothing; the
-  teaser follows its link but appears as the fourth picture in the gallery.
+- An article with a header logo, a round author avatar, three photos in figures between its
+  paragraphs and a teaser image linking to the next article: clicking the second photo opens
+  "2 / 3"; the logo and avatar do nothing; the teaser follows its link and is not part of the
+  photos' gallery.
+- A page with two photo galleries under their own headings: each opens only its own photos; a grid
+  of several rows opens as one gallery.
+- A product page: the main photo and the thumbnails below it open the same gallery.
+- A single photo in a text: opens alone, without a counter.
 - A photo with `srcset` offering 400 and 1600 px wide versions opens the 1600 px version.
 - A 160 px thumbnail linking to `photo-full.jpg` appears in the gallery as `photo-full.jpg`.
-- A photo far down the page that has not loaded yet is already counted in "n / total".
+- A photo far down a gallery that has not loaded yet is already counted in "n / total".
 - A share button showing a large picture never opens the viewer.
 - A product photo whose site opens its own zoom on `mousedown`: our viewer opens, the site's zoom
   does not.
 - A news teaser image linking to the article: a click opens the article; an Alt-click opens the
-  viewer with every picture of the front page.
+  viewer with the other teasers of its kind.
 - A Wikipedia article: a click on a photo opens our viewer instead of Wikipedia's media viewer; the
   link to the file page does not load as an image, so the largest picture from the article is shown.
 - A photo inside a rich-text editor stays clickable for the editor and never opens the viewer.

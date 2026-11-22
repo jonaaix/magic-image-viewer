@@ -8,7 +8,7 @@ test('an image of the page gallery opens at its place', async ({ page }) => {
 
     await chooseMenuEntry(page, page.getByAltText('Harbour'));
 
-    await expect(counter(page)).toHaveText('2 / 4');
+    await expect(counter(page)).toHaveText('2 / 3');
 });
 
 test('a decorative image opens alone', async ({ page }) => {

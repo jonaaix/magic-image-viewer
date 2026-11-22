@@ -34,15 +34,15 @@ test.describe('article', () => {
         await clickToOpen(page, 'img[alt="Cliffs at dawn"]');
         shots && (await page.screenshot({ path: `${shots}/article-viewer.png` }));
 
-        await expect(counter(page)).toHaveText('1 / 4');
-        expect(await shownSources(page)).toEqual(['photo-1.svg', 'photo-2.svg', 'photo-3.svg', 'teaser.svg']);
+        await expect(counter(page)).toHaveText('1 / 3');
+        expect(await shownSources(page)).toEqual(['photo-1.svg', 'photo-2.svg', 'photo-3.svg']);
     });
 
     test('takes the caption from the figure', async ({ page }) => {
         await page.goto('/article.html');
         await clickToOpen(page, 'img[alt="Harbour"]');
 
-        await expect(counter(page)).toHaveText('2 / 4');
+        await expect(counter(page)).toHaveText('2 / 3');
         await expect(viewer(page).getByText('The harbour at low tide')).toBeVisible();
     });
 
@@ -59,36 +59,34 @@ test.describe('article', () => {
     test('picks up an image added after the first opening', async ({ page }) => {
         await page.goto('/article.html');
         await clickToOpen(page, 'img[alt="Cliffs at dawn"]');
-        await expect(counter(page)).toHaveText('1 / 4');
+        await expect(counter(page)).toHaveText('1 / 3');
         await close(page);
 
         await page.evaluate(() => {
-            const image = Object.assign(document.createElement('img'), { src: 'images/late.svg', alt: 'Late', className: 'content' });
-            document.querySelector('figure').after(image);
+            const figure = document.createElement('figure');
+            figure.append(Object.assign(document.createElement('img'), { src: 'images/late.svg', alt: 'Late', className: 'content' }));
+            document.querySelector('figure').after(figure);
         });
         await page.locator('img[alt="Late"]').waitFor();
         await clickToOpen(page, 'img[alt="Late"]');
 
-        await expect(counter(page)).toHaveText('3 / 5');
+        await expect(counter(page)).toHaveText('2 / 4');
         expect(await shownImage(page).getAttribute('src')).toContain('late.svg');
     });
 });
 
 test.describe('sources', () => {
-    test('loads the largest version of every image', async ({ page }) => {
-        await page.goto('/sources.html');
-        await clickToOpen(page, '#srcset');
+    const shownFile = async (page) => new URL(await shownImage(page).getAttribute('src')).pathname.split('/').pop();
 
-        expect(await shownSources(page)).toEqual(['photo-5-1600.svg', 'photo-6-large.svg', 'photo-8-full.svg', 'late.svg', 'photo-7-full.svg']);
-    });
+    for (const [selector, file] of [['#srcset', 'photo-5-1600.svg'], ['#picture', 'photo-6-large.svg'], ['#linked', 'photo-8-full.svg'], ['#lazy', 'photo-7-full.svg']]) {
+        test(`loads the largest version of ${selector}`, async ({ page }) => {
+            await page.goto('/sources.html');
+            await page.locator(selector).scrollIntoViewIfNeeded();
+            await clickToOpen(page, selector);
 
-    test('lists a lazy image that has not loaded yet', async ({ page }) => {
-        await page.goto('/sources.html');
-        expect(await page.locator('#lazy').evaluate((image) => image.naturalWidth)).toBeLessThanOrEqual(1);
-
-        await clickToOpen(page, '#picture');
-        await expect(counter(page)).toHaveText('2 / 5');
-    });
+            expect(await shownFile(page)).toBe(file);
+        });
+    }
 });
 
 test.describe('fallback', () => {
@@ -96,7 +94,6 @@ test.describe('fallback', () => {
         await page.goto('/sources.html');
         await clickToOpen(page, '#file-page');
 
-        await expect(counter(page)).toHaveText('4 / 5');
         await expect(shownImage(page)).toHaveAttribute('src', /images\/late\.svg$/);
     });
 });
@@ -132,7 +129,7 @@ test.describe('animation', () => {
         await target.click();
         const grow = await opening;
 
-        await expect(counter(page)).toHaveText('3 / 4');
+        await expect(counter(page)).toHaveText('3 / 3');
         const firstNear = grow.findIndex(nearPicture);
         expect(firstNear).toBeGreaterThanOrEqual(0);
         expect(grow.at(-1).width).toBeGreaterThan(box.width + 50);

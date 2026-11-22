@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Groups</title>
+        <script src="fixture.js"></script>
+        <style>
+            body { font-family: system-ui, sans-serif; margin: 24px; }
+            img { display: block; }
+            .grid { display: flex; gap: 8px; }
+            .grid img { width: 160px; height: 120px; }
+            .row { display: flex; gap: 8px; margin-bottom: 8px; }
+            .row img { width: 160px; height: 120px; }
+            .masonry { display: flex; gap: 8px; align-items: flex-start; }
+            .masonry img { width: 150px; margin-bottom: 8px; }
+            .hero img { width: 400px; height: 267px; }
+            .thumbs { display: flex; gap: 8px; list-style: none; padding: 0; }
+            .thumbs img { width: 80px; height: 54px; }
+            .single { width: 300px; height: 200px; }
+            .carousel { width: 300px; overflow: hidden; }
+            .track { display: flex; transform: translateX(-300px); }
+            .track img { width: 300px; height: 200px; flex: none; }
+        </style>
+    </head>
+    <body>
+        <header><img src="images/logo.svg" alt="Site logo" width="180" height="48" /></header>
+        <main>
+            <section>
+                <h2>First gallery</h2>
+                <div class="grid">
+                    <img src="images/photo-1.svg?first" alt="First 1" />
+                    <img src="images/photo-2.svg?first" alt="First 2" />
+                    <img src="images/photo-3.svg?first" alt="First 3" />
+                </div>
+            </section>
+
+            <section>
+                <h2>Second gallery</h2>
+                <div class="grid">
+                    <img src="images/photo-4.svg?second" alt="Second 1" />
+                    <img src="images/photo-1.svg?second" alt="Second 2" />
+                </div>
+            </section>
+
+            <section>
+                <h2>Rows</h2>
+                <div class="rows">
+                    <div class="row">
+                        <img src="images/photo-1.svg?row" alt="Row 1" />
+                        <img src="images/photo-2.svg?row" alt="Row 2" />
+                    </div>
+                    <div class="row">
+                        <img src="images/photo-3.svg?row" alt="Row 3" />
+                        <img src="images/photo-4.svg?row" alt="Row 4" />
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Masonry</h2>
+                <div class="masonry">
+                    <div class="column">
+                        <img src="images/photo-1.svg?masonry" alt="Masonry 1" style="height: 100px" />
+                        <img src="images/photo-2.svg?masonry" alt="Masonry 2" style="height: 220px" />
+                    </div>
+                    <div class="column">
+                        <img src="images/photo-3.svg?masonry" alt="Masonry 3" style="height: 60px" />
+                        <img src="images/photo-4.svg?masonry" alt="Masonry 4" style="height: 160px" />
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Product</h2>
+                <div class="hero"><img id="hero" src="images/photo-8-full.svg" alt="Product" /></div>
+                <ul class="thumbs">
+                    <li><a href="images/photo-8-full.svg"><img src="images/photo-8-thumb.svg" alt="Thumb 1" /></a></li>
+                    <li><a href="images/photo-6-large.svg"><img src="images/photo-6-small.svg" alt="Thumb 2" /></a></li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Single</h2>
+                <p>An image on its own.</p>
+                <img class="single" src="images/teaser.svg" alt="Single" />
+            </section>
+
+            <section>
+                <h2>Carousel</h2>
+                <div class="carousel">
+                    <div class="track">
+                        <img src="images/photo-3.svg?slide" alt="Clone of slide 3" />
+                        <img src="images/photo-1.svg?slide" alt="Slide 1" />
+                        <img src="images/photo-2.svg?slide" alt="Slide 2" />
+                        <img src="images/photo-3.svg?slide" alt="Slide 3" />
+                        <img src="images/photo-1.svg?slide" alt="Clone of slide 1" />
+                    </div>
+                </div>
+            </section>
+        </main>
+    </body>
+</html>

@@ -10,13 +10,13 @@ test.beforeEach(async ({ page }) => {
 
 test.describe('site lightboxes stay closed, ours opens', () => {
     const patterns = [
-        ['listener on the image', '#direct', '1 / 8'],
-        ['delegated listener on document', '#delegated', '2 / 8'],
-        ['mousedown trigger', '#mousedown', '3 / 8'],
-        ['pointerup trigger', '#pointerup', '4 / 8'],
-        ['anchor on the image file', '#anchor img', '5 / 8'],
-        ['hash link with script', '#hash img', '6 / 8'],
-        ['overlay above the image', '#cover', '7 / 8'],
+        ['listener on the image', '#direct', '1 / 4'],
+        ['delegated listener on document', '#delegated', '2 / 4'],
+        ['mousedown trigger', '#mousedown', '3 / 4'],
+        ['pointerup trigger', '#pointerup', '4 / 4'],
+        ['anchor on the image file', '#anchor img', '1 / 3'],
+        ['hash link with script', '#hash img', '2 / 3'],
+        ['overlay above the image', '#cover', null],
     ];
 
     for (const [name, selector, position] of patterns) {
@@ -24,7 +24,7 @@ test.describe('site lightboxes stay closed, ours opens', () => {
             await page.locator(selector).click();
 
             await expect(viewer(page)).toBeVisible();
-            await expect(counter(page)).toHaveText(position);
+            await (position ? expect(counter(page)).toHaveText(position) : expect(counter(page)).toHaveCount(0));
             expect(await siteLog(page)).toEqual([]);
             await expect(page.locator('#site-lightbox')).toBeHidden();
         });
@@ -48,7 +48,7 @@ test.describe('links to other pages', () => {
         await page.locator('#page-link img').click({ modifiers: ['Alt'] });
 
         await expect(viewer(page)).toBeVisible();
-        await expect(counter(page)).toHaveText('8 / 8');
+        await expect(counter(page)).toHaveText('3 / 3');
         await page.waitForTimeout(300);
         await expect(page).toHaveURL(/lightboxes\.html$/);
     });
@@ -66,7 +66,7 @@ test.describe('special cases', () => {
     test('a repeated image opens at its first entry', async ({ page }) => {
         await page.locator('#duplicate').click();
 
-        await expect(counter(page)).toHaveText('1 / 8');
+        await expect(counter(page)).toHaveText('1 / 4');
         expect(await siteLog(page)).toEqual([]);
     });
 
@@ -96,11 +96,11 @@ test.describe('special cases', () => {
 
     test('clicks keep working normally once the viewer is open', async ({ page }) => {
         await page.locator('#direct').click();
-        await expect(counter(page)).toHaveText('1 / 8');
+        await expect(counter(page)).toHaveText('1 / 4');
         await page.waitForTimeout(450);
 
         await viewer(page).getByRole('button', { name: await label(page, 'next') }).click();
-        await expect(counter(page)).toHaveText('2 / 8');
+        await expect(counter(page)).toHaveText('2 / 4');
         await viewer(page).getByRole('button', { name: await label(page, 'close') }).click();
         await expect(viewer(page)).toBeHidden();
         expect(await siteLog(page)).toEqual([]);

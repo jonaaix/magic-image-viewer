@@ -1,6 +1,6 @@
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
-import { cornerRadius, isContentImage, isImageUrl, largestCandidate, largestSource, parseSrcset, sourcesBySize, thumbnailSource } from '../../entrypoints/content/collector/rules.js';
+import { cornerRadius, isContentImage, isGroupImage, isImageUrl, showsSameImage, largestCandidate, largestSource, parseSrcset, sourcesBySize, thumbnailSource } from '../../entrypoints/content/collector/rules.js';
 
 const image = (overrides = {}) => ({
     width: 300,
@@ -143,5 +143,30 @@ describe('cornerRadius', () => {
         assert.equal(cornerRadius('50%', 300, 200), 100);
         assert.equal(cornerRadius('0px', 300, 200), 0);
         assert.equal(cornerRadius('', 300, 200), 0);
+    });
+});
+
+describe('isGroupImage', () => {
+    test('takes a tile below the content threshold', () => {
+        assert.equal(isGroupImage(image({ width: 150, height: 60 })), true);
+    });
+
+    test('leaves out icons, hidden images and sprites', () => {
+        assert.equal(isGroupImage(image({ width: 24, height: 24 })), false);
+        assert.equal(isGroupImage(image({ visible: false })), false);
+        assert.equal(isGroupImage(image({ src: 'https://example.com/ui-sprite.png' })), false);
+    });
+});
+
+describe('showsSameImage', () => {
+    test('matches a main image with the thumbnail that links to it', () => {
+        const main = image({ src: 'https://example.com/full.jpg', currentSrc: 'https://example.com/full.jpg' });
+        const thumb = image({ src: 'https://example.com/thumb.jpg', currentSrc: 'https://example.com/thumb.jpg', link: 'https://example.com/full.jpg' });
+
+        assert.equal(showsSameImage(main, thumb), true);
+    });
+
+    test('does not match two different photos', () => {
+        assert.equal(showsSameImage(image(), image({ src: 'https://example.com/other.jpg', currentSrc: 'https://example.com/other.jpg' })), false);
     });
 });
