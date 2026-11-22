@@ -5,7 +5,8 @@ import { openOnClick } from './clickToOpen.js';
 import { openFromContextMenu } from './contextMenu.js';
 import { isFileDocument, showFileDocument } from './fileDocument.js';
 import { createActivation } from './activation.js';
-import { createGalleryCache } from './collector/galleryCache.js';
+import { collectImages } from './collector/index.js';
+import { prepareWhenIdle } from './idle.js';
 import { IMAGE_COUNT } from '../../utils/messages.js';
 
 export default defineContentScript({
@@ -20,20 +21,16 @@ export default defineContentScript({
         activation.onChange(({ enabled }) => !enabled && viewer.close());
         const fileDocument = isFileDocument();
         const testing = import.meta.env.MODE === 'test';
-        const galleries = createGalleryCache({
-            isEnabled: () => !fileDocument && activation.isEnabled() && !(testing && document.documentElement.hasAttribute('data-test-no-precompute')),
-            onIdle: () => !fileDocument && activation.isEnabled() && viewer.prepare(),
-            onReady: () => testing && document.dispatchEvent(new CustomEvent('magic-image-viewer:test-galleries-ready')),
-        });
-        openFromContextMenu(viewer, activation, galleries);
+        openFromContextMenu(viewer, activation);
 
         if (fileDocument) {
             showFileDocument(viewer, activation);
         } else {
-            openOnClick(viewer, activation, galleries);
+            openOnClick(viewer, activation);
+            prepareWhenIdle(() => activation.isEnabled() && viewer.prepare());
             browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 if (message?.type === IMAGE_COUNT) {
-                    sendResponse(galleries.imageCount());
+                    sendResponse(collectImages().entries.length);
                 }
             });
         }

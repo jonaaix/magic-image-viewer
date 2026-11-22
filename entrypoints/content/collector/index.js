@@ -38,7 +38,7 @@ function entriesOf(elements, describeOf) {
         });
     }
 
-    return { entries, members: [...indexByElement.keys()], indexOf: (element) => indexByElement.get(element) ?? -1 };
+    return { entries, indexOf: (element) => indexByElement.get(element) ?? -1 };
 }
 
 function cachedDescribe() {

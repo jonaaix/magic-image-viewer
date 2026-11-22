@@ -1,4 +1,4 @@
-import { collectAlone } from './collector/index.js';
+import { collectAlone, collectGallery } from './collector/index.js';
 import { cornerRadius } from './collector/rules.js';
 
 function onScreen(rect) {
@@ -32,13 +32,13 @@ function show(viewer, image, { entries, start }, options = {}) {
     return { items, opened };
 }
 
-function addGroupLater(viewer, image, galleries, shown) {
+function addGroupLater(viewer, image, shown) {
     requestAnimationFrame(() => setTimeout(() => {
         if (!viewer.shows(shown)) {
             return;
         }
 
-        const { entries, start } = galleries.galleryNow(image);
+        const { entries, start } = collectGallery(image);
 
         if (entries.length > 1) {
             viewer.replace(entries.map((entry) => entry.item), start, { origin: originOf(entries.map((entry) => entry.element)) });
@@ -46,15 +46,7 @@ function addGroupLater(viewer, image, galleries, shown) {
     }));
 }
 
-export function openInGallery(viewer, image, galleries) {
-    const cached = galleries.galleryFor(image);
-
-    if (cached) {
-        show(viewer, image, cached);
-
-        return true;
-    }
-
+export function openInGallery(viewer, image) {
     const alone = collectAlone(image);
 
     if (alone.start === -1) {
@@ -62,7 +54,7 @@ export function openInGallery(viewer, image, galleries) {
     }
 
     const { items, opened } = show(viewer, image, alone, { reserveThumbnails: true });
-    opened.then(() => addGroupLater(viewer, image, galleries, items));
+    opened.then(() => addGroupLater(viewer, image, items));
 
     return true;
 }

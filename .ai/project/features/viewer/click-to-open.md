@@ -43,14 +43,13 @@ The gallery is the group the opened picture belongs to, found by the page's stru
   group at the matching place.
 - **Otherwise alone.** A picture with none of these opens on its own, without a counter.
 
-Opening never waits for the gallery. The groups are worked out in the browser's idle time after
-the page has loaded and kept until the page changes. A click that comes earlier opens the picture
-at once on its own; the counter and the thumbnail strip appear as soon as the group is known, and
-the picture stays where it is.
+Opening never waits for the gallery. A click opens the picture at once on its own; right after,
+the group is searched on the page as it is at that moment, and the counter and the thumbnail strip
+appear while the picture stays where it is. Nothing is worked out in advance, so pictures a page
+loads later by script are always part of the next opening.
 
 Pictures of a group count even below the 100 px threshold, down to about 40 px, as long as they
-are visible and not sprites or inside controls. The group is read fresh at the moment of opening,
-so images the page added since are included. It follows the page's order, lists every picture once
+are visible and not sprites or inside controls. It follows the page's order, lists every picture once
 — cloned carousel slides included — and includes lazy images that have not loaded yet.
 
 For each picture the viewer shows the largest version the page offers, looked up in this order: a

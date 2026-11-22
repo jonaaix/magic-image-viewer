@@ -114,7 +114,7 @@ function inSwipeRegion(image) {
     return false;
 }
 
-export function openOnClick(viewer, activation, galleries) {
+export function openOnClick(viewer, activation) {
     let press = null;
 
     for (const type of [...PRESS_EVENTS, ...RELEASE_EVENTS]) {
@@ -144,7 +144,7 @@ export function openOnClick(viewer, activation, galleries) {
         event.preventDefault();
 
         if (!moved) {
-            openInGallery(viewer, image, galleries);
+            openInGallery(viewer, image);
         }
     }, true);
 }
