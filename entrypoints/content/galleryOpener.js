@@ -1,4 +1,4 @@
-import { collectImages } from './collector/index.js';
+import { collectGallery } from './collector/index.js';
 import { cornerRadius } from './collector/rules.js';
 
 function onScreen(rect) {
@@ -26,8 +26,7 @@ function radiusOf(element) {
 }
 
 export function openInGallery(viewer, image) {
-    const { entries, indexOf } = collectImages();
-    const start = indexOf(image);
+    const { entries, start } = collectGallery(image);
 
     if (start === -1) {
         return false;

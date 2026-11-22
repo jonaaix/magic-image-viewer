@@ -1,5 +1,6 @@
 export const MIN_SHORT_SIDE = 100;
 export const MIN_LINKED_THUMBNAIL_SIDE = 40;
+export const MIN_GROUP_IMAGE_SIDE = 40;
 export const FULL_SIZE_ATTRIBUTES = ['data-zoom-image', 'data-full', 'data-large', 'data-src'];
 
 const IMAGE_FILE = /\.(avif|bmp|gif|jpe?g|jxl|png|svg|webp)$/i;
@@ -54,6 +55,23 @@ export function isContentImage(image) {
     }
 
     return shortSide >= MIN_LINKED_THUMBNAIL_SIDE && !!image.link && isImageUrl(image.link);
+}
+
+export function isGroupImage(image) {
+    if (!image.visible || image.inControl || SPRITE.test(image.src)) {
+        return false;
+    }
+
+    const shortSide = Math.min(image.width, image.height);
+
+    return (image.pending && shortSide === 0) || shortSide >= MIN_GROUP_IMAGE_SIDE;
+}
+
+export function showsSameImage(a, b) {
+    const [largestA] = sourcesBySize(a);
+    const [largestB] = sourcesBySize(b);
+
+    return (!!largestA && sourcesBySize(b).includes(largestA)) || (!!largestB && sourcesBySize(a).includes(largestB));
 }
 
 export function sourcesBySize(image) {

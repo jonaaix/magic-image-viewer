@@ -68,7 +68,7 @@ test.describe('a tap in a carousel opens our viewer', () => {
     test('with the mouse', async ({ page }) => {
         await page.getByAltText('Slide 1').click();
 
-        await expect(counter(page)).toHaveText('1 / 7');
+        await expect(counter(page)).toHaveText('1 / 3');
         expect(await siteLog(page)).toEqual([]);
         expect(await slide(page, 'pointer-carousel')).toBe(0);
     });
@@ -76,7 +76,7 @@ test.describe('a tap in a carousel opens our viewer', () => {
     test('with touch', async ({ page }) => {
         await touch(page, page.getByAltText('Slide 4'));
 
-        await expect(counter(page)).toHaveText('4 / 7');
+        await expect(counter(page)).toHaveText('1 / 3');
         expect(await siteLog(page)).toEqual([]);
     });
 });
