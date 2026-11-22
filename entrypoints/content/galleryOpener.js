@@ -1,4 +1,4 @@
-import { collectGallery } from './collector/index.js';
+import { collectAlone } from './collector/index.js';
 import { cornerRadius } from './collector/rules.js';
 
 function onScreen(rect) {
@@ -25,15 +25,44 @@ function radiusOf(element) {
     return cornerRadius(getComputedStyle(element).borderTopLeftRadius, rect.width, rect.height);
 }
 
-export function openInGallery(viewer, image) {
-    const { entries, start } = collectGallery(image);
+function show(viewer, image, { entries, start }, options = {}) {
+    const items = entries.map((entry) => entry.item);
+    const opened = viewer.open(items, start, { origin: originOf(entries.map((entry) => entry.element)), originRadius: radiusOf(image), ...options });
 
-    if (start === -1) {
+    return { items, opened };
+}
+
+function addGroupLater(viewer, image, galleries, shown) {
+    requestAnimationFrame(() => setTimeout(() => {
+        if (!viewer.shows(shown)) {
+            return;
+        }
+
+        const { entries, start } = galleries.galleryNow(image);
+
+        if (entries.length > 1) {
+            viewer.replace(entries.map((entry) => entry.item), start, { origin: originOf(entries.map((entry) => entry.element)) });
+        }
+    }));
+}
+
+export function openInGallery(viewer, image, galleries) {
+    const cached = galleries.galleryFor(image);
+
+    if (cached) {
+        show(viewer, image, cached);
+
+        return true;
+    }
+
+    const alone = collectAlone(image);
+
+    if (alone.start === -1) {
         return false;
     }
 
-    const elements = entries.map((entry) => entry.element);
-    viewer.open(entries.map((entry) => entry.item), start, { origin: originOf(elements), originRadius: radiusOf(image) });
+    const { items, opened } = show(viewer, image, alone, { reserveThumbnails: true });
+    opened.then(() => addGroupLater(viewer, image, galleries, items));
 
     return true;
 }

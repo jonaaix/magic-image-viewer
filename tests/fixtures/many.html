@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Many images</title>
+        <script src="fixture.js"></script>
+        <style>
+            body { font-family: system-ui, sans-serif; margin: 24px; }
+            .grid { display: flex; flex-wrap: wrap; gap: 4px; }
+            .grid img { width: 120px; height: 100px; display: block; }
+            figure { margin: 0; }
+        </style>
+        <script>
+            window.longTasks = [];
+            new PerformanceObserver((list) => window.longTasks.push(...list.getEntries().map((entry) => ({ start: entry.startTime, duration: entry.duration })))).observe({ type: 'longtask', buffered: true });
+        </script>
+    </head>
+    <body>
+        <h1>Many images</h1>
+        <div class="grid" id="grid"></div>
+        <script>
+            const COUNT = 3000;
+            const grid = document.getElementById('grid');
+            const photo = (n) => `images/photo-${(n % 4) + 1}.svg?tile=${n}`;
+            const html = [];
+
+            for (let n = 1; n <= COUNT; n++) {
+                html.push(`<figure><img src="${photo(n)}" alt="Tile ${n}" loading="lazy" /></figure>`);
+            }
+
+            grid.innerHTML = html.join('');
+        </script>
+    </body>
+</html>
