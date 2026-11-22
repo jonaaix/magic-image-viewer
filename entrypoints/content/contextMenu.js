@@ -13,7 +13,7 @@ function imageFor(src, lastTarget) {
     return [...document.images].find((image) => shows(image, src)) ?? null;
 }
 
-export function openFromContextMenu(viewer, activation) {
+export function openFromContextMenu(viewer, activation, galleries) {
     let lastTarget = null;
 
     window.addEventListener('contextmenu', (event) => (lastTarget = event.composedPath()[0]), true);
@@ -31,7 +31,7 @@ export function openFromContextMenu(viewer, activation) {
 
         const image = message.inTopFrame ? imageFor(message.src, lastTarget) : null;
 
-        if (!image || !openInGallery(viewer, image)) {
+        if (!image || !openInGallery(viewer, image, galleries)) {
             openAlone(viewer, message.src, image);
         }
     });

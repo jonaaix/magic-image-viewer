@@ -38,7 +38,7 @@ function entriesOf(elements, describeOf) {
         });
     }
 
-    return { entries, indexOf: (element) => indexByElement.get(element) ?? -1 };
+    return { entries, members: [...indexByElement.keys()], indexOf: (element) => indexByElement.get(element) ?? -1 };
 }
 
 function cachedDescribe() {
@@ -86,6 +86,10 @@ export function collectGallery(image) {
         }
     }
 
+    return collectAlone(image, describeOf);
+}
+
+export function collectAlone(image, describeOf = cachedDescribe()) {
     const alone = entriesOf([image], describeOf);
 
     return { ...alone, start: alone.indexOf(image) };

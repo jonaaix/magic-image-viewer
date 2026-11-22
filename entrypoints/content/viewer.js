@@ -108,11 +108,17 @@ export function createViewer(ctx, { onOpened }) {
         }
     }, true);
 
-    async function ensureMounted() {
-        if (ui?.shadowHost.isConnected) {
-            return;
+    let mounting = null;
+
+    function ensureMounted() {
+        if (!ui?.shadowHost.isConnected) {
+            mounting ??= mount().finally(() => (mounting = null));
         }
 
+        return mounting ?? Promise.resolve();
+    }
+
+    async function mount() {
         ui?.remove();
         ui = await createShadowRootUi(ctx, {
             name: HOST_NAME,
@@ -140,15 +146,22 @@ export function createViewer(ctx, { onOpened }) {
     }
 
     return {
+        prepare: () => ensureMounted(),
         isOpen: () => index.value !== null,
         owns: (event) => !!ui && event.composedPath().includes(ui.shadowHost),
-        async open(list, start = 0, { origin = null, originRadius = 0, closable = true, immersive = false } = {}) {
+        async open(list, start = 0, { origin = null, originRadius = 0, closable = true, immersive = false, reserveThumbnails = false } = {}) {
             await ensureMounted();
-            options.value = { origin, originRadius, closable, immersive };
+            options.value = { origin, originRadius, closable, immersive, reserveThumbnails };
             images.value = list;
             index.value = start;
             await nextTick();
             onOpened();
+        },
+        shows: (list) => index.value !== null && images.value === list,
+        replace(list, start, { origin }) {
+            options.value = { ...options.value, origin };
+            images.value = list;
+            index.value = start;
         },
         close() {
             index.value = null;

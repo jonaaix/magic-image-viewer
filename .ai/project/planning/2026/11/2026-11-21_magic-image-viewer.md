@@ -224,6 +224,12 @@ headless via WebDriver BiDi (image tab and SVG checked there); not yet part of `
 - **The collector reads the DOM into plain descriptors** (`collector/describe.js`) and decides on
   them with pure functions (`collector/rules.js`), so the rules run under `node --test` without a
   browser.
+- **Opening an image never waits for its gallery** (Jonas, 2026-11-23). Groups are worked out
+  in idle time after `load`, in 8 ms slices, and cached per image; a debounced `MutationObserver`
+  drops the cache and the next idle pass rebuilds it. The viewer is mounted in the first idle
+  slot too, so its stylesheet is not queued behind the page's image requests. A click before the
+  cache is ready opens the image alone with the thumbnail room reserved and swaps the group in
+  afterwards, without sliding. The popup count reads from the same cache.
 - **Gallery scope: the group of the opened image**, not the whole page (Jonas, 2026-11-23). Up
   the tree from the image to the innermost level with siblings of the same shape; grows only
   through pure wrappers; a preview strip's main image opens the strip's group; otherwise alone.

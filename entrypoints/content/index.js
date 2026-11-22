@@ -5,7 +5,7 @@ import { openOnClick } from './clickToOpen.js';
 import { openFromContextMenu } from './contextMenu.js';
 import { isFileDocument, showFileDocument } from './fileDocument.js';
 import { createActivation } from './activation.js';
-import { collectImages } from './collector/index.js';
+import { createGalleryCache } from './collector/galleryCache.js';
 import { IMAGE_COUNT } from '../../utils/messages.js';
 
 export default defineContentScript({
@@ -18,20 +18,27 @@ export default defineContentScript({
         keys = guardKeys(viewer);
         const activation = createActivation();
         activation.onChange(({ enabled }) => !enabled && viewer.close());
-        openFromContextMenu(viewer, activation);
+        const fileDocument = isFileDocument();
+        const testing = import.meta.env.MODE === 'test';
+        const galleries = createGalleryCache({
+            isEnabled: () => !fileDocument && activation.isEnabled() && !(testing && document.documentElement.hasAttribute('data-test-no-precompute')),
+            onIdle: () => !fileDocument && activation.isEnabled() && viewer.prepare(),
+            onReady: () => testing && document.dispatchEvent(new CustomEvent('magic-image-viewer:test-galleries-ready')),
+        });
+        openFromContextMenu(viewer, activation, galleries);
 
-        if (isFileDocument()) {
+        if (fileDocument) {
             showFileDocument(viewer, activation);
         } else {
-            openOnClick(viewer, activation);
+            openOnClick(viewer, activation, galleries);
             browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 if (message?.type === IMAGE_COUNT) {
-                    sendResponse(collectImages().entries.length);
+                    sendResponse(galleries.imageCount());
                 }
             });
         }
 
-        if (import.meta.env.MODE === 'test') {
+        if (testing) {
             document.addEventListener('magic-image-viewer:test-open', (event) => {
                 const { images, start } = JSON.parse(event.detail);
                 viewer.open(images, start);
