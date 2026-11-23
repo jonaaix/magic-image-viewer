@@ -2,8 +2,9 @@ import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { findGroup, shapeOf, similarSize } from '../../entrypoints/content/collector/group.js';
 
-function node(localName, children = [], size = null) {
+function node(localName, children = [], size = null, attributes = {}) {
     const element = {
+        getAttribute: (name) => attributes[name] ?? null,
         localName,
         children,
         parentElement: null,
@@ -125,5 +126,14 @@ describe('copies of one picture', () => {
         node('ul', slides.map(({ item }) => item));
 
         assert.equal(findGroup(slides[1].shown, { ...measures, sameImage }), null);
+    });
+});
+
+describe('slotted slides', () => {
+    test('follow their slot numbers, not the order the page moved them into', () => {
+        const images = [img(), img(), img()];
+        node('ul', [node('li', [images[1]], null, { slot: 'page-2' }), node('li', [images[2]], null, { slot: 'page-3' }), node('li', [images[0]], null, { slot: 'page-1' })]);
+
+        assert.deepEqual(group(images[1]), images);
     });
 });

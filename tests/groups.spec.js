@@ -87,3 +87,12 @@ test('the context menu opens the group of the image', async ({ page }) => {
 
     await expect(counter(page)).toHaveText('2 / 4');
 });
+
+test('a slide carousel with hidden slides and blurred backdrops opens its own slides in order', async ({ page }) => {
+    await page.goto('/slides.html');
+    await expect(page.locator('magic-image-viewer')).toBeAttached();
+    await open(page, 'Slide 2');
+
+    await expect(counter(page)).toHaveText('2 / 3');
+    expect(await shownFiles(page)).toEqual(['photo-2.svg', 'photo-3.svg', 'photo-1.svg']);
+});

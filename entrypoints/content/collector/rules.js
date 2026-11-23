@@ -60,7 +60,7 @@ export function isContentImage(image) {
 }
 
 export function isGroupImage(image) {
-    if (!image.visible || image.inControl || SPRITE.test(image.src)) {
+    if (!image.laidOut || image.inControl || SPRITE.test(image.src)) {
         return false;
     }
 
