@@ -196,8 +196,12 @@ headless via WebDriver BiDi (image tab and SVG checked there); not yet part of `
   so a page of 200 thumbnails linking to file pages does not trigger 200 downloads.
 - **Unsized lazy images count**: docs sites lazy-load screenshots without width or height, 0×0
   until loaded (VS Code docs: 1 instead of 26 pictures before this rule).
-- **We deliver the store packages, texts and screenshots; Jonas uploads.** Both stores need his
-  developer accounts. The version tag is set only after his OK; CI then builds the packages.
+- **We deliver the store packages, texts and screenshots; Jonas uploads the first version.** The
+  stores need his developer accounts. The version tag is set only after his OK; CI then builds the
+  packages and, from the second version on, submits them via `wxt submit` to every store whose
+  secrets are set (`scripts/submit-stores.sh`). Chrome uses the Web Store API v2 with a service
+  account, since v1.1 was shut down in October 2026. Chrome 1.0.0 was submitted by hand on
+  2026-11-24 (ID `oonincilgnkpgboibfkinloncibankbc`).
 - **Firefox manifest declares `data_collection_permissions: { required: ["none"] }`** with
   `strict_min_version` 140.0: required for new AMO submissions since November 2025, understood from
   Firefox 140.

@@ -73,3 +73,16 @@ jobs:
               run: |
                   awk -v heading="## ${GITHUB_REF_NAME#v}" '/^## / { take = index($0, heading) == 1; next } take' CHANGELOG.md > release-notes.md
                   gh release create "$GITHUB_REF_NAME" dist/*.zip --title "$GITHUB_REF_NAME" --notes-file release-notes.md
+
+            - name: Submit to the stores
+              env:
+                  CHROME_EXTENSION_ID: oonincilgnkpgboibfkinloncibankbc
+                  CHROME_PUBLISHER_ID: ${{ secrets.CHROME_PUBLISHER_ID }}
+                  CHROME_SERVICE_ACCOUNT_KEY: ${{ secrets.CHROME_SERVICE_ACCOUNT_KEY }}
+                  FIREFOX_EXTENSION_ID: magic-image-viewer@jonaaix.github.io
+                  FIREFOX_JWT_ISSUER: ${{ secrets.FIREFOX_JWT_ISSUER }}
+                  FIREFOX_JWT_SECRET: ${{ secrets.FIREFOX_JWT_SECRET }}
+                  EDGE_PRODUCT_ID: ${{ secrets.EDGE_PRODUCT_ID }}
+                  EDGE_CLIENT_ID: ${{ secrets.EDGE_CLIENT_ID }}
+                  EDGE_API_KEY: ${{ secrets.EDGE_API_KEY }}
+              run: bash scripts/submit-stores.sh
