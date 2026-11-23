@@ -52,6 +52,11 @@ Pictures of a group count even below the 100 px threshold, down to about 40 px, 
 are visible and not sprites or inside controls. It follows the page's order, lists every picture once
 — cloned carousel slides included — and includes lazy images that have not loaded yet.
 
+The viewer opens at once with the picture the page has already loaded, scaled to the screen, and
+loads the largest version behind it; once that has loaded it takes the picture's place without a
+jump. When its shape differs — a square-cropped thumbnail of a wide photo — the picture eases into
+the new shape. When the largest version never loads, the page's picture stays.
+
 For each picture the viewer shows the largest version the page offers, looked up in this order: a
 link around the image to an image file, the largest candidate of `srcset` or `<picture>`, a
 full-size attribute (`data-zoom-image`, `data-full`, `data-large`, `data-src`), otherwise the

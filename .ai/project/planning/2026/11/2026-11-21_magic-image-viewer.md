@@ -224,6 +224,11 @@ headless via WebDriver BiDi (image tab and SVG checked there); not yet part of `
 - **The collector reads the DOM into plain descriptors** (`collector/describe.js`) and decides on
   them with pure functions (`collector/rules.js`), so the rules run under `node --test` without a
   browser.
+- **The viewer opens with the page's own image and loads the largest version behind it.** The
+  image already loaded on the page is shown at once and the open animation starts without waiting;
+  the largest version replaces it as soon as it has loaded. Rejected: waiting up to 400 ms for the
+  largest version before anything is visible (slow on real sites); opening only the page's image
+  (thumbnails stay blurred when zoomed).
 - **The image opens first, its gallery is found afterwards.** On a click the viewer shows the
   one image at once; the group is then searched on the page as it is at that moment and joins the
   open viewer without the picture moving. Nothing is precomputed and nothing is cached, so images

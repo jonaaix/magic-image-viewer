@@ -9,6 +9,11 @@ const types = { '.html': 'text/html', '.js': 'text/javascript', '.svg': 'image/s
 
 createServer(async (request, response) => {
     const path = normalize(decodeURIComponent(new URL(request.url, 'http://localhost').pathname)).replace(/^([/\\])+/, '');
+    const delay = Number(new URL(request.url, 'http://localhost').searchParams.get('delay') ?? 0);
+
+    if (delay) {
+        await new Promise((resolve) => setTimeout(resolve, delay));
+    }
 
     try {
         const body = await readFile(join(root, path || 'plain.html'));
