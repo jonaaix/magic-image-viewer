@@ -72,6 +72,32 @@ export function indexOfShown(photos, shownSources) {
     return photos.findIndex((photo) => [...photo.sources, photo.thumb].some((source) => shown.has(identity(source))));
 }
 
+export function photosOfStrip(thumbnails, photos) {
+    if (!thumbnails.length) {
+        return photos;
+    }
+
+    const used = new Set();
+    const fromStrip = thumbnails.map((thumb) => {
+        const key = identity(thumb);
+        const photo = photos.find((candidate) => identity(candidate.thumb) === key || candidate.sources.some((source) => identity(source) === key));
+
+        if (!photo) {
+            return { sources: [...new Set([key, thumb])], thumb };
+        }
+
+        used.add(photo);
+
+        return { ...photo, thumb };
+    });
+
+    return [...fromStrip, ...photos.filter((photo) => !used.has(photo))];
+}
+
+function stripThumbnails() {
+    return [...document.querySelectorAll('#altImages li.imageThumbnail img')].map((image) => image.currentSrc || image.src).filter(Boolean);
+}
+
 function photosOfPage() {
     for (const script of document.scripts) {
         if (script.textContent.includes(MARKER)) {
@@ -89,7 +115,7 @@ function photosOfPage() {
 export const amazon = {
     matches: (hostname) => HOST.test(hostname),
     gallery(image) {
-        const photos = photosOfPage();
+        const photos = photosOfStrip(stripThumbnails(), photosOfPage());
         const start = indexOfShown(photos, [image.currentSrc, image.getAttribute('src')]);
 
         if (start === -1) {

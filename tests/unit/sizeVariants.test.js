@@ -10,6 +10,11 @@ test('drops the size codes from an Amazon image', () => {
     assert.equal(originalOf('https://m.media-amazon.com/images/I/41UREFBvJhL._AC_US100_.jpg'), 'https://m.media-amazon.com/images/I/41UREFBvJhL.jpg');
 });
 
+test('drops Amazon delivery test paths and long processing codes', () => {
+    assert.equal(originalOf('https://m.media-amazon.com/images/W/BW_MEDIAX_AVIF_MEASUREMENT_1306696-T4/images/I/71yMBCERSFL._AC_SL1500_.jpg'), 'https://m.media-amazon.com/images/I/71yMBCERSFL.jpg');
+    assert.equal(originalOf('https://m.media-amazon.com/images/I/71yMBCERSFL._AC_AIweblab1392912,T2_FMavif_SF1358,1358_PQ60_.jpg?aicid=detailPage-mediaBlock'), 'https://m.media-amazon.com/images/I/71yMBCERSFL.jpg');
+});
+
 test('drops a WordPress dimension suffix', () => {
     assert.equal(originalOf('https://example.com/wp-content/uploads/2024/05/beach-300x200.jpg'), 'https://example.com/wp-content/uploads/2024/05/beach.jpg');
 });
