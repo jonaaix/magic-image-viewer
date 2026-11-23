@@ -233,6 +233,12 @@ headless via WebDriver BiDi (image tab and SVG checked there); not yet part of `
   enlarged to the screen, so the switch only ever grows the picture with a transition. Rejected:
   enlarging it to the screen (it shrank back whenever the largest version was smaller than the
   screen); waiting briefly for the largest version's size; keeping the enlarged size.
+- **Site adapters for galleries the page structure does not reveal.** An adapter per site
+  (`entrypoints/content/adapters/`) answers before the group rules and returns nothing when the
+  clicked picture is not its own, so the general rules stay the default. Amazon is the first: it
+  reads the `colorImages` list, because the thumbnails there are separate 500 px files that never
+  match the main photo. Rejected: tying a lone picture to any nearby thumbnail strip (blurred on
+  Amazon, and a foreign strip could join).
 - **The image opens first, its gallery is found afterwards.** On a click the viewer shows the
   one image at once; the group is then searched on the page as it is at that moment and joins the
   open viewer without the picture moving. Nothing is precomputed and nothing is cached, so images
