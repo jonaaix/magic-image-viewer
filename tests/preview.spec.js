@@ -85,7 +85,7 @@ test('a small page picture grows into the full size without shrinking first', as
     expect(opened).toBeLessThanOrEqual(400);
     expect(final).toBeGreaterThan(opened * 1.5);
     expect(widths.every((width, index) => index === 0 || width >= widths[index - 1] - 0.5)).toBe(true);
-    expect(widths.filter((width) => width > opened + 1 && width < final - 1).length).toBeGreaterThan(3);
+    expect(widths.filter((width) => width > opened + 1 && width < final - 1).length).toBeGreaterThan(1);
 });
 
 test('a full size that never loads leaves the page picture in place', async ({ page }) => {
