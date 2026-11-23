@@ -50,8 +50,10 @@ The gallery is the group the opened picture belongs to, found by the page's stru
 - **Otherwise alone.** A picture with none of these opens on its own, without a counter.
 
 Before these rules, a site adapter may answer for sites whose gallery the page structure does not
-reveal. On Amazon the adapter reads the product's photo list the page carries and opens every
-product photo in its largest version, starting at the one clicked; a picture not on that list —
+reveal. On Amazon the adapter takes the photos in the order and with the thumbnails of the page's
+own thumbnail strip, which are always loaded, and their largest versions from the product's photo
+list the page carries; photos the strip hides behind its "+" follow at the end. The gallery starts
+at the one clicked; a picture not on that list —
 after switching to another colour, for instance — falls through to the rules above.
 
 Opening never waits for the gallery. A click opens the picture at once on its own; right after,

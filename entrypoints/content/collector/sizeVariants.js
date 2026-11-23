@@ -1,5 +1,6 @@
 const AMAZON_HOST = /(^|\.)(media-amazon|ssl-images-amazon|images-amazon)\.com$/i;
 const AMAZON_SIZE = /\._[^/]+_(\.[a-z0-9]+)$/i;
+const AMAZON_DELIVERY_TEST = /^\/images\/W\/[^/]+(?=\/images\/)/;
 const SHOPIFY_HOST = /(^|\.)shopify\.com$/i;
 const SHOPIFY_SIZE = /_(\d{2,5}x\d{0,5}|x\d{2,5}|pico|icon|thumb|small|compact|medium|large|grande)(@\dx)?(_crop_[a-z]+)?(\.[a-z0-9]+)$/i;
 const CLOUDINARY_HOST = /(^|\.)cloudinary\.com$/i;
@@ -11,7 +12,7 @@ function withoutSizePath(url) {
     const path = url.pathname;
 
     if (AMAZON_HOST.test(url.hostname)) {
-        return path.replace(AMAZON_SIZE, '$1');
+        return path.replace(AMAZON_DELIVERY_TEST, '').replace(AMAZON_SIZE, '$1');
     }
 
     if (SHOPIFY_HOST.test(url.hostname) || path.includes('/cdn/shop/')) {
@@ -54,7 +55,9 @@ export function originalOf(source) {
 
     url.pathname = withoutSizePath(url);
 
-    if (SIZE_PARAMS.some((name) => url.searchParams.has(name))) {
+    if (AMAZON_HOST.test(url.hostname)) {
+        url.search = '';
+    } else if (SIZE_PARAMS.some((name) => url.searchParams.has(name))) {
         SIZE_PARAMS.forEach((name) => url.searchParams.delete(name));
     }
 

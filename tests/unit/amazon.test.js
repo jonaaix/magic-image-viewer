@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { indexOfShown, readPhotos } from '../../entrypoints/content/adapters/amazon.js';
+import { indexOfShown, photosOfStrip, readPhotos } from '../../entrypoints/content/adapters/amazon.js';
 
 const CDN = 'https://m.media-amazon.com/images/I';
 const photo = (large, small, altText = null) => ({
@@ -38,4 +38,23 @@ test('finds the shown photo by any of its sizes', () => {
     assert.equal(indexOfShown(photos, [`${CDN}/71zz._AC_SX466_.jpg`]), 1);
     assert.equal(indexOfShown(photos, [`${CDN}/41UR._AC_US40_.jpg`]), 0);
     assert.equal(indexOfShown(photos, [`${CDN}/99xx._AC_SX466_.jpg`]), -1);
+});
+
+test('finds the shown photo while Amazon tests another delivery', () => {
+    const tested = 'https://m.media-amazon.com/images/W/BW_MEDIAX_AVIF_MEASUREMENT_1306696-T4/images/I';
+    const photos = readPhotos(script(JSON.stringify([photo('71oJ', '41UR'), photo('71zz', '41yX')]).replaceAll(CDN, tested)));
+
+    assert.equal(indexOfShown(photos, [`${CDN}/71zz._AC_AIweblab1392912,T2_FMavif_SF1358,1358_PQ60_.jpg?aicid=detailPage-mediaBlock`]), 1);
+    assert.equal(photos[1].sources[0], `${CDN}/71zz.jpg`);
+});
+
+test('takes order and thumbnails from the strip and the large versions from the list', () => {
+    const photos = readPhotos(script(JSON.stringify([photo('71oJ', '41UR'), photo('71zz', '41yX')])));
+    const strip = photosOfStrip([`${CDN}/41yX._AC_US40_.jpg`, `${CDN}/51ab._AC_US40_.jpg`], photos);
+
+    assert.deepEqual(strip.map((entry) => entry.thumb), [`${CDN}/41yX._AC_US40_.jpg`, `${CDN}/51ab._AC_US40_.jpg`, `${CDN}/41UR._AC_US100_.jpg`]);
+    assert.equal(strip[0].sources[0], `${CDN}/71zz.jpg`);
+    assert.deepEqual(strip[1].sources, [`${CDN}/51ab.jpg`, `${CDN}/51ab._AC_US40_.jpg`]);
+    assert.equal(strip[2].sources[0], `${CDN}/71oJ.jpg`);
+    assert.equal(photosOfStrip([], photos), photos);
 });
