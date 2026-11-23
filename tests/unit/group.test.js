@@ -3,7 +3,21 @@ import assert from 'node:assert/strict';
 import { findGroup, shapeOf, similarSize } from '../../entrypoints/content/collector/group.js';
 
 function node(localName, children = [], size = null) {
-    const element = { localName, children, parentElement: null, size };
+    const element = {
+        localName,
+        children,
+        parentElement: null,
+        size,
+        contains(other) {
+            for (let current = other; current; current = current.parentElement) {
+                if (current === this) {
+                    return true;
+                }
+            }
+
+            return false;
+        },
+    };
     children.forEach((child) => (child.parentElement = element));
 
     return element;
@@ -83,5 +97,33 @@ describe('findGroup', () => {
         node('section', [node('h2'), node('p'), photo]);
 
         assert.equal(group(photo), null);
+    });
+});
+
+describe('copies of one picture', () => {
+    const slide = (source) => {
+        const backdrop = { ...img(840, 648), source };
+        const shown = { ...img(700, 540), source };
+        const item = node('li', [backdrop, node('figure', [shown])]);
+        backdrop.parentElement = item;
+
+        return { item, backdrop, shown };
+    };
+    const sameImage = (a, b) => a.source === b.source;
+
+    test('a slide with a blurred backdrop of its own picture is one item of the gallery', () => {
+        const slides = ['a', 'b', 'c'].map(slide);
+        node('ul', slides.map(({ item }) => item));
+
+        assert.deepEqual(findGroup(slides[1].shown, { ...measures, sameImage }), [slides[0].shown, slides[1].shown, slides[2].shown]);
+        assert.deepEqual(findGroup(slides[1].backdrop, { ...measures, sameImage }), [slides[0].shown, slides[1].backdrop, slides[2].shown]);
+    });
+
+    test('two different pictures in one item still stop the search', () => {
+        const slides = ['a', 'b'].map(slide);
+        slides[0].shown.source = 'other';
+        node('ul', slides.map(({ item }) => item));
+
+        assert.equal(findGroup(slides[1].shown, { ...measures, sameImage }), null);
     });
 });

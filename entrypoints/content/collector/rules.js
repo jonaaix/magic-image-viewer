@@ -77,15 +77,15 @@ export function showsSameImage(a, b) {
 }
 
 export function sourcesBySize(image) {
+    const link = image.link && isImageUrl(image.link) ? image.link : null;
     const declared = [
-        image.link && isImageUrl(image.link) ? image.link : null,
         largestCandidate([image.srcset, ...image.sourceSrcsets].flatMap(parseSrcset)),
         ...FULL_SIZE_ATTRIBUTES.map((name) => image.attributes[name]),
     ].filter(Boolean);
     const shown = [image.currentSrc, image.src].filter(Boolean);
-    const originals = [...declared, ...shown].map(originalOf).filter(Boolean);
+    const originals = [link, ...declared, ...shown].filter(Boolean).map(originalOf).filter(Boolean);
 
-    return [...new Set([...declared, ...originals, ...shown])];
+    return [...new Set([link, ...originals, ...declared, ...shown].filter(Boolean))];
 }
 
 export function thumbnailSource(image) {

@@ -15,6 +15,11 @@ test('drops Amazon delivery test paths and long processing codes', () => {
     assert.equal(originalOf('https://m.media-amazon.com/images/I/71yMBCERSFL._AC_AIweblab1392912,T2_FMavif_SF1358,1358_PQ60_.jpg?aicid=detailPage-mediaBlock'), 'https://m.media-amazon.com/images/I/71yMBCERSFL.jpg');
 });
 
+test('turns a Reddit preview into the uploaded original', () => {
+    assert.equal(originalOf('https://preview.redd.it/iilqp8qmjb3i1.jpeg?width=1080&crop=smart&auto=webp&s=3de1c3'), 'https://i.redd.it/iilqp8qmjb3i1.jpeg');
+    assert.equal(originalOf('https://preview.redd.it/my-neon-pothos-has-finally-fenestrated-v0-lauub1i4u13i1.jpeg?width=1080&s=f5a1'), 'https://i.redd.it/lauub1i4u13i1.jpeg');
+});
+
 test('drops a WordPress dimension suffix', () => {
     assert.equal(originalOf('https://example.com/wp-content/uploads/2024/05/beach-300x200.jpg'), 'https://example.com/wp-content/uploads/2024/05/beach.jpg');
 });
@@ -44,7 +49,7 @@ test('leaves an address without a size alone', () => {
     assert.equal(originalOf('not a url'), null);
 });
 
-test('ranks a guessed original after declared sources and before the shown picture', () => {
+test('ranks a guessed original after a linked file and before the other sources', () => {
     const declared = { ...image('https://example.com/a-300x200.jpg'), link: 'https://example.com/full.jpg' };
 
     assert.deepEqual(sourcesBySize(declared), ['https://example.com/full.jpg', 'https://example.com/a.jpg', 'https://example.com/a-300x200.jpg']);

@@ -6,6 +6,9 @@ const SHOPIFY_SIZE = /_(\d{2,5}x\d{0,5}|x\d{2,5}|pico|icon|thumb|small|compact|m
 const CLOUDINARY_HOST = /(^|\.)cloudinary\.com$/i;
 const CLOUDINARY_TRANSFORMS = /\/upload\/(?:[a-z]{1,2}_[^/]+\/)+/i;
 const DIMENSION_SUFFIX = /-\d{2,5}x\d{2,5}(\.[a-z0-9]+)$/i;
+const REDDIT_PREVIEW_HOST = 'preview.redd.it';
+const REDDIT_ORIGINAL_HOST = 'i.redd.it';
+const REDDIT_TITLE_PREFIX = /\/[^/]*-v0-(?=[a-z0-9]+\.[a-z0-9]+$)/i;
 const SIZE_PARAMS = ['w', 'h', 'width', 'height'];
 
 function withoutSizePath(url) {
@@ -45,6 +48,10 @@ export function originalOf(source) {
 
     if (!url.protocol.startsWith('http')) {
         return null;
+    }
+
+    if (url.hostname === REDDIT_PREVIEW_HOST) {
+        return `https://${REDDIT_ORIGINAL_HOST}${url.pathname.replace(REDDIT_TITLE_PREFIX, '/')}`;
     }
 
     const proxied = proxiedSource(url);
