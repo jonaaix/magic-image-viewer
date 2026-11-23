@@ -1,5 +1,6 @@
 import { isContentElement } from './collector/index.js';
 import { openInGallery } from './galleryOpener.js';
+import { controlAround } from './controls.js';
 import { CAROUSEL_MARKUP, isSwipeStyle, linkKind, movedTooFar, shouldOpen } from './clickRules.js';
 
 const PRESS_EVENTS = ['pointerdown', 'mousedown', 'touchstart'];
@@ -23,7 +24,7 @@ function imageBelow(top, point) {
             return element;
         }
 
-        if (element.closest(CONTROLS)) {
+        if (controlAround(element, CONTROLS)) {
             return null;
         }
     }
@@ -52,7 +53,7 @@ function imageOf(event) {
         return top;
     }
 
-    if (top.closest(CONTROLS)) {
+    if (controlAround(top, CONTROLS)) {
         return null;
     }
 

@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Buttons</title>
+        <script src="fixture.js"></script>
+        <style>
+            body { font-family: system-ui, sans-serif; margin: 24px; }
+            section { margin-bottom: 24px; }
+            img { display: block; width: 300px; }
+            .lens { position: absolute; inset: 0 auto auto 0; width: 80px; height: 80px; background: rgb(255 255 255 / 0.3); }
+            .zoom { position: relative; width: 300px; }
+        </style>
+    </head>
+    <body>
+        <section>
+            <h2>Image wrapped in a button role</h2>
+            <div class="zoom" role="button" tabindex="0"><img id="wrapped" src="images/photo-1.svg" alt="Wrapped" /><div class="lens"></div></div>
+        </section>
+        <section>
+            <h2>Button with a label</h2>
+            <div role="button" tabindex="0"><img id="labelled" src="images/photo-2.svg" alt="Labelled" /><span>Add to cart</span></div>
+        </section>
+    </body>
+</html>

@@ -1,4 +1,5 @@
 import { FULL_SIZE_ATTRIBUTES } from './rules.js';
+import { controlAround } from '../controls.js';
 
 const CONTROLS = 'button, [role="button"], input, select, textarea, label, option';
 
@@ -47,7 +48,7 @@ export function describe(element) {
         height: rect.height,
         visible: isRendered(element),
         pending: !loaded && (element.loading === 'lazy' || FULL_SIZE_ATTRIBUTES.some((name) => element.hasAttribute(name)) || element.hasAttribute('data-srcset')),
-        inControl: !!element.closest(CONTROLS) || element.isContentEditable,
+        inControl: !!controlAround(element, CONTROLS) || element.isContentEditable,
         src: absolute(element.getAttribute('src')) ?? '',
         currentSrc: loaded ? element.currentSrc || null : null,
         srcset: absoluteSrcset(element.getAttribute('srcset') || element.getAttribute('data-srcset')),
