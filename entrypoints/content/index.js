@@ -27,7 +27,7 @@ export default defineContentScript({
             showFileDocument(viewer, activation);
         } else {
             openOnClick(viewer, activation);
-            prepareWhenIdle(() => activation.isEnabled() && viewer.prepare());
+            activation.ready.then(() => prepareWhenIdle(() => activation.isSiteEnabled() && viewer.prepare()));
             browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 if (message?.type === IMAGE_COUNT) {
                     sendResponse(collectImages().entries.length);

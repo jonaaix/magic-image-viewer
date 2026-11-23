@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Preview</title>
+        <script src="fixture.js"></script>
+        <style>
+            body { font-family: system-ui, sans-serif; margin: 24px; }
+            section { margin-bottom: 24px; }
+            img { display: block; width: 240px; }
+        </style>
+    </head>
+    <body>
+        <section>
+            <h2>Slow full size</h2>
+            <a href="images/landscape.jpg?delay=2000"><img id="slow" src="images/landscape.jpg?preview" alt="Slow" /></a>
+        </section>
+        <section>
+            <h2>Square thumbnail</h2>
+            <a href="images/landscape.jpg?delay=1500&amp;square"><img id="square" src="images/square.svg" alt="Square" /></a>
+        </section>
+        <section>
+            <h2>Broken full size</h2>
+            <a href="images/missing.jpg?delay=300"><img id="broken" src="images/landscape.jpg?broken" alt="Broken" /></a>
+        </section>
+    </body>
+</html>

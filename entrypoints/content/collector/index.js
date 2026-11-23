@@ -32,6 +32,7 @@ function entriesOf(elements, describeOf) {
                 src,
                 fallbacks,
                 thumb: thumbnailSource(image),
+                preview: image.currentSrc && image.currentSrc !== src ? image.currentSrc : undefined,
                 alt: image.alt ?? undefined,
                 caption: image.caption ?? undefined,
             },

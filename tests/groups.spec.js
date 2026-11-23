@@ -60,13 +60,13 @@ test('masonry columns with changing heights are one gallery, small tiles include
 test('the main product image opens the gallery of its preview strip', async ({ page }) => {
     await open(page, 'Product');
     await expect(counter(page)).toHaveText('1 / 2');
-    expect(await shownFile(page)).toBe('photo-8-full.svg');
+    await expect.poll(() => shownFile(page)).toBe('photo-8-full.svg');
     await page.keyboard.press('Escape');
     await expect(viewer(page)).toBeHidden();
 
     await open(page, 'Thumb 2');
     await expect(counter(page)).toHaveText('2 / 2');
-    expect(await shownFile(page)).toBe('photo-6-large.svg');
+    await expect.poll(() => shownFile(page)).toBe('photo-6-large.svg');
 });
 
 test('an image without siblings of its shape opens alone', async ({ page }) => {
