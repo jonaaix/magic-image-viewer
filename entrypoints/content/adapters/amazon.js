@@ -1,4 +1,5 @@
 import { originalOf } from '../collector/sizeVariants.js';
+import { photoEntries } from '../collector/photoEntries.js';
 
 const HOST = /(^|\.)amazon\.[a-z.]+$/i;
 const MARKER = "'colorImages'";
@@ -95,17 +96,6 @@ export const amazon = {
             return null;
         }
 
-        const entries = photos.map(({ sources: [src, ...fallbacks], thumb, alt }, index) => ({
-            element: index === start ? image : null,
-            item: {
-                src,
-                fallbacks,
-                thumb,
-                preview: index === start && image.currentSrc !== src ? image.currentSrc : undefined,
-                alt: alt ?? (index === start ? image.alt || undefined : undefined),
-            },
-        }));
-
-        return { entries, start };
+        return photoEntries(photos, start, image);
     },
 };

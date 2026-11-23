@@ -239,6 +239,11 @@ headless via WebDriver BiDi (image tab and SVG checked there); not yet part of `
   reads the `colorImages` list, because the thumbnails there are separate 500 px files that never
   match the main photo. Rejected: tying a lone picture to any nearby thumbnail strip (blurred on
   Amazon, and a foreign strip could join).
+- **A lone picture looks for its photo list in the page's scripts.** After the group rules fail,
+  the inline scripts are searched for the picture's address; the innermost list around it with at
+  least two different photos is the gallery (`collector/embedded.js`). It covers Amazon and Shopify
+  without an adapter; adapters stay for sites where it fails. Rejected: clicking the page's own
+  thumbnails and watching the result (visible, slow, side effects, only small sizes).
 - **The image opens first, its gallery is found afterwards.** On a click the viewer shows the
   one image at once; the group is then searched on the page as it is at that moment and joins the
   open viewer without the picture moving. Nothing is precomputed and nothing is cached, so images
