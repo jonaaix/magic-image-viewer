@@ -84,7 +84,7 @@ test.describe('sources', () => {
             await page.locator(selector).scrollIntoViewIfNeeded();
             await clickToOpen(page, selector);
 
-            expect(await shownFile(page)).toBe(file);
+            await expect.poll(() => shownFile(page)).toBe(file);
         });
     }
 });
