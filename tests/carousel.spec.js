@@ -36,6 +36,8 @@ async function touch(page, locator, by = 0) {
 
 test.beforeEach(async ({ page }) => {
     await page.goto('/carousel.html');
+    await page.evaluate(() => Promise.all([...document.images].filter((image) => image.loading !== 'lazy').map((image) => image.decode().catch(() => {}))));
+    await expect(page.locator('magic-image-viewer')).toBeAttached();
 });
 
 test.describe('swiping stays with the page', () => {
