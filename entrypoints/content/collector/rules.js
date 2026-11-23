@@ -1,3 +1,5 @@
+import { originalOf } from './sizeVariants.js';
+
 export const MIN_SHORT_SIDE = 100;
 export const MIN_LINKED_THUMBNAIL_SIDE = 40;
 export const MIN_GROUP_IMAGE_SIDE = 40;
@@ -75,15 +77,15 @@ export function showsSameImage(a, b) {
 }
 
 export function sourcesBySize(image) {
-    const sources = [
+    const declared = [
         image.link && isImageUrl(image.link) ? image.link : null,
         largestCandidate([image.srcset, ...image.sourceSrcsets].flatMap(parseSrcset)),
         ...FULL_SIZE_ATTRIBUTES.map((name) => image.attributes[name]),
-        image.currentSrc,
-        image.src,
-    ];
+    ].filter(Boolean);
+    const shown = [image.currentSrc, image.src].filter(Boolean);
+    const originals = [...declared, ...shown].map(originalOf).filter(Boolean);
 
-    return [...new Set(sources.filter(Boolean))];
+    return [...new Set([...declared, ...originals, ...shown])];
 }
 
 export function thumbnailSource(image) {
