@@ -3,7 +3,9 @@ import { originalOf } from './sizeVariants.js';
 export const MIN_SHORT_SIDE = 100;
 export const MIN_LINKED_THUMBNAIL_SIDE = 40;
 export const MIN_GROUP_IMAGE_SIDE = 40;
-export const FULL_SIZE_ATTRIBUTES = ['data-zoom-image', 'data-full', 'data-large', 'data-src'];
+export const FULL_SIZE_ATTRIBUTES = ['data-zoom-image', 'data-full', 'data-large', 'data-src', 'data-lazy-src'];
+export const LAZY_SOURCE_ATTRIBUTES = ['data-lazy-src', 'data-src'];
+export const LAZY_SRCSET_ATTRIBUTES = ['data-srcset', 'data-lazy-srcset'];
 
 export const IMAGE_FILE = /\.(avif|bmp|gif|jpe?g|jxl|png|svg|webp)$/i;
 const SPRITE = /sprite/i;
@@ -95,6 +97,12 @@ export function thumbnailSource(image) {
 
     if (image.src && !image.src.startsWith('data:')) {
         return image.src;
+    }
+
+    const lazy = LAZY_SOURCE_ATTRIBUTES.map((name) => image.attributes[name]).find((source) => source && !source.startsWith('data:'));
+
+    if (lazy) {
+        return lazy;
     }
 
     const link = image.link && isImageUrl(image.link) ? image.link : null;

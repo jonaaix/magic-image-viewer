@@ -1,4 +1,4 @@
-import { FULL_SIZE_ATTRIBUTES } from './rules.js';
+import { FULL_SIZE_ATTRIBUTES, LAZY_SRCSET_ATTRIBUTES } from './rules.js';
 import { controlAround } from '../controls.js';
 
 const CONTROLS = 'button, [role="button"], input, select, textarea, label, option';
@@ -36,6 +36,10 @@ function isRendered(element) {
     return style.visibility !== 'hidden' && style.opacity !== '0';
 }
 
+function srcsetOf(element) {
+    return [element.getAttribute('srcset'), ...LAZY_SRCSET_ATTRIBUTES.map((name) => element.getAttribute(name))].find(Boolean) ?? null;
+}
+
 export function describe(element) {
     const rect = element.getBoundingClientRect();
     const loaded = element.complete && element.naturalWidth > 1;
@@ -48,12 +52,12 @@ export function describe(element) {
         height: rect.height,
         visible: isRendered(element),
         laidOut: element.getClientRects().length > 0,
-        pending: !loaded && (element.loading === 'lazy' || FULL_SIZE_ATTRIBUTES.some((name) => element.hasAttribute(name)) || element.hasAttribute('data-srcset')),
+        pending: !loaded && (element.loading === 'lazy' || FULL_SIZE_ATTRIBUTES.some((name) => element.hasAttribute(name)) || LAZY_SRCSET_ATTRIBUTES.some((name) => element.hasAttribute(name))),
         inControl: !!controlAround(element, CONTROLS) || element.isContentEditable,
         src: absolute(element.getAttribute('src')) ?? '',
         currentSrc: loaded ? element.currentSrc || null : null,
-        srcset: absoluteSrcset(element.getAttribute('srcset') || element.getAttribute('data-srcset')),
-        sourceSrcsets: sources.map((source) => absoluteSrcset(source.getAttribute('srcset') || source.getAttribute('data-srcset'))),
+        srcset: absoluteSrcset(srcsetOf(element)),
+        sourceSrcsets: sources.map((source) => absoluteSrcset(srcsetOf(source))),
         attributes,
         link: absolute(element.closest('a[href]')?.getAttribute('href')),
         alt: element.getAttribute('alt') || null,
