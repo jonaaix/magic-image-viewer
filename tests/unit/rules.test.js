@@ -6,6 +6,7 @@ const image = (overrides = {}) => ({
     width: 300,
     height: 200,
     visible: true,
+    laidOut: true,
     inControl: false,
     src: 'https://example.com/photo.jpg',
     currentSrc: 'https://example.com/photo.jpg',
@@ -153,8 +154,12 @@ describe('isGroupImage', () => {
 
     test('leaves out icons, hidden images and sprites', () => {
         assert.equal(isGroupImage(image({ width: 24, height: 24 })), false);
-        assert.equal(isGroupImage(image({ visible: false })), false);
+        assert.equal(isGroupImage(image({ visible: false, laidOut: false })), false);
         assert.equal(isGroupImage(image({ src: 'https://example.com/ui-sprite.png' })), false);
+    });
+
+    test('takes a slide a carousel hides while it keeps its place', () => {
+        assert.equal(isGroupImage(image({ visible: false, laidOut: true })), true);
     });
 });
 

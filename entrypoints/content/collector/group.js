@@ -87,6 +87,22 @@ function widen(parent, items, matches) {
     return itemsIn(top, matches);
 }
 
+function slotNumber(item) {
+    const number = /(\d+)$/.exec(item.getAttribute?.('slot') ?? '')?.[1];
+
+    return number === undefined ? null : Number(number);
+}
+
+function inSlotOrder(items) {
+    const numbers = items.map(slotNumber);
+
+    if (numbers.some((number) => number === null)) {
+        return items;
+    }
+
+    return items.map((item, index) => ({ item, number: numbers[index] })).sort((a, b) => a.number - b.number).map(({ item }) => item);
+}
+
 /**
  * Walks up from the image. On each level the branch holding the image is compared with its
  * siblings: same element, same path down to exactly one image (copies of the same picture, such
@@ -109,7 +125,7 @@ export function findGroup(image, measures) {
         const items = elementsOf(parent).filter((child) => child === branch || matches(child));
 
         if (items.length > 1) {
-            return widen(parent, items, matches).map((item) => (item.contains(image) ? image : shapeOf(item, counts, measures.sameImage).image));
+            return inSlotOrder(widen(parent, items, matches)).map((item) => (item.contains(image) ? image : shapeOf(item, counts, measures.sameImage).image));
         }
     }
 

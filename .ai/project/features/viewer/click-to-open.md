@@ -34,7 +34,9 @@ The gallery is the group the opened picture belongs to, found by the page's stru
   tree. On each level it compares the part holding the picture with its siblings. A sibling has
   the same shape when it is the same kind of element, leads down to exactly one picture by the same
   path — copies of that picture, such as a blurred backdrop behind a slide, count as one — and
-  shows it at a similar size — about the same width or about the same height, so masonry
+  shows it at a similar size. Slides a carousel hides while they keep their place on the page
+  count as well, and slides numbered by their `slot` (`page-1`, `page-2`, …) follow that number
+  rather than the order the page moved them into — about the same width or about the same height, so masonry
   tiles of changing height still match. The innermost level with at least one such sibling is the
   group; other content on that level, such as paragraphs between the figures of an article, stays
   out.

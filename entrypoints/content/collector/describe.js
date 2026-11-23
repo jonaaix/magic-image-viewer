@@ -47,6 +47,7 @@ export function describe(element) {
         width: rect.width,
         height: rect.height,
         visible: isRendered(element),
+        laidOut: element.getClientRects().length > 0,
         pending: !loaded && (element.loading === 'lazy' || FULL_SIZE_ATTRIBUTES.some((name) => element.hasAttribute(name)) || element.hasAttribute('data-srcset')),
         inControl: !!controlAround(element, CONTROLS) || element.isContentEditable,
         src: absolute(element.getAttribute('src')) ?? '',

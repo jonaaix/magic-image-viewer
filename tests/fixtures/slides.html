@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Feed with slides</title>
+        <script src="fixture.js"></script>
+        <style>
+            body { font-family: system-ui, sans-serif; margin: 24px; }
+            article { margin-bottom: 32px; width: 480px; }
+            .slides { position: relative; width: 480px; height: 320px; overflow: hidden; list-style: none; margin: 0; padding: 0; }
+            .slides li { position: absolute; inset: 0; visibility: hidden; }
+            .slides li.current { visibility: visible; }
+            .slides li:not(.current) { transform: translateX(-100%); }
+            .backdrop { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: blur(12px); opacity: 0.3; }
+            figure { position: relative; margin: 0; height: 100%; }
+            figure img { display: block; height: 100%; margin: 0 auto; }
+            .single img { display: block; width: 480px; }
+        </style>
+    </head>
+    <body>
+        <article id="post-slides">
+            <h2>Three photos</h2>
+            <ul class="slides">
+                <li slot="page-2" class="current"><img class="backdrop" src="images/photo-2.svg" alt="" /><figure><img id="slide-2" src="images/photo-2.svg" alt="Slide 2" /></figure></li>
+                <li slot="page-1"><img class="backdrop" src="images/photo-1.svg" alt="" /><figure><img src="images/photo-1.svg" alt="Slide 1" /></figure></li>
+                <li slot="page-3"><img class="backdrop" src="images/photo-3.svg" alt="" /><figure><img src="images/photo-3.svg" alt="Slide 3" /></figure></li>
+            </ul>
+        </article>
+        <article class="single">
+            <h2>One photo</h2>
+            <img src="images/photo-4.svg" alt="Single" />
+        </article>
+    </body>
+</html>
