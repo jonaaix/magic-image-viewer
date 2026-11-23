@@ -3,3 +3,4 @@
 - 2026-11-21 [agent]: CSS background images as content images.
 - 2026-11-21 [agent]: For a directly opened image, step through the other images of the same folder.
 - 2026-11-21 [agent]: Collect images inside iframes too (content script in all frames).
+- 2026-11-24 [agent]: Insert our own icons without innerHTML, so the Firefox review no longer warns about it (Vue's own warning stays)

@@ -297,7 +297,8 @@ headless via WebDriver BiDi (image tab and SVG checked there); not yet part of `
 
 ## Open
 
-- Firefox and Edge: first upload by hand (v1.0.0 is tagged and released), then store secrets.
+- Chrome and Firefox 1.0.0 submitted by hand on 2026-11-24, in review. Edge waits until both pass;
+  then store secrets for the automatic upload, and the store addresses into the README.
 
 - Firefox: whether the backdrop blur renders (missing in headless Firefox). Website access: granted
   at a temporary install, can be withdrawn; the popup then offers the button (checked headless).
