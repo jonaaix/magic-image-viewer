@@ -25,7 +25,7 @@
     },
     "dependencies": {
         "@aaix/laravel-islands": "github:jonaaix/laravel-islands#v1.0.177",
-        "@aaix/laravel-islands-gallery": "github:jonaaix/laravel-islands-gallery#v1.0.14",
+        "@aaix/laravel-islands-gallery": "github:jonaaix/laravel-islands-gallery#v1.0.15",
         "vue": "^3.5.42"
     },
     "devDependencies": {
