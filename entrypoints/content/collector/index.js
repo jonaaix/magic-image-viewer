@@ -1,6 +1,7 @@
 import { describe } from './describe.js';
 import { findGroup } from './group.js';
 import { isContentImage, isGroupImage, showsSameImage, sourcesBySize, thumbnailSource } from './rules.js';
+import { adaptedGallery } from '../adapters/index.js';
 
 export function isContentElement(element) {
     return isContentImage(describe(element));
@@ -61,6 +62,12 @@ export function collectImages(root = document) {
 }
 
 export function collectGallery(image) {
+    const adapted = adaptedGallery(image);
+
+    if (adapted) {
+        return adapted;
+    }
+
     const describeOf = cachedDescribe();
     const measures = { counts: (element) => isGroupImage(describeOf(element)), sizeOf: describeOf };
     const group = findGroup(image, measures);
