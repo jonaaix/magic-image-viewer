@@ -35,3 +35,29 @@ Load `dist/chrome-mv3` in Chrome, then repeat the marked rows in Firefox.
 - [ ] AMO: upload `magic-image-viewer-1.0.0-firefox.zip` and the sources zip, listing from `listings/`, screenshots.
 - [ ] Microsoft Partner Center: upload the same `magic-image-viewer-1.0.0-chrome.zip`, listing from `listings/`, screenshots.
 - [ ] Hand over the three store addresses; they replace "coming soon" in the README's head line and its Install table.
+
+## 6. Automatic store upload
+
+From the second version on, a pushed `v*` tag uploads the packages and submits them for review.
+CI submits to each store whose secrets are set and skips the others. Add the secrets under
+GitHub → Settings → Secrets and variables → Actions → New repository secret. A store needs its
+first version uploaded by hand; a version already submitted by hand cannot be uploaded again.
+
+Chrome Web Store (extension ID `oonincilgnkpgboibfkinloncibankbc` is in the workflow):
+
+1. Google Cloud console: create a project, enable the "Chrome Web Store API".
+2. IAM → Service accounts → create one, then Keys → Add key → JSON. Keep the downloaded file.
+3. Chrome Web Store dashboard → Account: add the service account's email address.
+4. Secret `CHROME_SERVICE_ACCOUNT_KEY`: the whole content of the JSON file.
+5. Secret `CHROME_PUBLISHER_ID`: the ID in the dashboard address, `…/devconsole/<publisher ID>/…`.
+
+Firefox Add-ons (add-on ID `magic-image-viewer@jonaaix.github.io` is in the workflow):
+
+1. addons.mozilla.org → Developer Hub → Manage API keys → generate credentials.
+2. Secrets `FIREFOX_JWT_ISSUER` and `FIREFOX_JWT_SECRET`.
+
+Edge Add-ons:
+
+1. Partner Center → Microsoft Edge → Publish API → create API credentials.
+2. Secrets `EDGE_CLIENT_ID` and `EDGE_API_KEY`.
+3. Secret `EDGE_PRODUCT_ID`: the product ID on the extension's overview page.
