@@ -297,7 +297,7 @@ headless via WebDriver BiDi (image tab and SVG checked there); not yet part of `
 
 ## Open
 
-- Tag `v1.0.0` after Jonas's OK and the release checklist in `store/`.
+- Firefox and Edge: first upload by hand (v1.0.0 is tagged and released), then store secrets.
 
 - Firefox: whether the backdrop blur renders (missing in headless Firefox). Website access: granted
   at a temporary install, can be withdrawn; the popup then offers the button (checked headless).
