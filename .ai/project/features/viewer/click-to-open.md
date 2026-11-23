@@ -43,6 +43,10 @@ The gallery is the group the opened picture belongs to, found by the page's stru
 - **The main image of a preview strip.** A picture without a group of its own that shows the large
   version of a grouped picture — the main photo above the thumbnails of a product page — opens that
   group at the matching place.
+- **The photo list in the page's data.** A picture with no group finds its gallery in the data the
+  page carries in its scripts — product data for search engines, a shop's product list, a page's
+  state. When the picture's address, in any size, sits in a list of several photos, that list is
+  the gallery, each photo in its largest size given there, starting at the clicked one.
 - **Otherwise alone.** A picture with none of these opens on its own, without a counter.
 
 Before these rules, a site adapter may answer for sites whose gallery the page structure does not

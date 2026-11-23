@@ -2,6 +2,8 @@ import { describe } from './describe.js';
 import { findGroup } from './group.js';
 import { isContentImage, isGroupImage, showsSameImage, sourcesBySize, thumbnailSource } from './rules.js';
 import { adaptedGallery } from '../adapters/index.js';
+import { embeddedGallery } from './embedded.js';
+import { photoEntries } from './photoEntries.js';
 
 export function isContentElement(element) {
     return isContentImage(describe(element));
@@ -92,6 +94,12 @@ export function collectGallery(image) {
 
             return { ...gallery, start: gallery.indexOf(other) };
         }
+    }
+
+    const embedded = embeddedGallery(image);
+
+    if (embedded) {
+        return photoEntries(embedded.photos, embedded.start, image);
     }
 
     return collectAlone(image, describeOf);

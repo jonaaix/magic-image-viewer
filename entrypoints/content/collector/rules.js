@@ -5,7 +5,7 @@ export const MIN_LINKED_THUMBNAIL_SIDE = 40;
 export const MIN_GROUP_IMAGE_SIDE = 40;
 export const FULL_SIZE_ATTRIBUTES = ['data-zoom-image', 'data-full', 'data-large', 'data-src'];
 
-const IMAGE_FILE = /\.(avif|bmp|gif|jpe?g|jxl|png|svg|webp)$/i;
+export const IMAGE_FILE = /\.(avif|bmp|gif|jpe?g|jxl|png|svg|webp)$/i;
 const SPRITE = /sprite/i;
 
 export function isImageUrl(url) {

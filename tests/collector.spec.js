@@ -113,6 +113,17 @@ test.describe('buttons', () => {
     });
 });
 
+test.describe('embedded data', () => {
+    test('a lone picture opens the photo list the page carries in its data', async ({ page }) => {
+        await page.goto('/embedded.html');
+        await clickToOpen(page, '#main');
+
+        await expect(counter(page)).toHaveText('1 / 3');
+        await page.keyboard.press('ArrowRight');
+        await expect(shownImage(page)).toHaveAttribute('src', /photo-2\.svg$/);
+    });
+});
+
 test.describe('fallback', () => {
     test('a link that is not an image file falls back to the picture itself', async ({ page }) => {
         await page.goto('/sources.html');

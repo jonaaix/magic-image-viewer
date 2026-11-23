@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Embedded photo list</title>
+        <script src="fixture.js"></script>
+        <style>
+            body { font-family: system-ui, sans-serif; margin: 24px; }
+            .stage img { display: block; width: 480px; }
+        </style>
+        <script>
+            const photo = (n) => `${location.origin}/images/photo-${n}.svg`;
+            const data = document.createElement('script');
+            data.type = 'application/ld+json';
+            data.textContent = JSON.stringify({ '@type': 'Product', name: 'Lamp', image: [photo(1), photo(2), photo(3)] });
+            document.head.append(data);
+        </script>
+    </head>
+    <body>
+        <h1>Lamp</h1>
+        <div class="stage"><img id="main" src="images/photo-1.svg" alt="Lamp" /></div>
+        <p>A product page that keeps its other photos only in its data.</p>
+    </body>
+</html>
