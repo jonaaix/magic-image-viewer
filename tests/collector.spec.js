@@ -91,6 +91,28 @@ test.describe('sources', () => {
     }
 });
 
+test.describe('buttons', () => {
+    test('a button made only of a picture opens it, also through an overlay on top', async ({ page }) => {
+        await page.goto('/buttons.html');
+        await page.locator('#wrapped').evaluate((image) => image.decode());
+        await expect(page.locator('magic-image-viewer')).toBeAttached();
+        await page.locator('.lens').click();
+
+        await expect(viewer(page)).toBeVisible();
+        await expect(shownImage(page)).toHaveAttribute('src', /photo-1\.svg$/);
+    });
+
+    test('a button with a label stays a button', async ({ page }) => {
+        await page.goto('/buttons.html');
+        await page.locator('#labelled').evaluate((image) => image.decode());
+        await expect(page.locator('magic-image-viewer')).toBeAttached();
+        await page.locator('#labelled').click();
+        await page.waitForTimeout(500);
+
+        await expect(viewer(page)).toHaveCount(0);
+    });
+});
+
 test.describe('fallback', () => {
     test('a link that is not an image file falls back to the picture itself', async ({ page }) => {
         await page.goto('/sources.html');

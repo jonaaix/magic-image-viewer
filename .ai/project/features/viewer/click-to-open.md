@@ -22,7 +22,9 @@ An image counts as a content image when it is visible and rendered at least abou
 shorter side. A smaller image still counts when it is a thumbnail of at least about 40 px that
 links to an image file. A lazy image that has no size yet because it has not loaded counts as long
 as the page does not hide it. Images inside buttons, form controls or editable content, sprites
-and tracking pixels never count. Only the page itself is searched, not embedded frames.
+and tracking pixels never count. An element that only acts as a button — no native button, no
+text of its own, just the picture — is the page's way of opening that picture and does not stop it
+from counting, like the main product photo on Amazon. Only the page itself is searched, not embedded frames.
 
 ### The gallery
 
