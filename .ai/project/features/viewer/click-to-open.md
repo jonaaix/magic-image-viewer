@@ -33,7 +33,8 @@ The gallery is the group the opened picture belongs to, found by the page's stru
 - **Siblings of the same shape.** Starting at the picture, the search goes up the page's element
   tree. On each level it compares the part holding the picture with its siblings. A sibling has
   the same shape when it is the same kind of element, leads down to exactly one picture by the same
-  path, and shows it at a similar size — about the same width or about the same height, so masonry
+  path — copies of that picture, such as a blurred backdrop behind a slide, count as one — and
+  shows it at a similar size — about the same width or about the same height, so masonry
   tiles of changing height still match. The innermost level with at least one such sibling is the
   group; other content on that level, such as paragraphs between the figures of an article, stays
   out.
@@ -71,12 +72,12 @@ picture eases into its size and shape — a square-cropped thumbnail of a wide p
 thumbnail grows. The change is always a transition, never a jump. When the largest version never loads, the page's picture stays.
 
 For each picture the viewer shows the largest version the page offers, looked up in this order: a
-link around the image to an image file, the largest candidate of `srcset` or `<picture>`, a
-full-size attribute (`data-zoom-image`, `data-full`, `data-large`, `data-src`), then the original
-read off one of these addresses, otherwise the loaded image. The original is the same address
-without its size marker — Amazon's `._AC_SX679_` codes, a `-300x200` suffix, Shopify's `_400x400`
-or `_large`, Cloudinary's transformations, the source behind a Next.js image proxy, and `w`, `h`,
-`width` and `height` parameters. Two pictures whose addresses lead to the same original show the
+link around the image to an image file, the original read off any of the image's addresses, the
+largest candidate of `srcset` or `<picture>`, a full-size attribute (`data-zoom-image`,
+`data-full`, `data-large`, `data-src`), otherwise the loaded image. The original is the same
+address without its size marker — Amazon's `._AC_SX679_` codes, a `-300x200` suffix, Shopify's
+`_400x400` or `_large`, Cloudinary's transformations, the source behind a Next.js image proxy,
+Reddit's upload behind its preview, and `w`, `h`, `width` and `height` parameters. Two pictures whose addresses lead to the same original show the
 same image. When a version does not load as an image — a link ending in `.jpg` that leads to a
 page about the file, for instance — the viewer falls back to the next one in that order. The
 thumbnail strip uses the picture the page already loaded, or before loading the image's own

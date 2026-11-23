@@ -71,7 +71,7 @@ export function collectGallery(image) {
     }
 
     const describeOf = cachedDescribe();
-    const measures = { counts: (element) => isGroupImage(describeOf(element)), sizeOf: describeOf };
+    const measures = { counts: (element) => isGroupImage(describeOf(element)), sizeOf: describeOf, sameImage: (a, b) => showsSameImage(describeOf(a), describeOf(b)) };
     const group = findGroup(image, measures);
 
     if (group) {

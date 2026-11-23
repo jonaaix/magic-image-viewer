@@ -24,27 +24,28 @@ export function similarSize(a, b) {
     return ratio(a.width, b.width) >= MIN_SIZE_RATIO || ratio(a.height, b.height) >= MIN_SIZE_RATIO;
 }
 
-export function shapeOf(node, counts) {
+export function shapeOf(node, counts, sameImage = () => false) {
     const images = imagesIn(node, counts);
+    const image = images.at(-1);
 
-    if (images.length !== 1) {
+    if (!image || !images.every((other) => other === image || sameImage(other, image))) {
         return null;
     }
 
     const names = [];
 
-    for (let current = images[0]; current !== node; current = current.parentElement) {
+    for (let current = image; current !== node; current = current.parentElement) {
         names.unshift(current.localName);
     }
 
-    return { key: [node.localName, ...names].join('>'), image: images[0] };
+    return { key: [node.localName, ...names].join('>'), image };
 }
 
-function matcher({ counts, sizeOf }, shape) {
+function matcher({ counts, sizeOf, sameImage }, shape) {
     const size = sizeOf(shape.image);
 
     return (node) => {
-        const candidate = shapeOf(node, counts);
+        const candidate = shapeOf(node, counts, sameImage);
 
         return !!candidate && candidate.key === shape.key && similarSize(sizeOf(candidate.image), size);
     };
@@ -88,16 +89,17 @@ function widen(parent, items, matches) {
 
 /**
  * Walks up from the image. On each level the branch holding the image is compared with its
- * siblings: same element, same path down to exactly one image, similar rendered size. The
- * innermost level with such a sibling is the group; it grows upwards only through wrappers that
- * hold nothing but these items, such as the rows or columns of a grid.
+ * siblings: same element, same path down to exactly one image (copies of the same picture, such
+ * as a blurred backdrop, count as one), similar rendered size. The innermost level with such a
+ * sibling is the group; it grows upwards only through wrappers that hold nothing but these items,
+ * such as the rows or columns of a grid.
  */
 export function findGroup(image, measures) {
     const counts = (node) => node === image || measures.counts(node);
     const options = { ...measures, counts };
 
     for (let branch = image, parent = image.parentElement; parent; branch = parent, parent = parent.parentElement) {
-        const shape = shapeOf(branch, counts);
+        const shape = shapeOf(branch, counts, measures.sameImage);
 
         if (!shape) {
             return null;
@@ -107,7 +109,7 @@ export function findGroup(image, measures) {
         const items = elementsOf(parent).filter((child) => child === branch || matches(child));
 
         if (items.length > 1) {
-            return widen(parent, items, matches).map((item) => shapeOf(item, counts).image);
+            return widen(parent, items, matches).map((item) => (item.contains(image) ? image : shapeOf(item, counts, measures.sameImage).image));
         }
     }
 
