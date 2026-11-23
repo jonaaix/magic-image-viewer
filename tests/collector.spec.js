@@ -5,6 +5,8 @@ const counter = (page) => viewer(page).locator('span.tabular-nums');
 const shownImage = (page) => viewer(page).locator('img.ilg-image');
 
 async function clickToOpen(page, selector) {
+    await page.locator(selector).evaluate((image) => image.loading === 'lazy' || image.decode());
+    await expect(page.locator('magic-image-viewer')).toBeAttached();
     await page.locator(selector).click();
     await expect(viewer(page)).toBeVisible();
     await page.waitForTimeout(450);
