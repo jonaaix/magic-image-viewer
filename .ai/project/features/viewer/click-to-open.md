@@ -61,8 +61,12 @@ thumbnail grows. The change is always a transition, never a jump. When the large
 
 For each picture the viewer shows the largest version the page offers, looked up in this order: a
 link around the image to an image file, the largest candidate of `srcset` or `<picture>`, a
-full-size attribute (`data-zoom-image`, `data-full`, `data-large`, `data-src`), otherwise the
-loaded image. When a version does not load as an image — a link ending in `.jpg` that leads to a
+full-size attribute (`data-zoom-image`, `data-full`, `data-large`, `data-src`), then the original
+read off one of these addresses, otherwise the loaded image. The original is the same address
+without its size marker — Amazon's `._AC_SX679_` codes, a `-300x200` suffix, Shopify's `_400x400`
+or `_large`, Cloudinary's transformations, the source behind a Next.js image proxy, and `w`, `h`,
+`width` and `height` parameters. Two pictures whose addresses lead to the same original show the
+same image. When a version does not load as an image — a link ending in `.jpg` that leads to a
 page about the file, for instance — the viewer falls back to the next one in that order. The
 thumbnail strip uses the picture the page already loaded, or before loading the image's own
 source, never the link around it. A `<figcaption>` of the surrounding figure becomes the caption.
