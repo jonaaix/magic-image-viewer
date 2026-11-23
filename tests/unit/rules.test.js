@@ -136,6 +136,14 @@ describe('thumbnailSource', () => {
 
         assert.equal(thumbnailSource(lazy), 'https://example.com/lazy.jpg');
     });
+
+    test('takes a data-lazy-src preview rather than the original it leads to', () => {
+        const preview = 'https://preview.redd.it/kxbq6qd96a3i1.jpeg?width=1080&s=1a';
+        const lazy = image({ currentSrc: null, src: '', attributes: { 'data-lazy-src': preview } });
+
+        assert.equal(thumbnailSource(lazy), preview);
+        assert.equal(sourcesBySize(lazy)[0], 'https://i.redd.it/kxbq6qd96a3i1.jpeg');
+    });
 });
 
 describe('cornerRadius', () => {
